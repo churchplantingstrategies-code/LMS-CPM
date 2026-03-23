@@ -23,10 +23,24 @@ export type AdminSettings = {
     enableDiscussions: boolean;
   };
   integrations: {
-    smsProvider: string;
-    smsApiKey: string;
-    emailProvider: string;
+    smsProvider: "TWILIO" | "PLIVO" | "VONAGE" | "NONE";
+    twilioAccountSid: string;
+    twilioAuthToken: string;
+    twilioSenderId: string;
+    plivoAuthId: string;
+    plivoAuthToken: string;
+    plivoSenderId: string;
+    vonageApiKey: string;
+    vonageApiSecret: string;
+    vonageSenderId: string;
+    emailProvider: "SENDGRID" | "MAILGUN" | "SMTP" | "NONE";
     emailApiKey: string;
+    emailApiSecret: string;
+    emailFromAddress: string;
+    smtpHost: string;
+    smtpPort: number;
+    smtpUser: string;
+    smtpPassword: string;
   };
   oauth: {
     googleClientId: string;
@@ -67,10 +81,24 @@ const DEFAULT_SETTINGS: AdminSettings = {
     enableDiscussions: true,
   },
   integrations: {
-    smsProvider: "Twilio",
-    smsApiKey: "",
-    emailProvider: "SendGrid",
+    smsProvider: "NONE",
+    twilioAccountSid: "",
+    twilioAuthToken: "",
+    twilioSenderId: "",
+    plivoAuthId: "",
+    plivoAuthToken: "",
+    plivoSenderId: "",
+    vonageApiKey: "",
+    vonageApiSecret: "",
+    vonageSenderId: "",
+    emailProvider: "NONE",
     emailApiKey: "",
+    emailApiSecret: "",
+    emailFromAddress: "",
+    smtpHost: "",
+    smtpPort: 587,
+    smtpUser: "",
+    smtpPassword: "",
   },
   oauth: {
     googleClientId: "",
@@ -172,6 +200,16 @@ export function sanitizeAdminSettings(input: Partial<AdminSettings>): AdminSetti
   if (!["UPLOAD", "YOUTUBE", "VIMEO", "CLOUDFLARE_STREAM"].includes(merged.video.defaultProvider)) {
     merged.video.defaultProvider = DEFAULT_SETTINGS.video.defaultProvider;
   }
+
+  if (!["TWILIO", "PLIVO", "VONAGE", "NONE"].includes(merged.integrations.smsProvider)) {
+    merged.integrations.smsProvider = DEFAULT_SETTINGS.integrations.smsProvider;
+  }
+
+  if (!["SENDGRID", "MAILGUN", "SMTP", "NONE"].includes(merged.integrations.emailProvider)) {
+    merged.integrations.emailProvider = DEFAULT_SETTINGS.integrations.emailProvider;
+  }
+
+  merged.integrations.smtpPort = Math.max(1, Math.min(65535, Number(merged.integrations.smtpPort) || 587));
 
   if (!["dark", "light"].includes(merged.branding.themeMode)) {
     merged.branding.themeMode = DEFAULT_SETTINGS.branding.themeMode;

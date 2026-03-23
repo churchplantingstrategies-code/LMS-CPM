@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { z } from "zod";
+import { sendEnrollmentConfirmation } from "@/lib/messaging";
+import { triggerAutomation } from "@/lib/automation-engine";
 
 const enrollSchema = z.object({
   courseId: z.string().min(1),
@@ -40,6 +42,29 @@ async function enrollInFreeCourse(userId: string, courseId: string) {
       enrolledAt: new Date(),
     },
   });
+
+  // Fire notifications + automations asynchronously (don't block response)
+  const user = await db.user.findUnique({
+    where: { id: userId },
+    select: { email: true, name: true, phone: true },
+  });
+  if (user?.email) {
+    const baseUrl = process.env.NEXTAUTH_URL ?? "http://localhost:3000";
+    Promise.allSettled([
+      sendEnrollmentConfirmation({
+        to: user.email,
+        name: user.name ?? "Student",
+        courseTitle: course.title,
+        courseUrl: `${baseUrl}/courses/${courseId}`,
+        phone: user.phone,
+      }),
+      triggerAutomation("COURSE_ENROLLED", {
+        userId,
+        courseTitle: course.title,
+        courseId,
+      }),
+    ]);
+  }
 
   return { enrollment, course };
 }

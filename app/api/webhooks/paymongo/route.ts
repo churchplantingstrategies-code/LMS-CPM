@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { updateBookOrderStatus } from "@/lib/book-orders";
 import { verifyWebhookSignature } from "@/lib/paymongo";
 import { db } from "@/lib/db";
+import {
+  sendEnrollmentConfirmation,
+  sendPaymentReceipt,
+  sendBookOrderConfirmation,
+  sendSubscriptionConfirmation,
+} from "@/lib/messaging";
+import { triggerAutomation } from "@/lib/automation-engine";
 
 async function upsertCompletedPayment({
   checkoutSessionId,
@@ -147,10 +154,36 @@ async function handleCheckoutSuccess(data: any) {
       amount: (data.amount ?? 0) / 100,
       currency: data.currency ?? "PHP",
       description: `Course purchase: ${courseId}`,
-      metadata: {
-        courseId,
-      },
+      metadata: { courseId },
     });
+
+    // Notify user about enrollment + payment
+    const [enrollUser, enrollCourse] = await Promise.all([
+      db.user.findUnique({ where: { id: userId }, select: { email: true, name: true, phone: true } }),
+      db.course.findUnique({ where: { id: courseId }, select: { title: true } }),
+    ]);
+    if (enrollUser?.email) {
+      const baseUrl = process.env.NEXTAUTH_URL ?? "http://localhost:3000";
+      Promise.allSettled([
+        sendEnrollmentConfirmation({
+          to: enrollUser.email,
+          name: enrollUser.name ?? "Student",
+          courseTitle: enrollCourse?.title ?? courseId,
+          courseUrl: `${baseUrl}/courses/${courseId}`,
+          phone: enrollUser.phone,
+        }),
+        sendPaymentReceipt({
+          to: enrollUser.email,
+          name: enrollUser.name ?? "Student",
+          amount: (data.amount ?? 0) / 100,
+          currency: data.currency ?? "PHP",
+          description: enrollCourse?.title ?? "Course",
+          phone: enrollUser.phone,
+        }),
+        triggerAutomation("COURSE_ENROLLED",  { userId, courseId, courseTitle: enrollCourse?.title }),
+        triggerAutomation("PAYMENT_RECEIVED", { userId, amount: (data.amount ?? 0) / 100, currency: data.currency ?? "PHP" }),
+      ]);
+    }
 
     console.log(`[PAYMONGO_WEBHOOK] Course enrollment completed for user ${userId}`);
   }
@@ -168,11 +201,27 @@ async function handleCheckoutSuccess(data: any) {
       amount: order?.subtotal ?? (data.amount ?? 0) / 100,
       currency: order?.currency ?? data.currency ?? "PHP",
       description: order ? `Book order ${order.orderNumber}` : "Book order",
-      metadata: {
-        bookOrderId,
-        items: order?.items ?? [],
-      },
+      metadata: { bookOrderId, items: order?.items ?? [] },
     });
+
+    // Notify user about book order
+    const bookUser = await db.user.findUnique({
+      where: { id: userId },
+      select: { email: true, name: true, phone: true },
+    });
+    if (bookUser?.email && order) {
+      Promise.allSettled([
+        sendBookOrderConfirmation({
+          to: bookUser.email,
+          name: bookUser.name ?? "Customer",
+          orderNumber: order.orderNumber,
+          amount: order.subtotal,
+          currency: order.currency,
+          phone: bookUser.phone,
+        }),
+        triggerAutomation("PAYMENT_RECEIVED", { userId, amount: order.subtotal, currency: order.currency }),
+      ]);
+    }
 
     console.log(`[PAYMONGO_WEBHOOK] Book order completed for user ${userId}`);
   }
@@ -195,11 +244,11 @@ async function handleSubscriptionUpsert(data: any) {
 
   const subscriptionStatus = statusMap[data.status] ?? data.status;
 
-  // Store or update customer ID
+  // Store customer ID on subscription record (User model has no paymongo customer field)
   if (data.customer_id) {
-    await db.user.updateMany({
-      where: { id: userId },
-      data: { stripeCustomerId: data.customer_id }, // We'll keep using this field for backward compatibility
+    await db.subscription.updateMany({
+      where: { userId, paymongoCustomerId: null },
+      data: { paymongoCustomerId: data.customer_id },
     });
   }
 
@@ -211,7 +260,7 @@ async function handleSubscriptionUpsert(data: any) {
       currentPeriodStart: new Date(data.billing_cycle_anchor * 1000),
       currentPeriodEnd: new Date(data.scheduled_deactivation_date
         ? data.scheduled_deactivation_date * 1000
-        : Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days if not set
+        : Date.now() + 30 * 24 * 60 * 60 * 1000),
       paymongoCustomerId: data.customer_id,
     },
     create: {
@@ -226,6 +275,25 @@ async function handleSubscriptionUpsert(data: any) {
         : Date.now() + 30 * 24 * 60 * 60 * 1000),
     },
   });
+
+  // Notify user on subscription activation
+  if (subscriptionStatus === "ACTIVE") {
+    const [subUser, subPlan] = await Promise.all([
+      db.user.findUnique({ where: { id: userId }, select: { email: true, name: true, phone: true } }),
+      planId ? db.plan.findUnique({ where: { id: planId }, select: { name: true } }) : null,
+    ]);
+    if (subUser?.email) {
+      Promise.allSettled([
+        sendSubscriptionConfirmation({
+          to: subUser.email,
+          name: subUser.name ?? "Student",
+          planName: subPlan?.name ?? "Premium",
+          phone: subUser.phone,
+        }),
+        triggerAutomation("SUBSCRIPTION_STARTED", { userId, planName: subPlan?.name ?? "Premium" }),
+      ]);
+    }
+  }
 
   console.log(`[PAYMONGO_WEBHOOK] Subscription ${subscriptionStatus} for user ${userId}`);
 }

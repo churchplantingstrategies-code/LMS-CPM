@@ -14,24 +14,38 @@ export default async function StudentLayout({ children }: { children: React.Reac
     redirect("/login");
   }
 
+  if (session.user.role === "SUPER_ADMIN" || session.user.role === "ADMIN") {
+    redirect("/admin");
+  }
+
+  if (session.user.role === "INSTRUCTOR") {
+    redirect("/teacher");
+  }
+
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
+    <div className="flex h-screen overflow-hidden bg-gradient-to-br from-brand-50 via-white to-purple-50">
       <StudentSidebar />
 
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top Bar */}
-        <header className="flex h-16 items-center justify-between border-b bg-white px-4 sm:px-6">
+        <header className="flex h-16 items-center justify-between border-b border-brand-100/80 bg-white/85 px-4 backdrop-blur sm:px-6">
           <div className="flex items-center gap-3">
             <StudentMobileNav />
             <div className="relative hidden w-80 sm:block">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input placeholder="Search courses, lessons..." className="border-0 bg-gray-50 pl-9" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-400" />
+              <Input
+                placeholder="Search courses, lessons..."
+                className="border border-brand-100 bg-white pl-9 shadow-sm focus-visible:ring-brand-500"
+              />
             </div>
           </div>
 
           <div className="relative w-full max-w-[220px] sm:hidden">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input placeholder="Search..." className="border-0 bg-gray-50 pl-9" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-400" />
+            <Input
+              placeholder="Search..."
+              className="border border-brand-100 bg-white pl-9 shadow-sm focus-visible:ring-brand-500"
+            />
           </div>
 
           <div className="flex items-center gap-3">
@@ -47,7 +61,10 @@ export default async function StudentLayout({ children }: { children: React.Reac
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-auto">{children}</main>
+        <main className="relative flex-1 overflow-auto">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.12),transparent_42%),radial-gradient(circle_at_75%_12%,rgba(168,85,247,0.12),transparent_36%)]" />
+          <div className="relative">{children}</div>
+        </main>
       </div>
     </div>
   );

@@ -11,11 +11,15 @@ export default async function AdminCrmPage() {
   const role = session.user.role;
   if (role !== "ADMIN" && role !== "SUPER_ADMIN") redirect("/dashboard");
 
-  const [leads, funnels, automations, campaigns] = await Promise.all([
+  const [leads, funnels, automations, campaigns, totalEnrollments, completedPayments, activeSubscriptions, totalStudents] = await Promise.all([
     db.lead.findMany({ orderBy: { createdAt: "desc" }, take: 20 }),
     db.funnel.findMany({ orderBy: { createdAt: "desc" }, take: 10 }),
     db.automationRule.findMany({ orderBy: { createdAt: "desc" }, take: 10 }),
     db.emailCampaign.findMany({ orderBy: { createdAt: "desc" }, take: 10 }),
+    db.enrollment.count(),
+    db.payment.count({ where: { status: "COMPLETED" } }),
+    db.subscription.count({ where: { status: "ACTIVE" } }),
+    db.user.count({ where: { role: "STUDENT" } }),
   ]);
 
   return (
@@ -25,6 +29,26 @@ export default async function AdminCrmPage() {
         <p className="mt-1 text-sm text-slate-400">
           Manage leads, conversion funnels, and automation workflows connected to your LMS growth engine.
         </p>
+      </div>
+
+      {/* Stats Overview */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
+          <p className="text-xs uppercase tracking-wider text-slate-400">Total Students</p>
+          <p className="mt-1 text-3xl font-bold text-slate-100">{totalStudents}</p>
+        </div>
+        <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
+          <p className="text-xs uppercase tracking-wider text-slate-400">Total Enrollments</p>
+          <p className="mt-1 text-3xl font-bold text-slate-100">{totalEnrollments}</p>
+        </div>
+        <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
+          <p className="text-xs uppercase tracking-wider text-slate-400">Completed Purchases</p>
+          <p className="mt-1 text-3xl font-bold text-slate-100">{completedPayments}</p>
+        </div>
+        <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
+          <p className="text-xs uppercase tracking-wider text-slate-400">Active Subscriptions</p>
+          <p className="mt-1 text-3xl font-bold text-slate-100">{activeSubscriptions}</p>
+        </div>
       </div>
 
       <Tabs defaultValue="leads" className="w-full">

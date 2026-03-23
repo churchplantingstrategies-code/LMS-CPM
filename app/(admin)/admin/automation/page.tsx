@@ -91,7 +91,11 @@ export default async function AdminAutomationPage() {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-gray-600 text-sm capitalize">
-                    {rule.action.replace(/_/g, " ").toLowerCase()}
+                    {Array.isArray(rule.actions)
+                      ? (rule.actions as Array<{ type?: string }>)
+                          .map((a) => (a.type ?? "").replace(/_/g, " ").toLowerCase())
+                          .join(", ")
+                      : "—"}
                   </TableCell>
                   <TableCell>
                     {rule.isActive ? (

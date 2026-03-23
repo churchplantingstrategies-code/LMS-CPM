@@ -33,10 +33,10 @@ export function StudentSidebar() {
   }, [pathname]);
 
   return (
-    <aside className="hidden h-full w-64 flex-col border-r bg-white md:flex">
+    <aside className="hidden h-full w-64 flex-col border-r border-brand-100/80 bg-gradient-to-b from-white via-brand-50/35 to-purple-50/45 md:flex">
       {/* Brand */}
-      <div className="flex h-16 items-center gap-2 px-6 border-b">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600">
+      <div className="flex h-16 items-center gap-2 border-b border-brand-100/80 px-6">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-purple-600 shadow-sm">
           <GraduationCap className="h-5 w-5 text-white" />
         </div>
         <span className="font-bold text-lg gradient-text">eDiscipleship</span>
@@ -61,19 +61,19 @@ export function StudentSidebar() {
                   className={cn(
                     "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
                     isActive
-                      ? "bg-brand-50 text-brand-700"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                      ? "bg-gradient-to-r from-brand-600 to-purple-600 text-white shadow-sm"
+                      : "text-gray-600 hover:bg-white hover:text-brand-700",
                     isPending && "opacity-80"
                   )}
                 >
                   {isPending ? (
                     <Loader2 className="h-5 w-5 animate-spin text-brand-500" />
                   ) : (
-                    <Icon className={cn("h-5 w-5", isActive ? "text-brand-600" : "text-gray-400")} />
+                    <Icon className={cn("h-5 w-5", isActive ? "text-white" : "text-gray-400")} />
                   )}
                   {item.label}
                   {isPending ? <Loader2 className="ml-auto h-4 w-4 animate-spin text-brand-400" /> : null}
-                  {isActive && !isPending ? <ChevronRight className="ml-auto h-4 w-4 text-brand-400" /> : null}
+                  {isActive && !isPending ? <ChevronRight className="ml-auto h-4 w-4 text-white/80" /> : null}
                 </Link>
               </li>
             );
@@ -83,11 +83,11 @@ export function StudentSidebar() {
 
       {/* User Info */}
       {session?.user && (
-        <div className="border-t p-4">
+        <div className="border-t border-brand-100/80 p-4">
           <div className="flex items-center gap-3">
             <Avatar className="h-9 w-9">
               <AvatarImage src={session.user.image || ""} />
-              <AvatarFallback className="bg-brand-100 text-brand-700 text-xs">
+              <AvatarFallback className="bg-gradient-to-br from-brand-100 to-purple-100 text-brand-700 text-xs">
                 {getInitials(session.user.name || session.user.email || "U")}
               </AvatarFallback>
             </Avatar>

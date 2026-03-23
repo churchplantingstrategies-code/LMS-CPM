@@ -258,57 +258,57 @@ export function CourseCreateForm() {
   }
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
-      <h2 className="mb-4 text-base font-semibold text-slate-100">Create Course Setup</h2>
+    <div className="rounded-xl border border-emerald-200 bg-white p-5">
+      <h2 className="mb-4 text-base font-semibold text-gray-900">Create Course Setup</h2>
       <form className="grid gap-4 md:grid-cols-2" onSubmit={(e) => e.preventDefault()}>
         <div className="space-y-2 md:col-span-2">
-          <label className="text-sm font-medium text-slate-300">Course Title</label>
+          <label className="text-sm font-medium text-gray-700">Course Title</label>
           <input
             type="text"
             placeholder="e.g. Discipleship Foundations"
             value={form.title}
             onChange={(e) => setForm((prev) => ({ ...prev, title: e.target.value }))}
-            className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
+            className="w-full rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
           />
         </div>
 
         <div className="space-y-2 md:col-span-2">
-          <label className="text-sm font-medium text-slate-300">Description</label>
+          <label className="text-sm font-medium text-gray-700">Description</label>
           <textarea
             rows={4}
             placeholder="Write course overview, outcomes, and target learners"
             value={form.description}
             onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))}
-            className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
+            className="w-full rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
           />
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-300">Price (PHP)</label>
+          <label className="text-sm font-medium text-gray-700">Price (PHP)</label>
           <input
             type="number"
             min={0}
             placeholder="0"
             value={form.price}
             onChange={(e) => setForm((prev) => ({ ...prev, price: Number(e.target.value) || 0 }))}
-            className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
+            className="w-full rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
           />
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-300">Category</label>
+          <label className="text-sm font-medium text-gray-700">Category</label>
           <input
             type="text"
             placeholder="Leadership, Bible Study, Ministry"
             value={form.category}
             onChange={(e) => setForm((prev) => ({ ...prev, category: e.target.value }))}
-            className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
+            className="w-full rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
           />
         </div>
 
-        <div className="md:col-span-2 space-y-4 rounded-lg border border-slate-800 bg-slate-950/50 p-4">
+        <div className="md:col-span-2 space-y-4 rounded-lg border border-emerald-200 bg-emerald-50 p-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-slate-200">Module & Lesson Builder</h3>
+            <h3 className="text-sm font-semibold text-gray-900">Module & Lesson Builder</h3>
             <Button type="button" size="sm" variant="outline" onClick={addModule}>
               <Plus className="mr-1 h-4 w-4" /> Add Module
             </Button>
@@ -326,16 +326,16 @@ export function CourseCreateForm() {
                 setDraggedModuleIndex(null);
               }}
               onDragEnd={() => setDraggedModuleIndex(null)}
-              className={`rounded-lg border bg-slate-900/40 p-4 transition ${
+              className={`rounded-lg border bg-white p-4 transition ${
                 draggedModuleIndex === moduleIndex
-                  ? "border-brand-500/60 opacity-75"
-                  : "border-slate-800"
+                  ? "border-emerald-500/60 opacity-75"
+                  : "border-emerald-200"
               }`}
             >
               <div className="mb-3 flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <GripVertical className="h-4 w-4 text-slate-500" />
-                  <p className="text-xs uppercase tracking-wider text-slate-400">Module {moduleIndex + 1}</p>
+                  <GripVertical className="h-4 w-4 text-gray-400" />
+                  <p className="text-xs uppercase tracking-wider text-gray-600">Module {moduleIndex + 1}</p>
                 </div>
                 <div className="flex items-center gap-1">
                   <Button
@@ -344,7 +344,7 @@ export function CourseCreateForm() {
                     variant="ghost"
                     onClick={() => reorderModules(moduleIndex, Math.max(0, moduleIndex - 1))}
                     disabled={moduleIndex === 0}
-                    className="text-slate-300 hover:text-slate-100"
+                    className="text-gray-700 hover:text-gray-900"
                   >
                     <ArrowUp className="h-4 w-4" />
                   </Button>
@@ -354,7 +354,7 @@ export function CourseCreateForm() {
                     variant="ghost"
                     onClick={() => reorderModules(moduleIndex, Math.min(form.modules.length - 1, moduleIndex + 1))}
                     disabled={moduleIndex === form.modules.length - 1}
-                    className="text-slate-300 hover:text-slate-100"
+                    className="text-gray-700 hover:text-gray-900"
                   >
                     <ArrowDown className="h-4 w-4" />
                   </Button>
@@ -363,7 +363,7 @@ export function CourseCreateForm() {
                     size="sm"
                     variant="ghost"
                     onClick={() => removeModule(moduleIndex)}
-                    className="text-rose-300 hover:text-rose-200"
+                    className="text-red-500 hover:text-red-700"
                   >
                     <Trash2 className="mr-1 h-4 w-4" /> Remove Module
                   </Button>
@@ -372,28 +372,28 @@ export function CourseCreateForm() {
 
               <div className="grid gap-3 md:grid-cols-2">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-300">Module Title</label>
+                  <label className="text-sm font-medium text-gray-700">Module Title</label>
                   <input
                     type="text"
                     value={moduleItem.title}
                     onChange={(e) => updateModuleField(moduleIndex, "title", e.target.value)}
-                    className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
+                    className="w-full rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-300">Module Description</label>
+                  <label className="text-sm font-medium text-gray-700">Module Description</label>
                   <input
                     type="text"
                     value={moduleItem.description}
                     onChange={(e) => updateModuleField(moduleIndex, "description", e.target.value)}
-                    className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
+                    className="w-full rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                   />
                 </div>
               </div>
 
               <div className="mt-4 space-y-3">
                 <div className="flex items-center justify-between">
-                  <p className="text-xs uppercase tracking-wider text-slate-400">Lessons</p>
+                  <p className="text-xs uppercase tracking-wider text-gray-600">Lessons</p>
                   <Button
                     type="button"
                     size="sm"
@@ -469,17 +469,17 @@ export function CourseCreateForm() {
 
                     <div className="grid gap-3 md:grid-cols-2">
                       <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-300">Lesson Title</label>
+                        <label className="text-sm font-medium text-gray-700">Lesson Title</label>
                         <input
                           type="text"
                           value={lessonItem.title}
                           onChange={(e) => updateLessonField(moduleIndex, lessonIndex, "title", e.target.value)}
-                          className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
+                          className="w-full rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                         />
                       </div>
 
                       <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-300">Duration (minutes)</label>
+                        <label className="text-sm font-medium text-gray-700">Duration (minutes)</label>
                         <input
                           type="number"
                           min={0}
@@ -492,12 +492,12 @@ export function CourseCreateForm() {
                               Number(e.target.value) || 0
                             )
                           }
-                          className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
+                          className="w-full rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                         />
                       </div>
 
                       <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-300">Video Provider</label>
+                        <label className="text-sm font-medium text-gray-700">Video Provider</label>
                         <select
                           value={lessonItem.videoProvider}
                           onChange={(e) =>
@@ -508,7 +508,7 @@ export function CourseCreateForm() {
                               e.target.value as VideoProvider
                             )
                           }
-                          className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
+                          className="w-full rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                         >
                           <option value="UPLOAD">UPLOAD</option>
                           <option value="YOUTUBE">YOUTUBE</option>
@@ -518,37 +518,37 @@ export function CourseCreateForm() {
                       </div>
 
                       <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-300">Video URL</label>
+                        <label className="text-sm font-medium text-gray-700">Video URL</label>
                         <input
                           type="url"
                           value={lessonItem.videoUrl}
                           onChange={(e) => updateLessonField(moduleIndex, lessonIndex, "videoUrl", e.target.value)}
-                          className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
+                          className="w-full rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                           placeholder="https://vimeo.com/..."
                         />
                       </div>
 
                       <div className="space-y-2 md:col-span-2">
-                        <label className="text-sm font-medium text-slate-300">Lesson Description</label>
+                        <label className="text-sm font-medium text-gray-700">Lesson Description</label>
                         <textarea
                           rows={2}
                           value={lessonItem.description}
                           onChange={(e) => updateLessonField(moduleIndex, lessonIndex, "description", e.target.value)}
-                          className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
+                          className="w-full rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                         />
                       </div>
 
                       <div className="space-y-2 md:col-span-2">
-                        <label className="text-sm font-medium text-slate-300">Lesson Content (optional HTML/text)</label>
+                        <label className="text-sm font-medium text-gray-700">Lesson Content (optional HTML/text)</label>
                         <textarea
                           rows={3}
                           value={lessonItem.content}
                           onChange={(e) => updateLessonField(moduleIndex, lessonIndex, "content", e.target.value)}
-                          className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
+                          className="w-full rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                         />
                       </div>
 
-                      <label className="flex items-center gap-2 text-sm text-slate-300 md:col-span-2">
+                      <label className="flex items-center gap-2 text-sm text-gray-700 md:col-span-2">
                         <input
                           type="checkbox"
                           checked={lessonItem.isFree}

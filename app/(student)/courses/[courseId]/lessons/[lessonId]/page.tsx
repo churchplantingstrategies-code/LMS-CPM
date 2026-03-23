@@ -132,28 +132,28 @@ export default async function LessonPage({
   const nextLocked = Boolean(enrollment && !progress?.completed);
 
   return (
-    <div className="flex min-h-screen overflow-hidden bg-gray-950 text-white">
+    <div className="flex min-h-screen overflow-hidden bg-gradient-to-br from-brand-50 via-white to-purple-50 text-gray-900">
       {/* Sidebar – Curriculum */}
-      <aside className="hidden lg:flex w-80 flex-col bg-gray-900 border-r border-gray-800 overflow-hidden">
-        <div className="p-4 border-b border-gray-800">
-          <Link href={`/courses/${course.id}`} className="text-sm text-gray-400 hover:text-white flex items-center gap-1 mb-2">
+      <aside className="hidden lg:flex w-80 flex-col overflow-hidden border-r border-brand-100 bg-white/90 backdrop-blur">
+        <div className="border-b border-brand-100 p-4">
+          <Link href={`/courses/${course.id}`} className="mb-2 flex items-center gap-1 text-sm text-gray-500 hover:text-brand-700">
             <ChevronLeft className="h-4 w-4" /> Back to course
           </Link>
-          <h2 className="font-semibold text-sm line-clamp-2">{course.title}</h2>
+          <h2 className="line-clamp-2 text-sm font-semibold text-gray-900">{course.title}</h2>
           <div className="mt-2">
-            <div className="flex justify-between text-xs text-gray-400 mb-1">
+            <div className="mb-1 flex justify-between text-xs text-gray-500">
               <span>{completedIds.size} lessons done</span>
               <span>{progressPct}%</span>
             </div>
-            <Progress value={progressPct} className="h-1 bg-gray-700" />
+            <Progress value={progressPct} className="h-1 bg-brand-100" />
           </div>
         </div>
 
         <div className="flex-1 overflow-auto">
           {course.modules.map((module, i) => (
             <div key={module.id}>
-              <div className="px-4 py-2.5 bg-gray-800/50 border-b border-gray-800">
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              <div className="border-b border-brand-100 bg-gradient-to-r from-brand-50 to-purple-50 px-4 py-2.5">
+                <p className="text-xs font-semibold uppercase tracking-wider text-brand-700">
                   Module {i + 1}: {module.title}
                 </p>
               </div>
@@ -170,12 +170,12 @@ export default async function LessonPage({
                       className="flex items-start gap-3 px-4 py-3 text-sm opacity-70"
                     >
                       <div className="flex-shrink-0 mt-0.5">
-                        <Lock className="h-4 w-4 text-gray-600" />
+                        <Lock className="h-4 w-4 text-gray-400" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="truncate text-gray-400">{l.title}</p>
-                        {l.duration && <p className="mt-0.5 text-xs text-gray-600">{l.duration}m</p>}
-                        <p className="mt-1 text-[11px] uppercase tracking-[0.14em] text-amber-300">Complete current lesson first</p>
+                        <p className="truncate text-gray-500">{l.title}</p>
+                        {l.duration && <p className="mt-0.5 text-xs text-gray-400">{l.duration}m</p>}
+                        <p className="mt-1 text-[11px] uppercase tracking-[0.14em] text-amber-500">Complete current lesson first</p>
                       </div>
                     </div>
                   ) : (
@@ -183,22 +183,22 @@ export default async function LessonPage({
                       key={l.id}
                       href={`/courses/${course.id}/lessons/${l.id}`}
                       className={`flex items-start gap-3 px-4 py-3 text-sm transition-colors ${
-                        isActive ? "bg-brand-700/30 border-l-2 border-brand-500" : "hover:bg-gray-800"
+                        isActive ? "border-l-2 border-brand-500 bg-brand-50" : "hover:bg-brand-50/60"
                       }`}
                     >
                       <div className="flex-shrink-0 mt-0.5">
                         {isCompleted ? (
-                          <CheckCircle className="h-4 w-4 text-emerald-400" />
+                          <CheckCircle className="h-4 w-4 text-emerald-500" />
                         ) : (
-                          <Circle className={`h-4 w-4 ${isActive ? "text-brand-400" : "text-gray-600"}`} />
+                          <Circle className={`h-4 w-4 ${isActive ? "text-brand-500" : "text-gray-400"}`} />
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className={`truncate ${isActive ? "text-white font-medium" : "text-gray-300"}`}>
+                        <p className={`truncate ${isActive ? "font-medium text-brand-900" : "text-gray-700"}`}>
                           {l.title}
                         </p>
                         {l.duration && (
-                          <p className="text-xs text-gray-500 mt-0.5">{l.duration}m</p>
+                          <p className="mt-0.5 text-xs text-gray-500">{l.duration}m</p>
                         )}
                       </div>
                     </Link>
@@ -213,14 +213,14 @@ export default async function LessonPage({
       {/* Main Content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top bar */}
-        <div className="flex items-center justify-between px-4 py-3 bg-gray-900 border-b border-gray-800">
+        <div className="flex items-center justify-between border-b border-brand-100 bg-white/80 px-4 py-3 backdrop-blur">
           <div className="flex items-center gap-3">
-            <Link href={`/courses/${course.id}`} className="lg:hidden text-gray-400 hover:text-white">
+            <Link href={`/courses/${course.id}`} className="text-gray-500 hover:text-brand-700 lg:hidden">
               <ChevronLeft className="h-5 w-5" />
             </Link>
             <div className="text-sm">
-              <p className="text-gray-400 text-xs">{lesson.module.title}</p>
-              <p className="max-w-[180px] truncate font-medium sm:max-w-xs">{lesson.title}</p>
+              <p className="text-xs text-gray-500">{lesson.module.title}</p>
+              <p className="max-w-[180px] truncate font-medium text-gray-900 sm:max-w-xs">{lesson.title}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -231,7 +231,7 @@ export default async function LessonPage({
         </div>
 
         {/* Video / Content Area */}
-        <div className="flex-1 overflow-auto bg-gray-950">
+        <div className="flex-1 overflow-auto">
           {/* Video */}
           {lesson.videoUrl && (
             <div className="bg-black">
@@ -269,23 +269,23 @@ export default async function LessonPage({
 
           {/* Lesson Details */}
           <div className="max-w-4xl mx-auto p-6">
-            <div className="flex items-start justify-between mb-4">
-              <h1 className="text-xl font-bold text-white">{lesson.title}</h1>
+            <div className="mb-4 flex items-start justify-between">
+              <h1 className="text-xl font-bold text-gray-900">{lesson.title}</h1>
             </div>
 
             <Tabs defaultValue="content" className="w-full">
-              <TabsList className="w-full justify-start overflow-x-auto bg-gray-800 whitespace-nowrap">
-                <TabsTrigger value="content" className="data-[state=active]:bg-gray-600">Overview</TabsTrigger>
-                <TabsTrigger value="discussion" className="data-[state=active]:bg-gray-600">
+              <TabsList className="w-full justify-start overflow-x-auto whitespace-nowrap border border-brand-100 bg-white">
+                <TabsTrigger value="content" className="data-[state=active]:bg-brand-50 data-[state=active]:text-brand-700">Overview</TabsTrigger>
+                <TabsTrigger value="discussion" className="data-[state=active]:bg-brand-50 data-[state=active]:text-brand-700">
                   <MessageSquare className="h-4 w-4 mr-1" /> Discussion
                 </TabsTrigger>
                 {quizItems.length > 0 && (
-                  <TabsTrigger value="quiz" className="data-[state=active]:bg-gray-600">
+                  <TabsTrigger value="quiz" className="data-[state=active]:bg-brand-50 data-[state=active]:text-brand-700">
                     Knowledge Check
                   </TabsTrigger>
                 )}
                 {lesson.assignments.length > 0 && (
-                  <TabsTrigger value="assignment" className="data-[state=active]:bg-gray-600">
+                  <TabsTrigger value="assignment" className="data-[state=active]:bg-brand-50 data-[state=active]:text-brand-700">
                     <FileText className="h-4 w-4 mr-1" /> Assignment
                   </TabsTrigger>
                 )}
@@ -293,18 +293,18 @@ export default async function LessonPage({
 
               <TabsContent value="content" className="mt-4">
                 {lesson.description && (
-                  <div className="prose prose-invert max-w-none text-gray-300 text-sm leading-relaxed">
+                  <div className="prose max-w-none text-sm leading-relaxed text-gray-700">
                     <p>{lesson.description}</p>
                   </div>
                 )}
                 {lesson.content && (
-                  <div className="mt-4 prose prose-invert max-w-none text-gray-300 text-sm leading-relaxed"
+                  <div className="prose mt-4 max-w-none text-sm leading-relaxed text-gray-700"
                     dangerouslySetInnerHTML={{ __html: lesson.content }}
                   />
                 )}
                 {resourceAttachments.length > 0 && (
-                  <div className="mt-6 p-4 bg-gray-800 rounded-xl">
-                    <h3 className="text-sm font-semibold mb-3">Lesson Resources</h3>
+                  <div className="mt-6 rounded-xl border border-brand-100 bg-white p-4">
+                    <h3 className="mb-3 text-sm font-semibold text-gray-900">Lesson Resources</h3>
                     <div className="space-y-2">
                       {resourceAttachments.map((file, i) => (
                         <a
@@ -312,7 +312,7 @@ export default async function LessonPage({
                           href={file.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 text-sm text-brand-400 hover:text-brand-300"
+                          className="flex items-center gap-2 text-sm text-brand-600 hover:text-brand-700"
                         >
                           <FileText className="h-4 w-4" />
                           {file.name}
@@ -341,8 +341,8 @@ export default async function LessonPage({
               )}
 
               <TabsContent value="discussion" className="mt-4">
-                <div className="text-center py-8 text-gray-500">
-                  <MessageSquare className="h-10 w-10 mx-auto mb-2 text-gray-700" />
+                <div className="py-8 text-center text-gray-500">
+                  <MessageSquare className="mx-auto mb-2 h-10 w-10 text-gray-400" />
                   <p>Discussions are available once you&apos;re enrolled.</p>
                 </div>
               </TabsContent>
@@ -350,9 +350,9 @@ export default async function LessonPage({
               {lesson.assignments.length > 0 && (
                 <TabsContent value="assignment" className="mt-4">
                   {lesson.assignments.map((assignment) => (
-                    <div key={assignment.id} className="p-4 bg-gray-800 rounded-xl">
-                      <h3 className="font-semibold mb-2">{assignment.title}</h3>
-                      <p className="text-sm text-gray-400 mb-4">{assignment.description}</p>
+                    <div key={assignment.id} className="rounded-xl border border-brand-100 bg-white p-4">
+                      <h3 className="mb-2 font-semibold text-gray-900">{assignment.title}</h3>
+                      <p className="mb-4 text-sm text-gray-500">{assignment.description}</p>
                       <Button variant="brand" size="sm">Submit Assignment</Button>
                     </div>
                   ))}
@@ -363,11 +363,11 @@ export default async function LessonPage({
         </div>
 
         {/* Bottom Nav */}
-        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-gray-800 bg-gray-900 px-4 py-3">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-brand-100 bg-white/80 px-4 py-3 backdrop-blur">
           <Button
             variant="outline"
             size="sm"
-            className="border-gray-700 bg-gray-900 text-gray-200 hover:border-gray-500 hover:text-white disabled:opacity-100 disabled:border-slate-800 disabled:bg-slate-900 disabled:text-slate-500"
+            className="border-brand-200 bg-white text-gray-700 hover:border-brand-300 hover:text-brand-700 disabled:opacity-100 disabled:border-gray-200 disabled:bg-gray-100 disabled:text-gray-400"
             disabled={!prevLesson}
             asChild={!!prevLesson}
           >
@@ -398,7 +398,7 @@ export default async function LessonPage({
           )}
 
           {requiresKnowledgeCheck ? (
-            <p className="text-xs uppercase tracking-[0.18em] text-amber-300">
+            <p className="text-xs uppercase tracking-[0.18em] text-amber-600">
               Pass the Knowledge Check tab to unlock lesson completion.
             </p>
           ) : null}
@@ -406,7 +406,7 @@ export default async function LessonPage({
           <Button
             variant="outline"
             size="sm"
-            className="border-gray-700 bg-gray-900 text-gray-200 hover:border-gray-500 hover:text-white disabled:opacity-100 disabled:border-slate-800 disabled:bg-slate-900 disabled:text-slate-500"
+            className="border-brand-200 bg-white text-gray-700 hover:border-brand-300 hover:text-brand-700 disabled:opacity-100 disabled:border-gray-200 disabled:bg-gray-100 disabled:text-gray-400"
             disabled={!nextLesson || nextLocked}
             asChild={!!nextLesson && !nextLocked}
           >

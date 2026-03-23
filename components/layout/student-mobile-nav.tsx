@@ -32,7 +32,7 @@ export function StudentMobileNav() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center justify-center rounded-md p-2 text-gray-600 hover:bg-gray-100 md:hidden"
+        className="inline-flex items-center justify-center rounded-md p-2 text-brand-700 hover:bg-brand-50 md:hidden"
         aria-label="Open navigation"
       >
         <Menu className="h-5 w-5" />
@@ -46,13 +46,13 @@ export function StudentMobileNav() {
             aria-label="Close navigation overlay"
             onClick={() => setOpen(false)}
           />
-          <aside className="absolute left-0 top-0 h-full w-72 bg-white shadow-xl">
-            <div className="flex h-14 items-center justify-between border-b px-4">
-              <p className="text-sm font-semibold text-gray-900">Student Menu</p>
+          <aside className="absolute left-0 top-0 h-full w-72 border-r border-brand-100/80 bg-gradient-to-b from-white via-brand-50/40 to-purple-50/50 shadow-xl">
+            <div className="flex h-14 items-center justify-between border-b border-brand-100/80 px-4">
+              <p className="text-sm font-semibold text-brand-800">Student Menu</p>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="rounded-md p-1.5 text-gray-500 hover:bg-gray-100"
+                className="rounded-md p-1.5 text-gray-500 hover:bg-white"
                 aria-label="Close navigation"
               >
                 <X className="h-5 w-5" />
@@ -76,15 +76,15 @@ export function StudentMobileNav() {
                         className={cn(
                           "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium",
                           isActive
-                            ? "bg-brand-50 text-brand-700"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                            ? "bg-gradient-to-r from-brand-600 to-purple-600 text-white shadow-sm"
+                            : "text-gray-600 hover:bg-white hover:text-brand-700",
                           isPending && "opacity-80"
                         )}
                       >
                         {isPending ? (
                           <Loader2 className="h-4 w-4 animate-spin text-brand-500" />
                         ) : (
-                          <Icon className={cn("h-4 w-4", isActive ? "text-brand-600" : "text-gray-400")} />
+                          <Icon className={cn("h-4 w-4", isActive ? "text-white" : "text-gray-400")} />
                         )}
                         {item.label}
                         {isPending ? <Loader2 className="ml-auto h-4 w-4 animate-spin text-brand-400" /> : null}

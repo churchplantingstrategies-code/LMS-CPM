@@ -88,7 +88,7 @@ if (googleClientId && googleClientSecret) {
   );
 }
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const authOptions = {
   adapter: PrismaAdapter(db),
   session: {
     strategy: "jwt",
@@ -143,4 +143,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
     },
   },
-});
+};
+
+export const { handlers, auth, signIn, signOut } = NextAuth(authOptions);

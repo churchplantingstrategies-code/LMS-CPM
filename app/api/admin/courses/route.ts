@@ -47,8 +47,8 @@ async function ensureUniqueCourseSlug(baseTitle: string) {
   }
 }
 
-function isAdmin(role?: string) {
-  return role === "ADMIN" || role === "SUPER_ADMIN";
+function canManageCourses(role?: string) {
+  return role === "INSTRUCTOR" || role === "ADMIN" || role === "SUPER_ADMIN";
 }
 
 function ensureUniqueLessonSlug(baseTitle: string, used: Set<string>) {
@@ -66,9 +66,12 @@ function ensureUniqueLessonSlug(baseTitle: string, used: Set<string>) {
 export async function POST(request: NextRequest) {
   const session = await auth();
 
-  if (!session?.user || !isAdmin((session.user as { role?: string }).role)) {
+  if (!session?.user || !canManageCourses((session.user as { role?: string }).role)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  const creatorId = session.user.id;
+  const creatorRole = (session.user as { role?: string }).role ?? "STUDENT";
 
   try {
     const body = await request.json();
@@ -118,6 +121,10 @@ export async function POST(request: NextRequest) {
           category: data.category || null,
           price: typeof data.price === "number" ? data.price : 0,
           previewVideo: data.videoUrl || null,
+          metadata: {
+            createdByUserId: creatorId,
+            createdByRole: creatorRole,
+          },
           tags: [],
           isPublished: data.isPublished,
         },

@@ -54,12 +54,16 @@ export default function LoginPage() {
     if (result?.error) {
       setError("Invalid email or password. Please try again.");
     } else {
-      // Redirect based on role: admins go to /admin, students go to /dashboard
+      // Redirect based on role
       const sessionRes = await fetch("/api/auth/session");
       const sessionData = await sessionRes.json();
       const role = sessionData?.user?.role;
-      if (role === "SUPER_ADMIN" || role === "ADMIN") {
+      if (role === "SUPER_ADMIN") {
         router.push("/admin");
+      } else if (role === "ADMIN") {
+        router.push("/instructor");
+      } else if (role === "INSTRUCTOR") {
+        router.push("/teacher");
       } else {
         router.push(callbackUrl);
       }

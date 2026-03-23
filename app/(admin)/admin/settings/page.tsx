@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { auth } from "../../../../lib/auth";
 import { redirect } from "next/navigation";
 import { AdminSettingsForm } from "../../../../components/admin/admin-settings-form";
+import { UserRoleManagementPanel } from "@/components/admin/user-role-management-panel";
 
 export default async function AdminSettingsPage() {
   const session = await auth();
@@ -33,6 +34,7 @@ export default async function AdminSettingsPage() {
       </div>
 
       <AdminSettingsForm />
+      <UserRoleManagementPanel isSuperAdmin={role === "SUPER_ADMIN"} />
     </div>
   );
 }

@@ -10,7 +10,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (!session) redirect("/login?callbackUrl=/admin");
 
   const role = (session.user as { role?: string }).role;
-  if (role !== "ADMIN" && role !== "SUPER_ADMIN") {
+  if (role !== "SUPER_ADMIN") {
     redirect("/dashboard");
   }
 
