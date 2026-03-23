@@ -1,28 +1,44 @@
 import axios from "axios";
+import { readAdminSettings } from "./admin-settings";
 
 const PAYMONGO_API_BASE = "https://api.paymongo.com/v1";
 
-// Setup axios instance with PayMongo auth
-const paymongoClient = axios.create({
-  baseURL: PAYMONGO_API_BASE,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+// Create PayMongo client with dynamic API key
+export async function createPaymongoClient() {
+  const settings = await readAdminSettings();
+  const secretKey =
+    settings.payment.paymongoSecretKey ||
+    process.env.PAYMONGO_SECRET_KEY;
 
-// Add Basic Auth middleware
-paymongoClient.interceptors.request.use((config) => {
-  const secretKey = process.env.PAYMONGO_SECRET_KEY!;
-  const encoded = Buffer.from(`${secretKey}:`).toString("base64");
-  config.headers.Authorization = `Basic ${encoded}`;
-  return config;
-});
+  if (!secretKey) {
+    throw new Error(
+      "PayMongo Secret Key not configured. Please configure it in admin settings or environment variables."
+    );
+  }
+
+  const paymongoClient = axios.create({
+    baseURL: PAYMONGO_API_BASE,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  // Add Basic Auth middleware
+  paymongoClient.interceptors.request.use((config) => {
+    const encoded = Buffer.from(`${secretKey}:`).toString("base64");
+    config.headers.Authorization = `Basic ${encoded}`;
+    return config;
+  });
+
+  return paymongoClient;
+}
 
 export async function createPaymongoCustomer(
   email: string,
   name?: string | null
 ): Promise<string> {
   try {
+    const paymongoClient = await createPaymongoClient();
     const response = await paymongoClient.post("/customers", {
       data: {
         email,
@@ -59,6 +75,7 @@ export async function createCheckoutSession({
   metadata?: Record<string, string>;
 }): Promise<{ checkoutUrl: string; sessionId: string }> {
   try {
+    const paymongoClient = await createPaymongoClient();
     // Create a billing subscription with PayMongo
     const response = await paymongoClient.post("/billing_subscriptions", {
       data: {
@@ -121,6 +138,7 @@ export async function createOneTimeCheckout({
   }>;
 }): Promise<{ checkoutUrl: string; sessionId: string }> {
   try {
+    const paymongoClient = await createPaymongoClient();
     const resolvedLineItems = lineItems && lineItems.length > 0
       ? lineItems.map((item) => ({
           amount: item.amount,
@@ -165,6 +183,7 @@ export async function createOneTimeCheckout({
 
 export async function cancelSubscription(subscriptionId: string): Promise<void> {
   try {
+    const paymongoClient = await createPaymongoClient();
     await paymongoClient.post(`/billing_subscriptions/${subscriptionId}/cancel`, {
       data: {},
     });
@@ -176,6 +195,7 @@ export async function cancelSubscription(subscriptionId: string): Promise<void> 
 
 export async function resumeSubscription(subscriptionId: string): Promise<void> {
   try {
+    const paymongoClient = await createPaymongoClient();
     await paymongoClient.post(`/billing_subscriptions/${subscriptionId}/resume`, {
       data: {},
     });

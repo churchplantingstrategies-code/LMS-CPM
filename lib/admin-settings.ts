@@ -8,6 +8,8 @@ export type AdminSettings = {
     trialDays: number;
     taxPercent: number;
     allowManualEnrollment: boolean;
+    paymongoPublicKey: string;
+    paymongoSecretKey: string;
   };
   video: {
     defaultProvider: "UPLOAD" | "YOUTUBE" | "VIMEO" | "CLOUDFLARE_STREAM";
@@ -21,8 +23,6 @@ export type AdminSettings = {
     enableDiscussions: boolean;
   };
   integrations: {
-    paymongoSecretKey: string;
-    paymongoPublicKey: string;
     smsProvider: string;
     smsApiKey: string;
     emailProvider: string;
@@ -52,6 +52,8 @@ const DEFAULT_SETTINGS: AdminSettings = {
     trialDays: 14,
     taxPercent: 0,
     allowManualEnrollment: false,
+    paymongoPublicKey: "",
+    paymongoSecretKey: "",
   },
   video: {
     defaultProvider: "UPLOAD",
@@ -65,8 +67,6 @@ const DEFAULT_SETTINGS: AdminSettings = {
     enableDiscussions: true,
   },
   integrations: {
-    paymongoSecretKey: "",
-    paymongoPublicKey: "",
     smsProvider: "Twilio",
     smsApiKey: "",
     emailProvider: "SendGrid",
@@ -123,30 +123,44 @@ export async function writeAdminSettings(next: AdminSettings): Promise<AdminSett
 }
 
 export function sanitizeAdminSettings(input: Partial<AdminSettings>): AdminSettings {
+  // Handle legacy structure: if PayMongo keys are in integrations, move them to payment
+  const inputWithMigration = { ...input };
+  if (input.integrations) {
+    const integrations = input.integrations as any;
+    if (integrations.paymongoSecretKey && !input.payment?.paymongoSecretKey) {
+      if (!inputWithMigration.payment) inputWithMigration.payment = {};
+      (inputWithMigration.payment as any).paymongoSecretKey = integrations.paymongoSecretKey;
+    }
+    if (integrations.paymongoPublicKey && !input.payment?.paymongoPublicKey) {
+      if (!inputWithMigration.payment) inputWithMigration.payment = {};
+      (inputWithMigration.payment as any).paymongoPublicKey = integrations.paymongoPublicKey;
+    }
+  }
+
   const merged: AdminSettings = {
     payment: {
       ...DEFAULT_SETTINGS.payment,
-      ...(input.payment || {}),
+      ...(inputWithMigration.payment || {}),
     },
     video: {
       ...DEFAULT_SETTINGS.video,
-      ...(input.video || {}),
+      ...(inputWithMigration.video || {}),
     },
     platform: {
       ...DEFAULT_SETTINGS.platform,
-      ...(input.platform || {}),
+      ...(inputWithMigration.platform || {}),
     },
     integrations: {
       ...DEFAULT_SETTINGS.integrations,
-      ...(input.integrations || {}),
+      ...(inputWithMigration.integrations || {}),
     },
     branding: {
       ...DEFAULT_SETTINGS.branding,
-      ...(input.branding || {}),
+      ...(inputWithMigration.branding || {}),
     },
     pages: {
       ...DEFAULT_SETTINGS.pages,
-      ...(input.pages || {}),
+      ...(inputWithMigration.pages || {}),
     },
     updatedAt: new Date().toISOString(),
   };
