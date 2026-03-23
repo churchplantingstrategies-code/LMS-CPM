@@ -1,0 +1,110 @@
+{
+  "pages": [
+    {
+      "id": "page-home",
+      "name": "Home Page",
+      "slug": "home-page",
+      "path": "/",
+      "status": "PUBLISHED",
+      "seoTitle": "eDiscipleship Home",
+      "seoDescription": "Edit this homepage from Super Admin Page Builder.",
+      "hero": {
+        "title": "Learn. Grow. Transform.",
+        "subtitle": "Use the Page Builder to edit homepage text, images, and calls to action in real time.",
+        "primaryButtonText": "Start for Free",
+        "primaryButtonUrl": "/register",
+        "secondaryButtonText": "Browse Courses",
+        "secondaryButtonUrl": "/courses",
+        "imageUrl": "/course-art/foundations-of-everyday-discipleship?scene=hero"
+      },
+      "sections": [
+        {
+          "id": "home-text-1",
+          "type": "TEXT",
+          "title": "Built for ministries and teams",
+          "content": "Edit this content under Admin > Settings > Page Builder.",
+          "imageUrl": "",
+          "buttonText": "",
+          "buttonUrl": ""
+        },
+        {
+          "id": "home-cta-1",
+          "type": "CTA",
+          "title": "Invite visitors to act",
+          "content": "Use Save for draft updates and Publish to push live.",
+          "imageUrl": "",
+          "buttonText": "Open Pricing",
+          "buttonUrl": "/pricing"
+        }
+      ],
+      "createdAt": "2026-03-23T04:41:13.124Z",
+      "updatedAt": "2026-03-23T04:41:13.124Z",
+      "publishedAt": "2026-03-23T00:00:00.000Z"
+    },
+    {
+      "id": "page-newsletter",
+      "name": "Newsletter Page",
+      "slug": "newsletter-page",
+      "path": "/newsletter",
+      "status": "DRAFT",
+      "seoTitle": "Newsletter",
+      "seoDescription": "Collect subscribers and announcements.",
+      "hero": {
+        "title": "Newsletter",
+        "subtitle": "Publish updates and collect email subscribers.",
+        "primaryButtonText": "Subscribe",
+        "primaryButtonUrl": "#",
+        "secondaryButtonText": "Back Home",
+        "secondaryButtonUrl": "/",
+        "imageUrl": ""
+      },
+      "sections": [
+        {
+          "id": "newsletter-text",
+          "type": "TEXT",
+          "title": "Stay Updated",
+          "content": "Share your latest ministry updates here.",
+          "imageUrl": "",
+          "buttonText": "",
+          "buttonUrl": ""
+        }
+      ],
+      "createdAt": "2026-03-23T04:41:13.124Z",
+      "updatedAt": "2026-03-23T04:41:13.125Z",
+      "publishedAt": null
+    },
+    {
+      "id": "page-lead",
+      "name": "Lead Page",
+      "slug": "lead-page",
+      "path": "/lead",
+      "status": "DRAFT",
+      "seoTitle": "Lead Generation",
+      "seoDescription": "Capture lead information from custom funnels.",
+      "hero": {
+        "title": "Lead Page",
+        "subtitle": "Create lead pages for campaigns and funnels.",
+        "primaryButtonText": "Get Started",
+        "primaryButtonUrl": "/register",
+        "secondaryButtonText": "Contact",
+        "secondaryButtonUrl": "/contact",
+        "imageUrl": ""
+      },
+      "sections": [
+        {
+          "id": "lead-text",
+          "type": "TEXT",
+          "title": "Lead Capture",
+          "content": "Describe your offer and add a contact flow.",
+          "imageUrl": "",
+          "buttonText": "",
+          "buttonUrl": ""
+        }
+      ],
+      "createdAt": "2026-03-23T04:41:13.124Z",
+      "updatedAt": "2026-03-23T04:41:13.125Z",
+      "publishedAt": null
+    }
+  ],
+  "updatedAt": "2026-03-23T04:41:13.125Z"
+}

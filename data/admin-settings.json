@@ -1,0 +1,39 @@
+{
+  "payment": {
+    "provider": "PAYMONGO",
+    "currency": "PHP",
+    "trialDays": 14,
+    "taxPercent": 0,
+    "allowManualEnrollment": false
+  },
+  "video": {
+    "defaultProvider": "UPLOAD",
+    "allowDownloads": false,
+    "maxUploadSizeMb": 500,
+    "transcodeOnUpload": true
+  },
+  "platform": {
+    "supportEmail": "support@ediscipleship.local",
+    "enableCertificates": true,
+    "enableDiscussions": true
+  },
+  "integrations": {
+    "paymongoSecretKey": "",
+    "paymongoPublicKey": "",
+    "smsProvider": "Twilio",
+    "smsApiKey": "",
+    "emailProvider": "SendGrid",
+    "emailApiKey": ""
+  },
+  "branding": {
+    "themeMode": "dark",
+    "primaryColor": "#4f46e5",
+    "logoUrl": ""
+  },
+  "pages": {
+    "homeLeadFormEnabled": true,
+    "maintenanceMode": false,
+    "customFooterText": "Empowering discipleship through digital learning."
+  },
+  "updatedAt": "2026-03-22T13:07:58.239Z"
+}

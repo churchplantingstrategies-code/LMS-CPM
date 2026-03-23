@@ -1,0 +1,87 @@
+# QUICK: Get Google OAuth Credentials (5 minutes)
+
+## Copy-Paste Instructions
+
+### 1️⃣ Create Project
+```
+Go to: https://console.cloud.google.com/
+→ Click project dropdown at top
+→ "NEW PROJECT"
+→ Name: "eDiscipleship"
+→ Click CREATE
+⏱️ Wait 30 seconds...
+```
+
+### 2️⃣ Enable Google+ API
+```
+→ Left sidebar: APIs & Services → Library
+→ Search: "Google+ API"
+→ Click it → ENABLE
+```
+
+### 3️⃣ Create OAuth Credentials
+```
+→ Left sidebar: APIs & Services → Credentials
+→ "+ CREATE CREDENTIALS"
+→ "OAuth client ID"
+
+If asked for consent screen:
+→ "Configure Consent Screen"
+→ User type: External → CREATE
+→ App name: eDiscipleship
+→ User support email: your-email@gmail.com
+→ Developer contact: your-email@gmail.com
+→ SAVE AND CONTINUE × 3
+→ Back to Credentials
+
+Then:
+→ "+ CREATE CREDENTIALS" again
+→ "OAuth client ID"
+→ Application type: Web application
+→ Name: eDiscipleship Dev
+```
+
+### 4️⃣ Add URLs
+```
+Under "Authorized JavaScript origins":
+→ Add: http://localhost:3000
+
+Under "Authorized redirect URIs":
+→ Add: http://localhost:3000/api/auth/callback/google
+
+→ CREATE
+
+👀 Copy both:
+   GOOGLE_CLIENT_ID = "..."
+   GOOGLE_CLIENT_SECRET = "..."
+```
+
+### 5️⃣ Update Your App
+```
+Open: .env.local
+
+Find:
+GOOGLE_CLIENT_ID=""
+GOOGLE_CLIENT_SECRET=""
+
+Paste:
+GOOGLE_CLIENT_ID="your-copied-id"
+GOOGLE_CLIENT_SECRET="your-copied-secret"
+
+Save file
+```
+
+### 6️⃣ Restart Server
+```powershell
+# Press Ctrl+C to stop current server
+npm run dev
+
+# Then go to: http://localhost:3000/login
+# Click "Continue with Google"
+```
+
+---
+
+**That's it!** Your Google SSO is now functional. 🎉
+
+If any issues, check [GOOGLE_OAUTH_SETUP.md](./GOOGLE_OAUTH_SETUP.md) for detailed troubleshooting.

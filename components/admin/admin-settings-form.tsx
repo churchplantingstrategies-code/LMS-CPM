@@ -1,0 +1,555 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+type AdminSettings = {
+  payment: {
+    provider: "PAYMONGO" | "MANUAL";
+    currency: string;
+    trialDays: number;
+    taxPercent: number;
+    allowManualEnrollment: boolean;
+  };
+  video: {
+    defaultProvider: "UPLOAD" | "YOUTUBE" | "VIMEO" | "CLOUDFLARE_STREAM";
+    allowDownloads: boolean;
+    maxUploadSizeMb: number;
+    transcodeOnUpload: boolean;
+  };
+  platform: {
+    supportEmail: string;
+    enableCertificates: boolean;
+    enableDiscussions: boolean;
+  };
+  integrations: {
+    paymongoSecretKey: string;
+    paymongoPublicKey: string;
+    smsProvider: string;
+    smsApiKey: string;
+    emailProvider: string;
+    emailApiKey: string;
+  };
+  branding: {
+    themeMode: "dark" | "light";
+    primaryColor: string;
+    logoUrl: string;
+  };
+  pages: {
+    homeLeadFormEnabled: boolean;
+    maintenanceMode: boolean;
+    customFooterText: string;
+  };
+  updatedAt: string;
+};
+
+const EMPTY_STATE: AdminSettings = {
+  payment: {
+    provider: "PAYMONGO",
+    currency: "PHP",
+    trialDays: 14,
+    taxPercent: 0,
+    allowManualEnrollment: false,
+  },
+  video: {
+    defaultProvider: "UPLOAD",
+    allowDownloads: false,
+    maxUploadSizeMb: 500,
+    transcodeOnUpload: true,
+  },
+  platform: {
+    supportEmail: "support@ediscipleship.local",
+    enableCertificates: true,
+    enableDiscussions: true,
+  },
+  integrations: {
+    paymongoSecretKey: "",
+    paymongoPublicKey: "",
+    smsProvider: "Twilio",
+    smsApiKey: "",
+    emailProvider: "SendGrid",
+    emailApiKey: "",
+  },
+  branding: {
+    themeMode: "dark",
+    primaryColor: "#4f46e5",
+    logoUrl: "",
+  },
+  pages: {
+    homeLeadFormEnabled: true,
+    maintenanceMode: false,
+    customFooterText: "Empowering discipleship through digital learning.",
+  },
+  updatedAt: new Date().toISOString(),
+};
+
+export function AdminSettingsForm() {
+  const [settings, setSettings] = useState<AdminSettings>(EMPTY_STATE);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const res = await fetch("/api/admin/settings");
+        if (!res.ok) {
+          throw new Error("Failed to load settings");
+        }
+        const data = (await res.json()) as AdminSettings;
+        setSettings(data);
+      } catch {
+        setMessage("Failed to load settings");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    load();
+  }, []);
+
+  async function saveSettings() {
+    setSaving(true);
+    setMessage(null);
+
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(settings),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to save settings");
+      }
+
+      const data = (await res.json()) as AdminSettings;
+      setSettings(data);
+      setMessage("Settings saved successfully");
+    } catch {
+      setMessage("Failed to save settings");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (loading) {
+    return <p className="text-sm text-gray-500">Loading settings...</p>;
+  }
+
+  return (
+    <div className="space-y-6">
+      <section className="rounded-xl border bg-white p-5">
+        <h2 className="mb-4 text-base font-semibold text-gray-900">Payment Setup</h2>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-2">
+            <label htmlFor="provider" className="text-sm font-medium text-gray-700">Provider</label>
+            <select
+              id="provider"
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={settings.payment.provider}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  payment: { ...prev.payment, provider: e.target.value as "PAYMONGO" | "MANUAL" },
+                }))
+              }
+            >
+              <option value="PAYMONGO">PayMongo</option>
+              <option value="MANUAL">Manual Payments</option>
+            </select>
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="currency" className="text-sm font-medium text-gray-700">Currency</label>
+            <input
+              id="currency"
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={settings.payment.currency}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  payment: { ...prev.payment, currency: e.target.value.toUpperCase() },
+                }))
+              }
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="trialDays" className="text-sm font-medium text-gray-700">Trial Days</label>
+            <input
+              id="trialDays"
+              type="number"
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={settings.payment.trialDays}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  payment: { ...prev.payment, trialDays: Number(e.target.value) },
+                }))
+              }
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="taxPercent" className="text-sm font-medium text-gray-700">Tax (%)</label>
+            <input
+              id="taxPercent"
+              type="number"
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={settings.payment.taxPercent}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  payment: { ...prev.payment, taxPercent: Number(e.target.value) },
+                }))
+              }
+            />
+          </div>
+
+          <label className="flex items-center gap-2 text-sm text-gray-700 md:col-span-2">
+            <input
+              type="checkbox"
+              checked={settings.payment.allowManualEnrollment}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  payment: { ...prev.payment, allowManualEnrollment: e.target.checked },
+                }))
+              }
+            />
+            Allow admins to grant enrollment without payment
+          </label>
+        </div>
+      </section>
+
+      <section className="rounded-xl border bg-white p-5">
+        <h2 className="mb-4 text-base font-semibold text-gray-900">Video Course Setup</h2>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-2">
+            <label htmlFor="defaultProvider" className="text-sm font-medium text-gray-700">Default Video Provider</label>
+            <select
+              id="defaultProvider"
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={settings.video.defaultProvider}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  video: {
+                    ...prev.video,
+                    defaultProvider: e.target.value as AdminSettings["video"]["defaultProvider"],
+                  },
+                }))
+              }
+            >
+              <option value="UPLOAD">Upload</option>
+              <option value="YOUTUBE">YouTube</option>
+              <option value="VIMEO">Vimeo</option>
+              <option value="CLOUDFLARE_STREAM">Cloudflare Stream</option>
+            </select>
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="maxUpload" className="text-sm font-medium text-gray-700">Max Upload Size (MB)</label>
+            <input
+              id="maxUpload"
+              type="number"
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={settings.video.maxUploadSizeMb}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  video: { ...prev.video, maxUploadSizeMb: Number(e.target.value) },
+                }))
+              }
+            />
+          </div>
+
+          <label className="flex items-center gap-2 text-sm text-gray-700">
+            <input
+              type="checkbox"
+              checked={settings.video.allowDownloads}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  video: { ...prev.video, allowDownloads: e.target.checked },
+                }))
+              }
+            />
+            Allow video downloads
+          </label>
+
+          <label className="flex items-center gap-2 text-sm text-gray-700">
+            <input
+              type="checkbox"
+              checked={settings.video.transcodeOnUpload}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  video: { ...prev.video, transcodeOnUpload: e.target.checked },
+                }))
+              }
+            />
+            Transcode uploaded videos
+          </label>
+        </div>
+      </section>
+
+      <section className="rounded-xl border bg-white p-5">
+        <h2 className="mb-4 text-base font-semibold text-gray-900">Platform Features</h2>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-2 md:col-span-2">
+            <label htmlFor="supportEmail" className="text-sm font-medium text-gray-700">Support Email</label>
+            <input
+              id="supportEmail"
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={settings.platform.supportEmail}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  platform: { ...prev.platform, supportEmail: e.target.value },
+                }))
+              }
+            />
+          </div>
+
+          <label className="flex items-center gap-2 text-sm text-gray-700">
+            <input
+              type="checkbox"
+              checked={settings.platform.enableCertificates}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  platform: { ...prev.platform, enableCertificates: e.target.checked },
+                }))
+              }
+            />
+            Enable certificates
+          </label>
+
+          <label className="flex items-center gap-2 text-sm text-gray-700">
+            <input
+              type="checkbox"
+              checked={settings.platform.enableDiscussions}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  platform: { ...prev.platform, enableDiscussions: e.target.checked },
+                }))
+              }
+            />
+            Enable discussions
+          </label>
+        </div>
+      </section>
+
+      <section className="rounded-xl border bg-white p-5">
+        <h2 className="mb-4 text-base font-semibold text-gray-900">API Configurations</h2>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">PayMongo Secret Key</label>
+            <input
+              type="password"
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={settings.integrations.paymongoSecretKey}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  integrations: { ...prev.integrations, paymongoSecretKey: e.target.value },
+                }))
+              }
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">PayMongo Public Key</label>
+            <input
+              type="text"
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={settings.integrations.paymongoPublicKey}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  integrations: { ...prev.integrations, paymongoPublicKey: e.target.value },
+                }))
+              }
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">SMS Provider</label>
+            <input
+              type="text"
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={settings.integrations.smsProvider}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  integrations: { ...prev.integrations, smsProvider: e.target.value },
+                }))
+              }
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">SMS API Key</label>
+            <input
+              type="password"
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={settings.integrations.smsApiKey}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  integrations: { ...prev.integrations, smsApiKey: e.target.value },
+                }))
+              }
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Email Provider</label>
+            <input
+              type="text"
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={settings.integrations.emailProvider}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  integrations: { ...prev.integrations, emailProvider: e.target.value },
+                }))
+              }
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Email API Key</label>
+            <input
+              type="password"
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={settings.integrations.emailApiKey}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  integrations: { ...prev.integrations, emailApiKey: e.target.value },
+                }))
+              }
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="rounded-xl border bg-white p-5">
+        <h2 className="mb-4 text-base font-semibold text-gray-900">Themes, Logo, and Page Setup</h2>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Theme Mode</label>
+            <select
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={settings.branding.themeMode}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  branding: {
+                    ...prev.branding,
+                    themeMode: e.target.value as "dark" | "light",
+                  },
+                }))
+              }
+            >
+              <option value="dark">Dark</option>
+              <option value="light">Light</option>
+            </select>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Primary Color</label>
+            <input
+              type="text"
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={settings.branding.primaryColor}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  branding: { ...prev.branding, primaryColor: e.target.value },
+                }))
+              }
+            />
+          </div>
+
+          <div className="space-y-2 md:col-span-2">
+            <label className="text-sm font-medium text-gray-700">Logo URL</label>
+            <input
+              type="url"
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={settings.branding.logoUrl}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  branding: { ...prev.branding, logoUrl: e.target.value },
+                }))
+              }
+            />
+          </div>
+
+          <label className="flex items-center gap-2 text-sm text-gray-700">
+            <input
+              type="checkbox"
+              checked={settings.pages.homeLeadFormEnabled}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  pages: { ...prev.pages, homeLeadFormEnabled: e.target.checked },
+                }))
+              }
+            />
+            Enable home page lead generator form
+          </label>
+
+          <label className="flex items-center gap-2 text-sm text-gray-700">
+            <input
+              type="checkbox"
+              checked={settings.pages.maintenanceMode}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  pages: { ...prev.pages, maintenanceMode: e.target.checked },
+                }))
+              }
+            />
+            Enable maintenance mode
+          </label>
+
+          <div className="space-y-2 md:col-span-2">
+            <label className="text-sm font-medium text-gray-700">Footer Text</label>
+            <textarea
+              rows={2}
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={settings.pages.customFooterText}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  pages: { ...prev.pages, customFooterText: e.target.value },
+                }))
+              }
+            />
+          </div>
+        </div>
+      </section>
+
+      <div className="flex items-center justify-between rounded-lg border bg-white p-4">
+        <p className="text-xs text-gray-500">
+          Last updated: {new Date(settings.updatedAt).toLocaleString()}
+        </p>
+        <button
+          type="button"
+          onClick={saveSettings}
+          disabled={saving}
+          className="rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {saving ? "Saving..." : "Save Settings"}
+        </button>
+      </div>
+
+      {message ? <p className="text-sm text-gray-600">{message}</p> : null}
+    </div>
+  );
+}
