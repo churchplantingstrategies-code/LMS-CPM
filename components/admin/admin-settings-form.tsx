@@ -184,22 +184,22 @@ export function AdminSettingsForm() {
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Provider</label>
-                <select className="w-full rounded-md border px-3 py-2 text-sm" value={settings.payment.provider} onChange={(e) => setSettings(prev => ({ ...prev, payment: { ...prev.payment, provider: e.target.value as "PAYMONGO" | "MANUAL" } }))}>
+                <select className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.payment.provider} onChange={(e) => setSettings(prev => ({ ...prev, payment: { ...prev.payment, provider: e.target.value as "PAYMONGO" | "MANUAL" } }))}>
                   <option value="PAYMONGO">PayMongo</option>
                   <option value="MANUAL">Manual Payments</option>
                 </select>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Currency</label>
-                <input className="w-full rounded-md border px-3 py-2 text-sm" value={settings.payment.currency} onChange={(e) => setSettings(prev => ({ ...prev, payment: { ...prev.payment, currency: e.target.value.toUpperCase() } }))} />
+                <input className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.payment.currency} onChange={(e) => setSettings(prev => ({ ...prev, payment: { ...prev.payment, currency: e.target.value.toUpperCase() } }))} />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Trial Days</label>
-                <input type="number" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.payment.trialDays} onChange={(e) => setSettings(prev => ({ ...prev, payment: { ...prev.payment, trialDays: Number(e.target.value) } }))} />
+                <input type="number" className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.payment.trialDays} onChange={(e) => setSettings(prev => ({ ...prev, payment: { ...prev.payment, trialDays: Number(e.target.value) } }))} />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Tax (%)</label>
-                <input type="number" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.payment.taxPercent} onChange={(e) => setSettings(prev => ({ ...prev, payment: { ...prev.payment, taxPercent: Number(e.target.value) } }))} />
+                <input type="number" className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.payment.taxPercent} onChange={(e) => setSettings(prev => ({ ...prev, payment: { ...prev.payment, taxPercent: Number(e.target.value) } }))} />
               </div>
               <label className="flex items-center gap-2 text-sm text-gray-700 md:col-span-2">
                 <input type="checkbox" checked={settings.payment.allowManualEnrollment} onChange={(e) => setSettings(prev => ({ ...prev, payment: { ...prev.payment, allowManualEnrollment: e.target.checked } }))} />
@@ -215,7 +215,7 @@ export function AdminSettingsForm() {
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Default Video Provider</label>
-                <select className="w-full rounded-md border px-3 py-2 text-sm" value={settings.video.defaultProvider} onChange={(e) => setSettings(prev => ({ ...prev, video: { ...prev.video, defaultProvider: e.target.value as AdminSettings["video"]["defaultProvider"] } }))}>
+                <select className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.video.defaultProvider} onChange={(e) => setSettings(prev => ({ ...prev, video: { ...prev.video, defaultProvider: e.target.value as AdminSettings["video"]["defaultProvider"] } }))}>
                   <option value="UPLOAD">Upload</option>
                   <option value="YOUTUBE">YouTube</option>
                   <option value="VIMEO">Vimeo</option>
@@ -224,7 +224,7 @@ export function AdminSettingsForm() {
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Max Upload Size (MB)</label>
-                <input type="number" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.video.maxUploadSizeMb} onChange={(e) => setSettings(prev => ({ ...prev, video: { ...prev.video, maxUploadSizeMb: Number(e.target.value) } }))} />
+                <input type="number" className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.video.maxUploadSizeMb} onChange={(e) => setSettings(prev => ({ ...prev, video: { ...prev.video, maxUploadSizeMb: Number(e.target.value) } }))} />
               </div>
               <label className="flex items-center gap-2 text-sm text-gray-700">
                 <input type="checkbox" checked={settings.video.allowDownloads} onChange={(e) => setSettings(prev => ({ ...prev, video: { ...prev.video, allowDownloads: e.target.checked } }))} />
@@ -244,7 +244,7 @@ export function AdminSettingsForm() {
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2 md:col-span-2">
                 <label className="text-sm font-medium text-gray-700">Support Email</label>
-                <input className="w-full rounded-md border px-3 py-2 text-sm" value={settings.platform.supportEmail} onChange={(e) => setSettings(prev => ({ ...prev, platform: { ...prev.platform, supportEmail: e.target.value } }))} />
+                <input className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.platform.supportEmail} onChange={(e) => setSettings(prev => ({ ...prev, platform: { ...prev.platform, supportEmail: e.target.value } }))} />
               </div>
               <label className="flex items-center gap-2 text-sm text-gray-700">
                 <input type="checkbox" checked={settings.platform.enableCertificates} onChange={(e) => setSettings(prev => ({ ...prev, platform: { ...prev.platform, enableCertificates: e.target.checked } }))} />
@@ -264,27 +264,27 @@ export function AdminSettingsForm() {
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">PayMongo Secret Key</label>
-                <input type="password" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.paymongoSecretKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, paymongoSecretKey: e.target.value } }))} />
+                <input type="password" className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.integrations.paymongoSecretKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, paymongoSecretKey: e.target.value } }))} />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">PayMongo Public Key</label>
-                <input type="text" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.paymongoPublicKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, paymongoPublicKey: e.target.value } }))} />
+                <input type="text" className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.integrations.paymongoPublicKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, paymongoPublicKey: e.target.value } }))} />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">SMS Provider</label>
-                <input type="text" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.smsProvider} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, smsProvider: e.target.value } }))} />
+                <input type="text" className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.integrations.smsProvider} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, smsProvider: e.target.value } }))} />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">SMS API Key</label>
-                <input type="password" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.smsApiKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, smsApiKey: e.target.value } }))} />
+                <input type="password" className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.integrations.smsApiKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, smsApiKey: e.target.value } }))} />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Email Provider</label>
-                <input type="text" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.emailProvider} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, emailProvider: e.target.value } }))} />
+                <input type="text" className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.integrations.emailProvider} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, emailProvider: e.target.value } }))} />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Email API Key</label>
-                <input type="password" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.emailApiKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, emailApiKey: e.target.value } }))} />
+                <input type="password" className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.integrations.emailApiKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, emailApiKey: e.target.value } }))} />
               </div>
             </div>
           </div>
@@ -308,11 +308,11 @@ export function AdminSettingsForm() {
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Google Client ID</label>
-                <input type="text" className="w-full rounded-md border px-3 py-2 text-sm font-mono" placeholder="xxxx-xxxx.apps.googleusercontent.com" value={settings.oauth.googleClientId} onChange={(e) => setSettings(prev => ({ ...prev, oauth: { ...prev.oauth, googleClientId: e.target.value } }))} />
+                <input type="text" className="w-full rounded-md border px-3 py-2 text-sm font-mono text-gray-900" placeholder="xxxx-xxxx.apps.googleusercontent.com" value={settings.oauth.googleClientId} onChange={(e) => setSettings(prev => ({ ...prev, oauth: { ...prev.oauth, googleClientId: e.target.value } }))} />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Google Client Secret</label>
-                <input type="password" className="w-full rounded-md border px-3 py-2 text-sm font-mono" placeholder="GOCSPX-xxxx..." value={settings.oauth.googleClientSecret} onChange={(e) => setSettings(prev => ({ ...prev, oauth: { ...prev.oauth, googleClientSecret: e.target.value } }))} />
+                <input type="password" className="w-full rounded-md border px-3 py-2 text-sm font-mono text-gray-900" placeholder="GOCSPX-xxxx..." value={settings.oauth.googleClientSecret} onChange={(e) => setSettings(prev => ({ ...prev, oauth: { ...prev.oauth, googleClientSecret: e.target.value } }))} />
               </div>
             </div>
           </div>
@@ -324,18 +324,18 @@ export function AdminSettingsForm() {
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Theme Mode</label>
-                <select className="w-full rounded-md border px-3 py-2 text-sm" value={settings.branding.themeMode} onChange={(e) => setSettings(prev => ({ ...prev, branding: { ...prev.branding, themeMode: e.target.value as "dark" | "light" } }))}>
+                <select className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.branding.themeMode} onChange={(e) => setSettings(prev => ({ ...prev, branding: { ...prev.branding, themeMode: e.target.value as "dark" | "light" } }))}>
                   <option value="dark">Dark</option>
                   <option value="light">Light</option>
                 </select>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Primary Color</label>
-                <input type="text" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.branding.primaryColor} onChange={(e) => setSettings(prev => ({ ...prev, branding: { ...prev.branding, primaryColor: e.target.value } }))} />
+                <input type="text" className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.branding.primaryColor} onChange={(e) => setSettings(prev => ({ ...prev, branding: { ...prev.branding, primaryColor: e.target.value } }))} />
               </div>
               <div className="space-y-2 md:col-span-2">
                 <label className="text-sm font-medium text-gray-700">Logo URL</label>
-                <input type="url" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.branding.logoUrl} onChange={(e) => setSettings(prev => ({ ...prev, branding: { ...prev.branding, logoUrl: e.target.value } }))} />
+                <input type="url" className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.branding.logoUrl} onChange={(e) => setSettings(prev => ({ ...prev, branding: { ...prev.branding, logoUrl: e.target.value } }))} />
               </div>
               <label className="flex items-center gap-2 text-sm text-gray-700">
                 <input type="checkbox" checked={settings.pages.homeLeadFormEnabled} onChange={(e) => setSettings(prev => ({ ...prev, pages: { ...prev.pages, homeLeadFormEnabled: e.target.checked } }))} />
@@ -347,7 +347,7 @@ export function AdminSettingsForm() {
               </label>
               <div className="space-y-2 md:col-span-2">
                 <label className="text-sm font-medium text-gray-700">Footer Text</label>
-                <textarea rows={2} className="w-full rounded-md border px-3 py-2 text-sm" value={settings.pages.customFooterText} onChange={(e) => setSettings(prev => ({ ...prev, pages: { ...prev.pages, customFooterText: e.target.value } }))} />
+                <textarea rows={2} className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.pages.customFooterText} onChange={(e) => setSettings(prev => ({ ...prev, pages: { ...prev.pages, customFooterText: e.target.value } }))} />
               </div>
             </div>
           </div>
