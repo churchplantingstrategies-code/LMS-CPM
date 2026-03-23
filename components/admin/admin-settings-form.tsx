@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { CreditCard, Video, Settings, Key, Lock, Palette } from "lucide-react";
 
 type AdminSettings = {
   payment: {
@@ -111,25 +113,21 @@ export function AdminSettingsForm() {
         setLoading(false);
       }
     }
-
     load();
   }, []);
 
   async function saveSettings() {
     setSaving(true);
     setMessage(null);
-
     try {
       const res = await fetch("/api/admin/settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(settings),
       });
-
       if (!res.ok) {
         throw new Error("Failed to save settings");
       }
-
       const data = (await res.json()) as AdminSettings;
       setSettings(data);
       setMessage("Settings saved successfully");
@@ -146,493 +144,174 @@ export function AdminSettingsForm() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-xl border bg-white p-5">
-        <h2 className="mb-4 text-base font-semibold text-gray-900">Payment Setup</h2>
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-2">
-            <label htmlFor="provider" className="text-sm font-medium text-gray-700">Provider</label>
-            <select
-              id="provider"
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={settings.payment.provider}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  payment: { ...prev.payment, provider: e.target.value as "PAYMONGO" | "MANUAL" },
-                }))
-              }
-            >
-              <option value="PAYMONGO">PayMongo</option>
-              <option value="MANUAL">Manual Payments</option>
-            </select>
+      <Tabs defaultValue="payment" className="w-full">
+        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 mb-8">
+          <TabsTrigger value="payment" className="gap-2 flex items-center justify-center">
+            <CreditCard className="h-4 w-4 hidden sm:block" />
+            <span className="hidden sm:inline">Payment</span>
+            <span className="sm:hidden">Pay</span>
+          </TabsTrigger>
+          <TabsTrigger value="video" className="gap-2 flex items-center justify-center">
+            <Video className="h-4 w-4 hidden sm:block" />
+            <span className="hidden sm:inline">Video</span>
+            <span className="sm:hidden">Vid</span>
+          </TabsTrigger>
+          <TabsTrigger value="platform" className="gap-2 flex items-center justify-center">
+            <Settings className="h-4 w-4 hidden sm:block" />
+            <span className="hidden sm:inline">Platform</span>
+            <span className="sm:hidden">Plat</span>
+          </TabsTrigger>
+          <TabsTrigger value="integrations" className="gap-2 flex items-center justify-center">
+            <Key className="h-4 w-4 hidden sm:block" />
+            <span className="hidden sm:inline">API</span>
+            <span className="sm:hidden">API</span>
+          </TabsTrigger>
+          <TabsTrigger value="oauth" className="gap-2 flex items-center justify-center">
+            <Lock className="h-4 w-4 hidden sm:block" />
+            <span className="hidden sm:inline">OAuth</span>
+            <span className="sm:hidden">Auth</span>
+          </TabsTrigger>
+          <TabsTrigger value="branding" className="gap-2 flex items-center justify-center">
+            <Palette className="h-4 w-4 hidden sm:block" />
+            <span className="hidden sm:inline">Branding</span>
+            <span className="sm:hidden">Brand</span>
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="payment" className="space-y-4">
+          <div className="rounded-xl border bg-white p-6">
+            <h2 className="mb-6 text-lg font-semibold text-gray-900">Payment Setup</h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Provider</label>
+                <select className="w-full rounded-md border px-3 py-2 text-sm" value={settings.payment.provider} onChange={(e) => setSettings(prev => ({ ...prev, payment: { ...prev.payment, provider: e.target.value as "PAYMONGO" | "MANUAL" } }))}>
+                  <option value="PAYMONGO">PayMongo</option>
+                  <option value="MANUAL">Manual Payments</option>
+                </select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Currency</label>
+                <input className="w-full rounded-md border px-3 py-2 text-sm" value={settings.payment.currency} onChange={(e) => setSettings(prev => ({ ...prev, payment: { ...prev.payment, currency: e.target.value.toUpperCase() } }))} />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Trial Days</label>
+                <input type="number" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.payment.trialDays} onChange={(e) => setSettings(prev => ({ ...prev, payment: { ...prev.payment, trialDays: Number(e.target.value) } }))} />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Tax (%)</label>
+                <input type="number" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.payment.taxPercent} onChange={(e) => setSettings(prev => ({ ...prev, payment: { ...prev.payment, taxPercent: Number(e.target.value) } }))} />
+              </div>
+              <label className="flex items-center gap-2 text-sm text-gray-700 md:col-span-2">
+                <input type="checkbox" checked={settings.payment.allowManualEnrollment} onChange={(e) => setSettings(prev => ({ ...prev, payment: { ...prev.payment, allowManualEnrollment: e.target.checked } }))} />
+                Allow admins to grant enrollment without payment
+              </label>
+            </div>
           </div>
+        </TabsContent>
 
-          <div className="space-y-2">
-            <label htmlFor="currency" className="text-sm font-medium text-gray-700">Currency</label>
-            <input
-              id="currency"
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={settings.payment.currency}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  payment: { ...prev.payment, currency: e.target.value.toUpperCase() },
-                }))
-              }
-            />
+        <TabsContent value="video" className="space-y-4">
+          <div className="rounded-xl border bg-white p-6">
+            <h2 className="mb-6 text-lg font-semibold text-gray-900">Video Course Setup</h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Default Video Provider</label>
+                <select className="w-full rounded-md border px-3 py-2 text-sm" value={settings.video.defaultProvider} onChange={(e) => setSettings(prev => ({ ...prev, video: { ...prev.video, defaultProvider: e.target.value as AdminSettings["video"]["defaultProvider"] } }))}>
+                  <option value="UPLOAD">Upload</option>
+                  <option value="YOUTUBE">YouTube</option>
+                  <option value="VIMEO">Vimeo</option>
+                  <option value="CLOUDFLARE_STREAM">Cloudflare Stream</option>
+                </select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Max Upload Size (MB)</label>
+                <input type="number" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.video.maxUploadSizeMb} onChange={(e) => setSettings(prev => ({ ...prev, video: { ...prev.video, maxUploadSizeMb: Number(e.target.value) } }))} />
+              </div>
+              <label className="flex items-center gap-2 text-sm text-gray-700">
+                <input type="checkbox" checked={settings.video.allowDownloads} onChange={(e) => setSettings(prev => ({ ...prev, video: { ...prev.video, allowDownloads: e.target.checked } }))} />
+                Allow video downloads
+              </label>
+              <label className="flex items-center gap-2 text-sm text-gray-700">
+                <input type="checkbox" checked={settings.video.transcodeOnUpload} onChange={(e) => setSettings(prev => ({ ...prev, video: { ...prev.video, transcodeOnUpload: e.target.checked } }))} />
+                Transcode uploaded videos
+              </label>
+            </div>
           </div>
+        </TabsContent>
 
-          <div className="space-y-2">
-            <label htmlFor="trialDays" className="text-sm font-medium text-gray-700">Trial Days</label>
-            <input
-              id="trialDays"
-              type="number"
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={settings.payment.trialDays}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  payment: { ...prev.payment, trialDays: Number(e.target.value) },
-                }))
-              }
-            />
+        <TabsContent value="platform" className="space-y-4">
+          <div className="rounded-xl border bg-white p-6">
+            <h2 className="mb-6 text-lg font-semibold text-gray-900">Platform Features</h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-sm font-medium text-gray-700">Support Email</label>
+                <input className="w-full rounded-md border px-3 py-2 text-sm" value={settings.platform.supportEmail} onChange={(e) => setSettings(prev => ({ ...prev, platform: { ...prev.platform, supportEmail: e.target.value } }))} />
+              </div>
+              <label className="flex items-center gap-2 text-sm text-gray-700">
+                <input type="checkbox" checked={settings.platform.enableCertificates} onChange={(e) => setSettings(prev => ({ ...prev, platform: { ...prev.platform, enableCertificates: e.target.checked } }))} />
+                Enable certificates
+              </label>
+              <label className="flex items-center gap-2 text-sm text-gray-700">
+                <input type="checkbox" checked={settings.platform.enableDiscussions} onChange={(e) => setSettings(prev => ({ ...prev, platform: { ...prev.platform, enableDiscussions: e.target.checked } }))} />
+                Enable discussions
+              </label>
+            </div>
           </div>
+        </TabsContent>
 
-          <div className="space-y-2">
-            <label htmlFor="taxPercent" className="text-sm font-medium text-gray-700">Tax (%)</label>
-            <input
-              id="taxPercent"
-              type="number"
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={settings.payment.taxPercent}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  payment: { ...prev.payment, taxPercent: Number(e.target.value) },
-                }))
-              }
-            />
+        <TabsContent value="integrations" className="space-y-4">
+          <div className="rounded-xl border bg-white p-6">
+            <h2 className="mb-6 text-lg font-semibold text-gray-900">API Configurations</h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">PayMongo Secret Key</label><input type="password" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.paymongoSecretKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, paymongoSecretKey: e.target.value } }))} /></div>
+              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">PayMongo Public Key</label><input type="text" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.paymongoPublicKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, paymongoPublicKey: e.target.value } }))} /></div>
+              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">SMS Provider</label><input type="text" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.smsProvider} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, smsProvider: e.target.value } }))} /></div>
+              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">SMS API Key</label><input type="password" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.smsApiKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, smsApiKey: e.target.value } }))} /></div>
+              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">Email Provider</label><input type="text" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.emailProvider} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, emailProvider: e.target.value } }))} /></div>
+              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">Email API Key</label><input type="password" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.emailApiKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, emailApiKey: e.target.value } }))} /></div>
+            </div>
           </div>
+        </TabsContent>
 
-          <label className="flex items-center gap-2 text-sm text-gray-700 md:col-span-2">
-            <input
-              type="checkbox"
-              checked={settings.payment.allowManualEnrollment}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  payment: { ...prev.payment, allowManualEnrollment: e.target.checked },
-                }))
-              }
-            />
-            Allow admins to grant enrollment without payment
-          </label>
-        </div>
-      </section>
-
-      <section className="rounded-xl border bg-white p-5">
-        <h2 className="mb-4 text-base font-semibold text-gray-900">Video Course Setup</h2>
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-2">
-            <label htmlFor="defaultProvider" className="text-sm font-medium text-gray-700">Default Video Provider</label>
-            <select
-              id="defaultProvider"
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={settings.video.defaultProvider}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  video: {
-                    ...prev.video,
-                    defaultProvider: e.target.value as AdminSettings["video"]["defaultProvider"],
-                  },
-                }))
-              }
-            >
-              <option value="UPLOAD">Upload</option>
-              <option value="YOUTUBE">YouTube</option>
-              <option value="VIMEO">Vimeo</option>
-              <option value="CLOUDFLARE_STREAM">Cloudflare Stream</option>
-            </select>
+        <TabsContent value="oauth" className="space-y-4">
+          <div className="rounded-xl border bg-white p-6">
+            <h2 className="mb-4 text-lg font-semibold text-gray-900">Google OAuth Setup</h2>
+            <p className="mb-4 text-sm text-gray-600">Enable Google login for students. Leave empty to disable.</p>
+            <div className="mb-6 rounded-lg bg-blue-50 border border-blue-200 p-4">
+              <p className="text-xs font-medium text-blue-900 mb-2">?? How to set up Google OAuth:</p>
+              <ol className="list-decimal list-inside text-xs text-blue-800 space-y-1">
+                <li>Go to <a href="https://console.cloud.google.com" target="_blank" rel="noopener noreferrer" className="font-semibold underline hover:text-blue-600">console.cloud.google.com</a></li>
+                <li>Create or select a project</li>
+                <li>Enable the &quot;Google+ API&quot;</li>
+                <li>Go to &quot;Credentials&quot; ? &quot;Create Credentials&quot; ? &quot;OAuth 2.0 Client IDs&quot;</li>
+                <li>Add <code className="bg-blue-100 px-2 py-1 rounded text-xs font-mono">http://localhost:3000/api/auth/callback/google</code> as an authorized redirect URI (or your production domain)</li>
+                <li>Copy your Client ID and Client Secret below</li>
+              </ol>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">Google Client ID</label><input type="text" className="w-full rounded-md border px-3 py-2 text-sm font-mono" placeholder="xxxx-xxxx.apps.googleusercontent.com" value={settings.oauth.googleClientId} onChange={(e) => setSettings(prev => ({ ...prev, oauth: { ...prev.oauth, googleClientId: e.target.value } }))} /></div>
+              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">Google Client Secret</label><input type="password" className="w-full rounded-md border px-3 py-2 text-sm font-mono" placeholder="GOCSPX-xxxx..." value={settings.oauth.googleClientSecret} onChange={(e) => setSettings(prev => ({ ...prev, oauth: { ...prev.oauth, googleClientSecret: e.target.value } }))} /></div>
+            </div>
           </div>
+        </TabsContent>
 
-          <div className="space-y-2">
-            <label htmlFor="maxUpload" className="text-sm font-medium text-gray-700">Max Upload Size (MB)</label>
-            <input
-              id="maxUpload"
-              type="number"
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={settings.video.maxUploadSizeMb}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  video: { ...prev.video, maxUploadSizeMb: Number(e.target.value) },
-                }))
-              }
-            />
+        <TabsContent value="branding" className="space-y-4">
+          <div className="rounded-xl border bg-white p-6">
+            <h2 className="mb-6 text-lg font-semibold text-gray-900">Branding, Logo & Page Setup</h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">Theme Mode</label><select className="w-full rounded-md border px-3 py-2 text-sm" value={settings.branding.themeMode} onChange={(e) => setSettings(prev => ({ ...prev, branding: { ...prev.branding, themeMode: e.target.value as "dark" | "light" } }))}><option value="dark">Dark</option><option value="light">Light</option></select></div>
+              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">Primary Color</label><input type="text" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.branding.primaryColor} onChange={(e) => setSettings(prev => ({ ...prev, branding: { ...prev.branding, primaryColor: e.target.value } }))} /></div>
+              <div className="space-y-2 md:col-span-2"><label className="text-sm font-medium text-gray-700">Logo URL</label><input type="url" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.branding.logoUrl} onChange={(e) => setSettings(prev => ({ ...prev, branding: { ...prev.branding, logoUrl: e.target.value } }))} /></div>
+              <label className="flex items-center gap-2 text-sm text-gray-700"><input type="checkbox" checked={settings.pages.homeLeadFormEnabled} onChange={(e) => setSettings(prev => ({ ...prev, pages: { ...prev.pages, homeLeadFormEnabled: e.target.checked } }))} />Enable home page lead generator form</label>
+              <label className="flex items-center gap-2 text-sm text-gray-700"><input type="checkbox" checked={settings.pages.maintenanceMode} onChange={(e) => setSettings(prev => ({ ...prev, pages: { ...prev.pages, maintenanceMode: e.target.checked } }))} />Enable maintenance mode</label>
+              <div className="space-y-2 md:col-span-2"><label className="text-sm font-medium text-gray-700">Footer Text</label><textarea rows={2} className="w-full rounded-md border px-3 py-2 text-sm" value={settings.pages.customFooterText} onChange={(e) => setSettings(prev => ({ ...prev, pages: { ...prev.pages, customFooterText: e.target.value } }))} /></div>
+            </div>
           </div>
-
-          <label className="flex items-center gap-2 text-sm text-gray-700">
-            <input
-              type="checkbox"
-              checked={settings.video.allowDownloads}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  video: { ...prev.video, allowDownloads: e.target.checked },
-                }))
-              }
-            />
-            Allow video downloads
-          </label>
-
-          <label className="flex items-center gap-2 text-sm text-gray-700">
-            <input
-              type="checkbox"
-              checked={settings.video.transcodeOnUpload}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  video: { ...prev.video, transcodeOnUpload: e.target.checked },
-                }))
-              }
-            />
-            Transcode uploaded videos
-          </label>
-        </div>
-      </section>
-
-      <section className="rounded-xl border bg-white p-5">
-        <h2 className="mb-4 text-base font-semibold text-gray-900">Platform Features</h2>
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-2 md:col-span-2">
-            <label htmlFor="supportEmail" className="text-sm font-medium text-gray-700">Support Email</label>
-            <input
-              id="supportEmail"
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={settings.platform.supportEmail}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  platform: { ...prev.platform, supportEmail: e.target.value },
-                }))
-              }
-            />
-          </div>
-
-          <label className="flex items-center gap-2 text-sm text-gray-700">
-            <input
-              type="checkbox"
-              checked={settings.platform.enableCertificates}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  platform: { ...prev.platform, enableCertificates: e.target.checked },
-                }))
-              }
-            />
-            Enable certificates
-          </label>
-
-          <label className="flex items-center gap-2 text-sm text-gray-700">
-            <input
-              type="checkbox"
-              checked={settings.platform.enableDiscussions}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  platform: { ...prev.platform, enableDiscussions: e.target.checked },
-                }))
-              }
-            />
-            Enable discussions
-          </label>
-        </div>
-      </section>
-
-      <section className="rounded-xl border bg-white p-5">
-        <h2 className="mb-4 text-base font-semibold text-gray-900">API Configurations</h2>
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">PayMongo Secret Key</label>
-            <input
-              type="password"
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={settings.integrations.paymongoSecretKey}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  integrations: { ...prev.integrations, paymongoSecretKey: e.target.value },
-                }))
-              }
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">PayMongo Public Key</label>
-            <input
-              type="text"
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={settings.integrations.paymongoPublicKey}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  integrations: { ...prev.integrations, paymongoPublicKey: e.target.value },
-                }))
-              }
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">SMS Provider</label>
-            <input
-              type="text"
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={settings.integrations.smsProvider}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  integrations: { ...prev.integrations, smsProvider: e.target.value },
-                }))
-              }
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">SMS API Key</label>
-            <input
-              type="password"
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={settings.integrations.smsApiKey}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  integrations: { ...prev.integrations, smsApiKey: e.target.value },
-                }))
-              }
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Email Provider</label>
-            <input
-              type="text"
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={settings.integrations.emailProvider}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  integrations: { ...prev.integrations, emailProvider: e.target.value },
-                }))
-              }
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Email API Key</label>
-            <input
-              type="password"
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={settings.integrations.emailApiKey}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  integrations: { ...prev.integrations, emailApiKey: e.target.value },
-                }))
-              }
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="rounded-xl border bg-white p-5">
-        <div className="mb-4 flex items-start justify-between">
-          <div>
-            <h2 className="text-base font-semibold text-gray-900">Google OAuth Setup</h2>
-            <p className="mt-1 text-xs text-gray-500">
-              Enable Google login for students. Leave empty to disable.
-            </p>
-          </div>
-        </div>
-
-        <div className="mb-5 rounded-lg bg-blue-50 border border-blue-200 p-4">
-          <p className="text-xs font-medium text-blue-900 mb-2">📌 How to set up Google OAuth:
-          </p>
-          <ol className="list-decimal list-inside text-xs text-blue-800 space-y-1">
-            <li>
-              Go to{" "}
-              <a
-                href="https://console.cloud.google.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-semibold underline hover:text-blue-600"
-              >
-                console.cloud.google.com
-              </a>
-            </li>
-            <li>Create or select a project</li>
-            <li>Enable the &quot;Google+ API&quot;</li>
-            <li>
-              Go to &quot;Credentials&quot; → &quot;Create Credentials&quot; → &quot;OAuth 2.0 Client
-              IDs&quot;
-            </li>
-            <li>
-              Add{" "}
-              <code className="bg-blue-100 px-2 py-1 rounded text-xs font-mono">
-                http://localhost:3000/api/auth/callback/google
-              </code>
-              {" "}
-              as an authorized redirect URI (or your production domain)
-            </li>
-            <li>Copy your Client ID and Client Secret below</li>
-          </ol>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Google Client ID</label>
-            <input
-              type="text"
-              className="w-full rounded-md border px-3 py-2 text-sm font-mono"
-              placeholder="xxxx-xxxx.apps.googleusercontent.com"
-              value={settings.oauth.googleClientId}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  oauth: { ...prev.oauth, googleClientId: e.target.value },
-                }))
-              }
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Google Client Secret</label>
-            <input
-              type="password"
-              className="w-full rounded-md border px-3 py-2 text-sm font-mono"
-              placeholder="GOCSPX-xxxx..."
-              value={settings.oauth.googleClientSecret}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  oauth: { ...prev.oauth, googleClientSecret: e.target.value },
-                }))
-              }
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="rounded-xl border bg-white p-5">
-        <h2 className="mb-4 text-base font-semibold text-gray-900">Themes, Logo, and Page Setup</h2>
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Theme Mode</label>
-            <select
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={settings.branding.themeMode}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  branding: {
-                    ...prev.branding,
-                    themeMode: e.target.value as "dark" | "light",
-                  },
-                }))
-              }
-            >
-              <option value="dark">Dark</option>
-              <option value="light">Light</option>
-            </select>
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Primary Color</label>
-            <input
-              type="text"
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={settings.branding.primaryColor}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  branding: { ...prev.branding, primaryColor: e.target.value },
-                }))
-              }
-            />
-          </div>
-
-          <div className="space-y-2 md:col-span-2">
-            <label className="text-sm font-medium text-gray-700">Logo URL</label>
-            <input
-              type="url"
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={settings.branding.logoUrl}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  branding: { ...prev.branding, logoUrl: e.target.value },
-                }))
-              }
-            />
-          </div>
-
-          <label className="flex items-center gap-2 text-sm text-gray-700">
-            <input
-              type="checkbox"
-              checked={settings.pages.homeLeadFormEnabled}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  pages: { ...prev.pages, homeLeadFormEnabled: e.target.checked },
-                }))
-              }
-            />
-            Enable home page lead generator form
-          </label>
-
-          <label className="flex items-center gap-2 text-sm text-gray-700">
-            <input
-              type="checkbox"
-              checked={settings.pages.maintenanceMode}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  pages: { ...prev.pages, maintenanceMode: e.target.checked },
-                }))
-              }
-            />
-            Enable maintenance mode
-          </label>
-
-          <div className="space-y-2 md:col-span-2">
-            <label className="text-sm font-medium text-gray-700">Footer Text</label>
-            <textarea
-              rows={2}
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={settings.pages.customFooterText}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  pages: { ...prev.pages, customFooterText: e.target.value },
-                }))
-              }
-            />
-          </div>
-        </div>
-      </section>
+        </TabsContent>
+      </Tabs>
 
       <div className="flex items-center justify-between rounded-lg border bg-white p-4">
-        <p className="text-xs text-gray-500">
-          Last updated: {new Date(settings.updatedAt).toLocaleString()}
-        </p>
-        <button
-          type="button"
-          onClick={saveSettings}
-          disabled={saving}
-          className="rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {saving ? "Saving..." : "Save Settings"}
-        </button>
+        <p className="text-xs text-gray-500">Last updated: {new Date(settings.updatedAt).toLocaleString()}</p>
+        <button type="button" onClick={saveSettings} disabled={saving} className="rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-60">{saving ? "Saving..." : "Save Settings"}</button>
       </div>
 
       {message ? <p className="text-sm text-gray-600">{message}</p> : null}
