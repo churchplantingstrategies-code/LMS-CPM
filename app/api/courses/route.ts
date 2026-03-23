@@ -6,38 +6,66 @@ import { slugify } from "@/lib/utils";
 
 // GET /api/courses — public list (published) or admin all
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const page = parseInt(searchParams.get("page") ?? "1", 10);
-  const limit = parseInt(searchParams.get("limit") ?? "12", 10);
-  const search = searchParams.get("search") ?? "";
-  const category = searchParams.get("category") ?? "";
-  const skip = (page - 1) * limit;
+  try {
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get("page") ?? "1", 10);
+    const limit = parseInt(searchParams.get("limit") ?? "12", 10);
+    const search = searchParams.get("search") ?? "";
+    const category = searchParams.get("category") ?? "";
+    const skip = (page - 1) * limit;
 
-  const session = await auth();
-  const isAdmin =
-    session?.user?.role === "ADMIN" || session?.user?.role === "SUPER_ADMIN";
+    const session = await auth();
+    const isAdmin =
+      session?.user?.role === "ADMIN" || session?.user?.role === "SUPER_ADMIN";
 
-  const where = {
-    ...(isAdmin ? {} : { isPublished: true }),
-    ...(search ? { title: { contains: search, mode: "insensitive" as const } } : {}),
-    ...(category ? { category } : {}),
-  };
+    const where = {
+      ...(isAdmin ? {} : { isPublished: true }),
+      ...(search ? { title: { contains: search, mode: "insensitive" as const } } : {}),
+      ...(category ? { category } : {}),
+    };
 
-  const [courses, total] = await Promise.all([
-    db.course.findMany({
-      where,
-      skip,
-      take: limit,
-      orderBy: { createdAt: "desc" },
-      include: {
-        instructor: { select: { id: true, name: true, image: true } },
-        _count: { select: { enrollments: true, modules: true } },
-      },
-    }),
-    db.course.count({ where }),
-  ]);
+    const [courses, total] = await Promise.all([
+      db.courses.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          description: true,
+          shortDesc: true,
+          thumbnail: true,
+          previewVideo: true,
+          price: true,
+          isPublished: true,
+          isFeatured: true,
+          level: true,
+          language: true,
+          category: true,
+          tags: true,
+          duration: true,
+          createdAt: true,
+          _count: { select: { enrollments: true, modules: true } },
+        },
+      }),
+      db.courses.count({ where }),
+    ]);
 
-  return NextResponse.json({ courses, total, page, limit });
+    return NextResponse.json({ courses, total, page, limit });
+  } catch (error) {
+    console.error("[GET /api/courses]", error);
+    return NextResponse.json(
+      { error: "Failed to fetch courses", detail: String(error) },
+      { status: 500 }
+    );
+  }
+}
+
+// OPTIONS /api/courses — CORS preflight
+export async function OPTIONS() {
+  return new NextResponse(null, { status: 204 });
 }
 
 const createCourseSchema = z.object({
