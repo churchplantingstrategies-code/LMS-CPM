@@ -4,12 +4,34 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
+import { readFileSync } from "fs";
+import path from "path";
 
 // Ensure NEXTAUTH_SECRET is set
 if (!process.env.NEXTAUTH_SECRET) {
   console.warn(
     "⚠️  NEXTAUTH_SECRET is not set. Please set it in your .env.local file for production use."
   );
+}
+
+// Load Google OAuth credentials from settings or env vars
+let googleClientId = process.env.GOOGLE_CLIENT_ID || "";
+let googleClientSecret = process.env.GOOGLE_CLIENT_SECRET || "";
+
+// Try to load from admin settings JSON if env vars are empty
+if ((!googleClientId || !googleClientSecret) && process.env.NODE_ENV !== "production") {
+  try {
+    const settingsPath = path.join(process.cwd(), "data", "admin-settings.json");
+    const settingsData = JSON.parse(readFileSync(settingsPath, "utf-8"));
+    if (settingsData.oauth?.googleClientId) {
+      googleClientId = settingsData.oauth.googleClientId;
+    }
+    if (settingsData.oauth?.googleClientSecret) {
+      googleClientSecret = settingsData.oauth.googleClientSecret;
+    }
+  } catch {
+    // Settings file not found or can't be read - fall back to env vars
+  }
 }
 
 const providers = [
@@ -57,11 +79,11 @@ const providers = [
 ];
 
 // Only add Google provider if credentials are available
-if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+if (googleClientId && googleClientSecret) {
   providers.push(
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: googleClientId,
+      clientSecret: googleClientSecret,
     })
   );
 }

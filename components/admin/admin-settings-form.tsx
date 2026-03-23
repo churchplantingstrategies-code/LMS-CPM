@@ -29,6 +29,10 @@ type AdminSettings = {
     emailProvider: string;
     emailApiKey: string;
   };
+  oauth: {
+    googleClientId: string;
+    googleClientSecret: string;
+  };
   branding: {
     themeMode: "dark" | "light";
     primaryColor: string;
@@ -68,6 +72,10 @@ const EMPTY_STATE: AdminSettings = {
     smsApiKey: "",
     emailProvider: "SendGrid",
     emailApiKey: "",
+  },
+  oauth: {
+    googleClientId: "",
+    googleClientSecret: "",
   },
   branding: {
     themeMode: "dark",
@@ -430,6 +438,84 @@ export function AdminSettingsForm() {
                 setSettings((prev) => ({
                   ...prev,
                   integrations: { ...prev.integrations, emailApiKey: e.target.value },
+                }))
+              }
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="rounded-xl border bg-white p-5">
+        <div className="mb-4 flex items-start justify-between">
+          <div>
+            <h2 className="text-base font-semibold text-gray-900">Google OAuth Setup</h2>
+            <p className="mt-1 text-xs text-gray-500">
+              Enable Google login for students. Leave empty to disable.
+            </p>
+          </div>
+        </div>
+
+        <div className="mb-5 rounded-lg bg-blue-50 border border-blue-200 p-4">
+          <p className="text-xs font-medium text-blue-900 mb-2">📌 How to set up Google OAuth:
+          </p>
+          <ol className="list-decimal list-inside text-xs text-blue-800 space-y-1">
+            <li>
+              Go to{" "}
+              <a
+                href="https://console.cloud.google.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold underline hover:text-blue-600"
+              >
+                console.cloud.google.com
+              </a>
+            </li>
+            <li>Create or select a project</li>
+            <li>Enable the &quot;Google+ API&quot;</li>
+            <li>
+              Go to &quot;Credentials&quot; → &quot;Create Credentials&quot; → &quot;OAuth 2.0 Client
+              IDs&quot;
+            </li>
+            <li>
+              Add{" "}
+              <code className="bg-blue-100 px-2 py-1 rounded text-xs font-mono">
+                http://localhost:3000/api/auth/callback/google
+              </code>
+              {" "}
+              as an authorized redirect URI (or your production domain)
+            </li>
+            <li>Copy your Client ID and Client Secret below</li>
+          </ol>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Google Client ID</label>
+            <input
+              type="text"
+              className="w-full rounded-md border px-3 py-2 text-sm font-mono"
+              placeholder="xxxx-xxxx.apps.googleusercontent.com"
+              value={settings.oauth.googleClientId}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  oauth: { ...prev.oauth, googleClientId: e.target.value },
+                }))
+              }
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Google Client Secret</label>
+            <input
+              type="password"
+              className="w-full rounded-md border px-3 py-2 text-sm font-mono"
+              placeholder="GOCSPX-xxxx..."
+              value={settings.oauth.googleClientSecret}
+              onChange={(e) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  oauth: { ...prev.oauth, googleClientSecret: e.target.value },
                 }))
               }
             />

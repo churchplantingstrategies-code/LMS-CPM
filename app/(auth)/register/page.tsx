@@ -28,6 +28,14 @@ export default function RegisterPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const plan = searchParams.get("plan");
+  const authError = searchParams.get("error");
+  const oauthErrorMessages: Record<string, string> = {
+    OAuthSignin: "Google sign-in is not configured yet. Please register with email instead.",
+    OAuthCallback: "Google sign-in failed. Please try again or register with email.",
+    OAuthCreateAccount: "Could not create account with Google. Please register with email.",
+    Configuration: "Google sign-in is not set up on this server. Use email and password.",
+    Default: "Sign-in failed. Please try again.",
+  };
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [googleLoading, setGoogleLoading] = useState(false);
@@ -95,7 +103,13 @@ export default function RegisterPage() {
 
   async function loginWithGoogle() {
     setGoogleLoading(true);
-    await signIn("google", { callbackUrl: "/dashboard" });
+    try {
+      await signIn("google", { callbackUrl: "/dashboard" });
+    } catch {
+      setError("Google sign-in is not configured. Please use email and password.");
+    } finally {
+      setGoogleLoading(false);
+    }
   }
 
   return (
@@ -114,6 +128,13 @@ export default function RegisterPage() {
           </div>
         )}
       </div>
+
+      {/* OAuth / URL error */}
+      {authError && (
+        <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+          {oauthErrorMessages[authError] ?? oauthErrorMessages.Default}
+        </div>
+      )}
 
       {/* Google */}
       <Button

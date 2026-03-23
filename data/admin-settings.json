@@ -25,6 +25,10 @@
     "emailProvider": "SendGrid",
     "emailApiKey": ""
   },
+  "oauth": {
+    "googleClientId": "",
+    "googleClientSecret": ""
+  },
   "branding": {
     "themeMode": "dark",
     "primaryColor": "#4f46e5",

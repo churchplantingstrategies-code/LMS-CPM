@@ -28,6 +28,10 @@ export type AdminSettings = {
     emailProvider: string;
     emailApiKey: string;
   };
+  oauth: {
+    googleClientId: string;
+    googleClientSecret: string;
+  };
   branding: {
     themeMode: "dark" | "light";
     primaryColor: string;
@@ -67,6 +71,10 @@ const DEFAULT_SETTINGS: AdminSettings = {
     smsApiKey: "",
     emailProvider: "SendGrid",
     emailApiKey: "",
+  },
+  oauth: {
+    googleClientId: "",
+    googleClientSecret: "",
   },
   branding: {
     themeMode: "dark",

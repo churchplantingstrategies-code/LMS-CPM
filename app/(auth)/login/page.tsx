@@ -26,6 +26,15 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [googleLoading, setGoogleLoading] = useState(false);
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+  const authError = searchParams.get("error");
+
+  const oauthErrorMessages: Record<string, string> = {
+    OAuthSignin: "Google sign-in is not configured yet. Please use email and password instead.",
+    OAuthCallback: "Google sign-in failed. Please try again or use email and password.",
+    OAuthCreateAccount: "Could not create account with Google. Please register with email.",
+    Configuration: "Google sign-in is not set up on this server. Use email and password.",
+    Default: "Sign-in failed. Please try again.",
+  };
 
   const {
     register,
@@ -45,13 +54,27 @@ export default function LoginPage() {
     if (result?.error) {
       setError("Invalid email or password. Please try again.");
     } else {
-      router.push(result?.url || callbackUrl);
+      // Redirect based on role: admins go to /admin, students go to /dashboard
+      const sessionRes = await fetch("/api/auth/session");
+      const sessionData = await sessionRes.json();
+      const role = sessionData?.user?.role;
+      if (role === "SUPER_ADMIN" || role === "ADMIN") {
+        router.push("/admin");
+      } else {
+        router.push(callbackUrl);
+      }
     }
   }
 
   async function loginWithGoogle() {
     setGoogleLoading(true);
-    await signIn("google", { callbackUrl });
+    try {
+      await signIn("google", { callbackUrl });
+    } catch {
+      setError("Google sign-in is not configured. Please use email and password.");
+    } finally {
+      setGoogleLoading(false);
+    }
   }
 
   return (
@@ -65,6 +88,13 @@ export default function LoginPage() {
           </Link>
         </p>
       </div>
+
+      {/* OAuth / URL error */}
+      {(error || authError) && (
+        <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+          {error || (authError ? (oauthErrorMessages[authError] ?? oauthErrorMessages.Default) : "")}
+        </div>
+      )}
 
       {/* Google OAuth */}
       <Button
@@ -104,8 +134,8 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Error Message */}
-      {error && (
+      {/* Error Message — shown inline below divider (credentials errors only) */}
+      {error && !authError && (
         <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
           {error}
         </div>
