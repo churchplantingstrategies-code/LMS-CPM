@@ -11,6 +11,8 @@ type AdminSettings = {
     trialDays: number;
     taxPercent: number;
     allowManualEnrollment: boolean;
+    paymongoPublicKey: string;
+    paymongoSecretKey: string;
   };
   video: {
     defaultProvider: "UPLOAD" | "YOUTUBE" | "VIMEO" | "CLOUDFLARE_STREAM";
@@ -24,8 +26,6 @@ type AdminSettings = {
     enableDiscussions: boolean;
   };
   integrations: {
-    paymongoSecretKey: string;
-    paymongoPublicKey: string;
     smsProvider: string;
     smsApiKey: string;
     emailProvider: string;
@@ -55,6 +55,8 @@ const EMPTY_STATE: AdminSettings = {
     trialDays: 14,
     taxPercent: 0,
     allowManualEnrollment: false,
+    paymongoPublicKey: "",
+    paymongoSecretKey: "",
   },
   video: {
     defaultProvider: "UPLOAD",
@@ -68,8 +70,6 @@ const EMPTY_STATE: AdminSettings = {
     enableDiscussions: true,
   },
   integrations: {
-    paymongoSecretKey: "",
-    paymongoPublicKey: "",
     smsProvider: "Twilio",
     smsApiKey: "",
     emailProvider: "SendGrid",
@@ -201,6 +201,14 @@ export function AdminSettingsForm() {
                 <label className="text-sm font-medium text-gray-700">Tax (%)</label>
                 <input type="number" className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.payment.taxPercent} onChange={(e) => setSettings(prev => ({ ...prev, payment: { ...prev.payment, taxPercent: Number(e.target.value) } }))} />
               </div>
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-sm font-medium text-gray-700">PayMongo Public Key</label>
+                <input type="text" className="w-full rounded-md border px-3 py-2 text-sm text-gray-900 font-mono" placeholder="pk_live_..." value={settings.payment.paymongoPublicKey} onChange={(e) => setSettings(prev => ({ ...prev, payment: { ...prev.payment, paymongoPublicKey: e.target.value } }))} />
+              </div>
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-sm font-medium text-gray-700">PayMongo Secret Key</label>
+                <input type="password" className="w-full rounded-md border px-3 py-2 text-sm text-gray-900 font-mono" placeholder="sk_live_..." value={settings.payment.paymongoSecretKey} onChange={(e) => setSettings(prev => ({ ...prev, payment: { ...prev.payment, paymongoSecretKey: e.target.value } }))} />
+              </div>
               <label className="flex items-center gap-2 text-sm text-gray-700 md:col-span-2">
                 <input type="checkbox" checked={settings.payment.allowManualEnrollment} onChange={(e) => setSettings(prev => ({ ...prev, payment: { ...prev.payment, allowManualEnrollment: e.target.checked } }))} />
                 Allow admins to grant enrollment without payment
@@ -262,14 +270,6 @@ export function AdminSettingsForm() {
           <div className="rounded-xl border bg-white p-6">
             <h2 className="mb-6 text-lg font-semibold text-gray-900">API Configurations</h2>
             <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">PayMongo Secret Key</label>
-                <input type="password" className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.integrations.paymongoSecretKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, paymongoSecretKey: e.target.value } }))} />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">PayMongo Public Key</label>
-                <input type="text" className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.integrations.paymongoPublicKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, paymongoPublicKey: e.target.value } }))} />
-              </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">SMS Provider</label>
                 <input type="text" className="w-full rounded-md border px-3 py-2 text-sm text-gray-900" value={settings.integrations.smsProvider} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, smsProvider: e.target.value } }))} />
