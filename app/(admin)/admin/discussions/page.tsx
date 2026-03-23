@@ -10,7 +10,7 @@ export default async function AdminDiscussionsPage() {
     redirect("/login");
   }
 
-  const discussionsCount = await db.discussion.count();
+  const discussionsCount = await db.discussions.count();
 
   return (
     <div className="space-y-6">

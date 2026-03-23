@@ -115,8 +115,8 @@ export default function RegisterPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Create your account</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-slate-100">Create your account</h1>
+        <p className="mt-1 text-gray-500 dark:text-slate-400">
           Already have an account?{" "}
           <Link href="/login" className="text-brand-600 font-medium hover:underline">
             Sign in
@@ -154,9 +154,9 @@ export default function RegisterPage() {
       </Button>
 
       <div className="relative mb-6">
-        <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
+        <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-gray-200 dark:border-slate-700" /></div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-white px-2 text-gray-400">Or register with email</span>
+          <span className="bg-white px-2 text-gray-400 dark:bg-slate-900 dark:text-slate-500">Or register with email</span>
         </div>
       </div>
 
@@ -168,7 +168,7 @@ export default function RegisterPage() {
         <div>
           <Label htmlFor="name">Full Name</Label>
           <div className="relative mt-1">
-            <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-slate-500" />
             <Input id="name" placeholder="John Doe" className="pl-9" {...register("name")} />
           </div>
           {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name.message}</p>}
@@ -177,7 +177,7 @@ export default function RegisterPage() {
         <div>
           <Label htmlFor="email">Email</Label>
           <div className="relative mt-1">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-slate-500" />
             <Input id="email" type="email" placeholder="you@example.com" className="pl-9" {...register("email")} />
           </div>
           {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>}
@@ -186,7 +186,7 @@ export default function RegisterPage() {
         <div>
           <Label htmlFor="password">Password</Label>
           <div className="relative mt-1">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-slate-500" />
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
@@ -194,7 +194,7 @@ export default function RegisterPage() {
               className="pl-9 pr-10"
               {...register("password")}
             />
-            <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+            <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500">
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
@@ -218,7 +218,7 @@ export default function RegisterPage() {
         <div>
           <Label htmlFor="confirmPassword">Confirm Password</Label>
           <div className="relative mt-1">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-slate-500" />
             <Input
               id="confirmPassword"
               type="password"
@@ -234,7 +234,7 @@ export default function RegisterPage() {
           Create Account
         </Button>
 
-        <p className="text-xs text-center text-gray-400">
+        <p className="text-center text-xs text-gray-400 dark:text-slate-500">
           By registering, you agree to our{" "}
           <Link href="/terms" className="underline">Terms of Service</Link>
           {" "}and{" "}

@@ -12,13 +12,13 @@ export default async function AdminBillingPage() {
   if (role !== "ADMIN" && role !== "SUPER_ADMIN") redirect("/dashboard");
 
   const [payments, plans] = await Promise.all([
-    db.payment.findMany({
+    db.payments.findMany({
       where: { status: "COMPLETED" },
-      include: { user: { select: { name: true, email: true } } },
+      include: { users: { select: { name: true, email: true } } },
       orderBy: { createdAt: "desc" },
       take: 20,
     }),
-    db.plan.findMany({ orderBy: { price: "asc" } }),
+    db.plans.findMany({ orderBy: { price: "asc" } }),
   ]);
 
   const totalRevenue = payments.reduce((sum: number, p: { amount: number }) => sum + p.amount, 0);
@@ -88,11 +88,11 @@ export default async function AdminBillingPage() {
                     </td>
                   </tr>
                 ) : (
-                  payments.map((payment: { id: string; user: { name: string | null; email: string }; description: string | null; amount: number; paymongoInvoiceId: string | null; createdAt: Date }) => (
+                  payments.map((payment: { id: string; users: { name: string | null; email: string }; description: string | null; amount: number; paymongoInvoiceId: string | null; createdAt: Date }) => (
                     <tr key={payment.id} className="border-b border-slate-900 text-slate-200">
                       <td className="px-3 py-3">
-                        <p className="font-medium">{payment.user.name || "Unknown"}</p>
-                        <p className="text-xs text-slate-500">{payment.user.email}</p>
+                        <p className="font-medium">{payment.users.name || "Unknown"}</p>
+                        <p className="text-xs text-slate-500">{payment.users.email}</p>
                       </td>
                       <td className="px-3 py-3 text-slate-300">{payment.description || "Subscription"}</td>
                       <td className="px-3 py-3 text-emerald-400">{formatCurrency(payment.amount)}</td>

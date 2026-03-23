@@ -13,7 +13,7 @@ import { Progress } from "@/components/ui/progress";
 import { formatDuration, calculateProgress } from "@/lib/utils";
 
 async function getCourseDetails(courseId: string, userId: string) {
-  const course = await db.course.findFirst({
+  const course = await db.courses.findFirst({
     where: { id: courseId, isPublished: true },
     include: {
       modules: {
@@ -30,13 +30,13 @@ async function getCourseDetails(courseId: string, userId: string) {
 
   if (!course) return null;
 
-  const enrollment = await db.enrollment.findUnique({
+  const enrollment = await db.enrollments.findUnique({
     where: { userId_courseId: { userId, courseId } },
   });
 
   const lessonProgress = enrollment
-    ? await db.lessonProgress.findMany({
-        where: { userId, lesson: { module: { courseId } } },
+    ? await db.lesson_progress.findMany({
+        where: { userId, lessons: { modules: { courseId } } },
       })
     : [];
 

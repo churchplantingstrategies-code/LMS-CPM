@@ -29,18 +29,18 @@ export default async function AdminSubscriptionsPage() {
   const role = session.user.role;
   if (role !== "ADMIN" && role !== "SUPER_ADMIN") redirect("/dashboard");
 
-  const subscriptions = await db.subscription.findMany({
+  const subscriptions = await db.subscriptions.findMany({
     orderBy: { createdAt: "desc" },
     include: {
-      user: { select: { name: true, email: true } },
-      plan: { select: { name: true, price: true, interval: true } },
+      users: { select: { name: true, email: true } },
+      plans: { select: { name: true, price: true, interval: true } },
     },
   });
 
   const activeCount = subscriptions.filter((s) => s.status === "ACTIVE").length;
   const mrr = subscriptions
     .filter((s) => s.status === "ACTIVE")
-    .reduce((sum, s) => sum + (s.plan?.price ?? 0), 0);
+    .reduce((sum, s) => sum + (s.plans?.price ?? 0), 0);
 
   return (
     <div className="space-y-6">
@@ -92,15 +92,15 @@ export default async function AdminSubscriptionsPage() {
             {subscriptions.map((sub) => (
               <TableRow key={sub.id}>
                 <TableCell>
-                  <div className="font-medium text-gray-900">{sub.user.name ?? "—"}</div>
-                  <div className="text-xs text-gray-400">{sub.user.email}</div>
+                  <div className="font-medium text-gray-900">{sub.users.name ?? "—"}</div>
+                  <div className="text-xs text-gray-400">{sub.users.email}</div>
                 </TableCell>
-                <TableCell className="text-gray-700">{sub.plan?.name ?? "—"}</TableCell>
+                <TableCell className="text-gray-700">{sub.plans?.name ?? "—"}</TableCell>
                 <TableCell>
                   <Badge variant={statusVariant[sub.status] ?? "outline"}>{sub.status}</Badge>
                 </TableCell>
                 <TableCell className="text-gray-700">
-                  {sub.plan ? formatCurrency(sub.plan.price) + "/" + sub.plan.interval.toLowerCase() : "—"}
+                  {sub.plans ? formatCurrency(sub.plans.price) + "/" + sub.plans.interval.toLowerCase() : "—"}
                 </TableCell>
                 <TableCell className="text-sm text-gray-500">
                   {sub.currentPeriodStart ? formatDate(sub.currentPeriodStart) : "—"}

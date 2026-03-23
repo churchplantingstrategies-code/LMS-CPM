@@ -40,9 +40,9 @@ async function getLessonData(courseId: string, lessonId: string, userId: string)
   });
 
   const lesson = await db.lesson.findFirst({
-    where: { id: lessonId, module: { courseId } },
+    where: { id: lessonId, modules: { courseId } },
     include: {
-      module: true,
+      modules: true,
       assignments: true,
     },
   });
@@ -63,7 +63,7 @@ async function getLessonData(courseId: string, lessonId: string, userId: string)
 
   // Completed lesson IDs
   const lessonProgress = await db.lessonProgress.findMany({
-    where: { userId, completed: true, lesson: { module: { courseId } } },
+    where: { userId, completed: true, lessons: { modules: { courseId } } },
     select: { lessonId: true },
   });
   const completedIds = new Set(lessonProgress.map((p) => p.lessonId));
@@ -132,16 +132,16 @@ export default async function LessonPage({
   const nextLocked = Boolean(enrollment && !progress?.completed);
 
   return (
-    <div className="flex min-h-screen overflow-hidden bg-gradient-to-br from-brand-50 via-white to-purple-50 text-gray-900">
+    <div className="flex min-h-screen overflow-hidden bg-gradient-to-br from-brand-50 via-white to-purple-50 text-gray-900 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/60 dark:text-slate-100">
       {/* Sidebar – Curriculum */}
-      <aside className="hidden lg:flex w-80 flex-col overflow-hidden border-r border-brand-100 bg-white/90 backdrop-blur">
-        <div className="border-b border-brand-100 p-4">
-          <Link href={`/courses/${course.id}`} className="mb-2 flex items-center gap-1 text-sm text-gray-500 hover:text-brand-700">
+      <aside className="hidden lg:flex w-80 flex-col overflow-hidden border-r border-brand-100 bg-white/90 backdrop-blur dark:border-slate-700 dark:bg-slate-900/90">
+        <div className="border-b border-brand-100 p-4 dark:border-slate-700">
+          <Link href={`/courses/${course.id}`} className="mb-2 flex items-center gap-1 text-sm text-gray-500 hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-300">
             <ChevronLeft className="h-4 w-4" /> Back to course
           </Link>
-          <h2 className="line-clamp-2 text-sm font-semibold text-gray-900">{course.title}</h2>
+          <h2 className="line-clamp-2 text-sm font-semibold text-gray-900 dark:text-slate-100">{course.title}</h2>
           <div className="mt-2">
-            <div className="mb-1 flex justify-between text-xs text-gray-500">
+            <div className="mb-1 flex justify-between text-xs text-gray-500 dark:text-slate-400">
               <span>{completedIds.size} lessons done</span>
               <span>{progressPct}%</span>
             </div>
@@ -152,7 +152,7 @@ export default async function LessonPage({
         <div className="flex-1 overflow-auto">
           {course.modules.map((module, i) => (
             <div key={module.id}>
-              <div className="border-b border-brand-100 bg-gradient-to-r from-brand-50 to-purple-50 px-4 py-2.5">
+              <div className="border-b border-brand-100 bg-gradient-to-r from-brand-50 to-purple-50 px-4 py-2.5 dark:border-slate-700 dark:from-slate-900 dark:to-slate-800">
                 <p className="text-xs font-semibold uppercase tracking-wider text-brand-700">
                   Module {i + 1}: {module.title}
                 </p>
@@ -213,14 +213,14 @@ export default async function LessonPage({
       {/* Main Content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top bar */}
-        <div className="flex items-center justify-between border-b border-brand-100 bg-white/80 px-4 py-3 backdrop-blur">
+        <div className="flex items-center justify-between border-b border-brand-100 bg-white/80 px-4 py-3 backdrop-blur dark:border-slate-700 dark:bg-slate-900/80">
           <div className="flex items-center gap-3">
-            <Link href={`/courses/${course.id}`} className="text-gray-500 hover:text-brand-700 lg:hidden">
+            <Link href={`/courses/${course.id}`} className="text-gray-500 hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-300 lg:hidden">
               <ChevronLeft className="h-5 w-5" />
             </Link>
             <div className="text-sm">
-              <p className="text-xs text-gray-500">{lesson.module.title}</p>
-              <p className="max-w-[180px] truncate font-medium text-gray-900 sm:max-w-xs">{lesson.title}</p>
+              <p className="text-xs text-gray-500 dark:text-slate-400">{lesson.modules.title}</p>
+              <p className="max-w-[180px] truncate font-medium text-gray-900 dark:text-slate-100 sm:max-w-xs">{lesson.title}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -363,7 +363,7 @@ export default async function LessonPage({
         </div>
 
         {/* Bottom Nav */}
-        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-brand-100 bg-white/80 px-4 py-3 backdrop-blur">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-brand-100 bg-white/80 px-4 py-3 backdrop-blur dark:border-slate-700 dark:bg-slate-900/80">
           <Button
             variant="outline"
             size="sm"

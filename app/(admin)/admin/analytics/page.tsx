@@ -38,20 +38,20 @@ export default async function AdminAnalyticsPage() {
   ] = await Promise.all([
     db.user.count(),
     db.user.count({ where: { createdAt: { gte: thirtyDaysAgo } } }),
-    db.course.count({ where: { isPublished: true } }),
-    db.enrollment.count(),
-    db.enrollment.count({ where: { enrolledAt: { gte: thirtyDaysAgo } } }),
-    db.payment.aggregate({
+    db.courses.count({ where: { isPublished: true } }),
+    db.enrollments.count(),
+    db.enrollments.count({ where: { enrolledAt: { gte: thirtyDaysAgo } } }),
+    db.payments.aggregate({
       _sum: { amount: true },
       where: { status: "COMPLETED" },
     }),
-    db.payment.aggregate({
+    db.payments.aggregate({
       _sum: { amount: true },
       where: { status: "COMPLETED", createdAt: { gte: thirtyDaysAgo } },
     }),
-    db.lead.count(),
-    db.lead.count({ where: { createdAt: { gte: thirtyDaysAgo } } }),
-    db.certificate.count(),
+    db.leads.count(),
+    db.leads.count({ where: { createdAt: { gte: thirtyDaysAgo } } }),
+    db.certificates.count(),
   ]);
 
   const stats = [
@@ -145,7 +145,7 @@ export default async function AdminAnalyticsPage() {
 }
 
 async function TopCoursesSection() {
-  const topCourses = await db.course.findMany({
+  const topCourses = await db.courses.findMany({
     where: { isPublished: true },
     orderBy: { enrollments: { _count: "desc" } },
     take: 5,

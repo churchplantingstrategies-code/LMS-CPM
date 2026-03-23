@@ -34,7 +34,7 @@ if ((!googleClientId || !googleClientSecret) && process.env.NODE_ENV !== "produc
   }
 }
 
-const providers = [
+const providers: any[] = [
   CredentialsProvider({
     name: "credentials",
     credentials: {
@@ -46,8 +46,19 @@ const providers = [
         return null;
       }
 
-      const user = await db.user.findUnique({
-        where: { email: credentials.email as string },
+      const email = String(credentials.email).trim().toLowerCase();
+      const userDelegate = ((db as any).user ?? (db as any).users) as {
+        findUnique: (args: { where: { email: string } }) => Promise<any>;
+        update: (args: { where: { id: string }; data: { lastLoginAt: Date } }) => Promise<any>;
+      };
+
+      if (!userDelegate?.findUnique || !userDelegate?.update) {
+        console.error("[AUTH] User delegate is unavailable on Prisma client");
+        return null;
+      }
+
+      const user = await userDelegate.findUnique({
+        where: { email },
       });
 
       if (!user || !user.password) {
@@ -62,7 +73,7 @@ const providers = [
       if (!passwordMatch) return null;
 
       // Update last login
-      await db.user.update({
+      await userDelegate.update({
         where: { id: user.id },
         data: { lastLoginAt: new Date() },
       });
@@ -88,8 +99,10 @@ if (googleClientId && googleClientSecret) {
   );
 }
 
-export const authOptions = {
+export const authOptions: any = {
   adapter: PrismaAdapter(db),
+  secret: process.env.NEXTAUTH_SECRET,
+  trustHost: true,
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -100,7 +113,7 @@ export const authOptions = {
   },
   providers,
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: any) {
       if (user) {
         token.id = user.id;
         token.role = (user as { role?: string }).role;
@@ -117,30 +130,12 @@ export const authOptions = {
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token }: any) {
       if (session.user && token) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
       }
       return session;
-    },
-  },
-  events: {
-    async createUser({ user }) {
-      // Track analytics event on signup
-      if (user.id) {
-        try {
-          await db.analyticsEvent.create({
-            data: {
-              userId: user.id,
-              event: "user_registered",
-              properties: { method: "credentials" },
-            },
-          });
-        } catch (err) {
-          console.error("Failed to create analytics event:", err);
-        }
-      }
     },
   },
 };

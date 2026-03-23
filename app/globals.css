@@ -158,3 +158,105 @@
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-muted-foreground/50;
 }
+
+/* Student-area dark theme utility overrides for readability on dark surfaces */
+.dark .student-theme-scope .text-gray-900 {
+  color: rgb(241 245 249);
+}
+
+.dark .student-theme-scope .text-gray-800 {
+  color: rgb(226 232 240);
+}
+
+.dark .student-theme-scope .text-gray-700 {
+  color: rgb(203 213 225);
+}
+
+.dark .student-theme-scope .text-gray-600,
+.dark .student-theme-scope .text-gray-500 {
+  color: rgb(148 163 184);
+}
+
+.dark .student-theme-scope .text-gray-400 {
+  color: rgb(100 116 139);
+}
+
+.dark .student-theme-scope .bg-white,
+.dark .student-theme-scope .bg-white\/80,
+.dark .student-theme-scope .bg-white\/85,
+.dark .student-theme-scope .bg-white\/90,
+.dark .student-theme-scope .bg-gray-50,
+.dark .student-theme-scope .bg-gray-100 {
+  background-color: rgb(15 23 42);
+}
+
+.dark .student-theme-scope .border-gray-100,
+.dark .student-theme-scope .border-gray-200,
+.dark .student-theme-scope .border-brand-100,
+.dark .student-theme-scope .border-brand-100\/80 {
+  border-color: rgb(51 65 85);
+}
+
+/* Teacher-area dark theme utility overrides */
+.dark .teacher-theme-scope .text-gray-900 {
+  color: rgb(241 245 249);
+}
+
+.dark .teacher-theme-scope .text-gray-800 {
+  color: rgb(226 232 240);
+}
+
+.dark .teacher-theme-scope .text-gray-700 {
+  color: rgb(203 213 225);
+}
+
+.dark .teacher-theme-scope .text-gray-600,
+.dark .teacher-theme-scope .text-gray-500 {
+  color: rgb(148 163 184);
+}
+
+.dark .teacher-theme-scope .bg-white,
+.dark .teacher-theme-scope .bg-gray-50 {
+  background-color: rgb(15 23 42);
+}
+
+.dark .teacher-theme-scope .bg-emerald-50,
+.dark .teacher-theme-scope .bg-emerald-100 {
+  background-color: rgb(6 32 27);
+}
+
+.dark .teacher-theme-scope .border-gray-200,
+.dark .teacher-theme-scope .border-gray-300,
+.dark .teacher-theme-scope .border-emerald-200 {
+  border-color: rgb(51 65 85);
+}
+
+.dark .teacher-theme-scope .text-emerald-900 {
+  color: rgb(209 250 229);
+}
+
+.dark .teacher-theme-scope .text-emerald-700 {
+  color: rgb(110 231 183);
+}
+
+/* Keep autofilled fields readable in dark mode */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus {
+  -webkit-text-fill-color: rgb(15 23 42);
+  transition: background-color 9999s ease-out 0s;
+  box-shadow: inset 0 0 0 1000px rgb(255 255 255);
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark textarea:-webkit-autofill,
+.dark textarea:-webkit-autofill:hover,
+.dark textarea:-webkit-autofill:focus {
+  -webkit-text-fill-color: rgb(241 245 249);
+  box-shadow: inset 0 0 0 1000px rgb(15 23 42);
+}

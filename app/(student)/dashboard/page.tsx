@@ -15,10 +15,10 @@ import { formatRelativeTime, calculateProgress } from "@/lib/utils";
 
 async function getStudentData(userId: string) {
   const [enrollments, recentProgress, certificates] = await Promise.all([
-    db.enrollment.findMany({
+    db.enrollments.findMany({
       where: { userId, status: "ACTIVE" },
       include: {
-        course: {
+        courses: {
           include: {
             modules: {
               include: { lessons: true },
@@ -29,22 +29,22 @@ async function getStudentData(userId: string) {
       orderBy: { enrolledAt: "desc" },
       take: 6,
     }),
-    db.lessonProgress.findMany({
+    db.lesson_progress.findMany({
       where: { userId, completed: true },
-      include: { lesson: { include: { module: { include: { course: true } } } } },
+      include: { lessons: { include: { modules: { include: { courses: true } } } } },
       orderBy: { completedAt: "desc" },
       take: 5,
     }),
-    db.certificate.findMany({
+    db.certificates.findMany({
       where: { userId },
-      include: { course: true },
+      include: { courses: true },
       orderBy: { issuedAt: "desc" },
     }),
   ]);
 
   // Calculate per-course progress
   const coursesWithProgress = enrollments.map((enrollment) => {
-    const totalLessons = enrollment.course.modules.reduce(
+    const totalLessons = enrollment.courses.modules.reduce(
       (acc, m) => acc + m.lessons.length, 0
     );
     return { enrollment, totalLessons };
@@ -55,7 +55,7 @@ async function getStudentData(userId: string) {
     coursesWithProgress,
     recentProgress,
     certificates,
-    totalLessonsCompleted: await db.lessonProgress.count({
+    totalLessonsCompleted: await db.lesson_progress.count({
       where: { userId, completed: true },
     }),
   };
@@ -102,10 +102,10 @@ export default async function DashboardPage() {
     <div className="p-6 max-w-7xl mx-auto">
       {/* Welcome */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-slate-100">
           Welcome back, {session.user.name?.split(" ")[0] || "Learner"}! 👋
         </h1>
-        <p className="text-gray-500 mt-1">Here&apos;s what&apos;s happening with your learning today.</p>
+        <p className="text-gray-500 mt-1 dark:text-slate-400">Here&apos;s what&apos;s happening with your learning today.</p>
       </div>
 
       {/* Stats */}
@@ -120,8 +120,8 @@ export default async function DashboardPage() {
                     <Icon className={`h-5 w-5 ${stat.color}`} />
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-                <div className="text-sm text-gray-500 mt-0.5">{stat.label}</div>
+                <div className="text-2xl font-bold text-gray-900 dark:text-slate-100">{stat.value}</div>
+                <div className="text-sm text-gray-500 mt-0.5 dark:text-slate-400">{stat.label}</div>
               </CardContent>
             </Card>
           );
@@ -132,7 +132,7 @@ export default async function DashboardPage() {
         {/* Enrolled Courses */}
         <div className="lg:col-span-2">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Continue Learning</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-slate-100">Continue Learning</h2>
             <Button variant="ghost" size="sm" asChild>
               <Link href="/courses">View all <ArrowRight className="ml-1 h-4 w-4" /></Link>
             </Button>
@@ -151,14 +151,14 @@ export default async function DashboardPage() {
             </Card>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {data.enrollments.slice(0, 4).map(({ course, enrolledAt }) => {
-                const totalLessons = course.modules.reduce((acc, m) => acc + m.lessons.length, 0);
+              {data.enrollments.slice(0, 4).map(({ courses, enrolledAt }) => {
+                const totalLessons = courses.modules.reduce((acc, m) => acc + m.lessons.length, 0);
                 const progressPct = calculateProgress(0, totalLessons); // Would need real data
                 return (
-                  <Card key={course.id} className="border-0 shadow-sm overflow-hidden card-hover">
+                  <Card key={courses.id} className="border-0 shadow-sm overflow-hidden card-hover">
                     <div className="h-32 bg-gradient-to-br from-brand-500 to-purple-600 relative">
-                      {course.thumbnail ? (
-                        <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover" />
+                      {courses.thumbnail ? (
+                        <img src={courses.thumbnail} alt={courses.title} className="w-full h-full object-cover" />
                       ) : (
                         <div className="flex items-center justify-center h-full">
                           <BookOpen className="h-12 w-12 text-white/50" />
@@ -169,14 +169,14 @@ export default async function DashboardPage() {
                         className="absolute bottom-2 right-2 h-8 w-8 rounded-full bg-white text-brand-600 hover:bg-brand-50 shadow-md"
                         asChild
                       >
-                        <Link href={`/courses/${course.id}`}>
+                        <Link href={`/courses/${courses.id}`}>
                           <Play className="h-4 w-4" />
                         </Link>
                       </Button>
                     </div>
                     <CardContent className="pt-3 pb-4">
-                      <Badge variant="brand" className="text-xs mb-2">{course.level}</Badge>
-                      <h3 className="font-semibold text-sm truncate">{course.title}</h3>
+                      <Badge variant="brand" className="text-xs mb-2">{courses.level}</Badge>
+                      <h3 className="font-semibold text-sm truncate">{courses.title}</h3>
                       <div className="mt-2">
                         <div className="flex justify-between text-xs text-gray-500 mb-1">
                           <span>{progressPct}% complete</span>
@@ -199,7 +199,7 @@ export default async function DashboardPage() {
 
           {/* Recent Activity */}
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4 dark:text-slate-100">Recent Activity</h2>
             <Card className="border-0 shadow-sm">
               <CardContent className="pt-4">
                 {data.recentProgress.length === 0 ? (
@@ -210,9 +210,9 @@ export default async function DashboardPage() {
                       <div key={progress.id} className="flex items-start gap-2.5">
                         <CheckCircle className="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" />
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium truncate">{progress.lesson.title}</p>
+                          <p className="text-sm font-medium truncate">{progress.lessons.title}</p>
                           <p className="text-xs text-gray-400">
-                            {progress.lesson.module.course.title} ·{" "}
+                            {progress.lessons.modules.courses.title} ·{" "}
                             {progress.completedAt && formatRelativeTime(progress.completedAt)}
                           </p>
                         </div>
@@ -226,7 +226,7 @@ export default async function DashboardPage() {
 
           {/* Certificates */}
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Certificates</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4 dark:text-slate-100">Certificates</h2>
             <Card className="border-0 shadow-sm">
               <CardContent className="pt-4">
                 {data.certificates.length === 0 ? (
@@ -240,7 +240,7 @@ export default async function DashboardPage() {
                       <div key={cert.id} className="flex items-center gap-2.5 p-2 rounded-lg bg-amber-50">
                         <Award className="h-5 w-5 text-amber-500 flex-shrink-0" />
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium truncate">{cert.course.title}</p>
+                          <p className="text-sm font-medium truncate">{cert.courses.title}</p>
                           <p className="text-xs text-gray-400">{formatRelativeTime(cert.issuedAt)}</p>
                         </div>
                       </div>

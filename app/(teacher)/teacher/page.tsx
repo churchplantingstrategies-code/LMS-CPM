@@ -13,7 +13,7 @@ export default async function TeacherDashboardPage() {
 
   let ownedCourseIds: string[] = [];
   if (role === "INSTRUCTOR") {
-    const courses = await db.course.findMany({
+    const courses = await db.courses.findMany({
       select: { id: true, metadata: true },
       take: 500,
     });
@@ -28,7 +28,7 @@ export default async function TeacherDashboardPage() {
   const [courseCount, studentCount, submissionsToGrade, discussionCount] = await Promise.all([
     role === "INSTRUCTOR"
       ? Promise.resolve(ownedCourseIds.length)
-      : db.course.count(),
+      : db.courses.count(),
     role === "INSTRUCTOR"
       ? db.user.count({
           where: {
@@ -38,16 +38,16 @@ export default async function TeacherDashboardPage() {
         })
       : db.user.count({ where: { role: "STUDENT" } }),
     role === "INSTRUCTOR"
-      ? db.submission.count({
+      ? db.submissions.count({
           where: {
             status: { in: ["SUBMITTED", "UNDER_REVIEW"] },
-            assignment: { lesson: { module: { courseId: { in: ownedCourseIds } } } },
+            assignments: { lessons: { modules: { courseId: { in: ownedCourseIds } } } },
           },
         })
-      : db.submission.count({ where: { status: { in: ["SUBMITTED", "UNDER_REVIEW"] } } }),
+      : db.submissions.count({ where: { status: { in: ["SUBMITTED", "UNDER_REVIEW"] } } }),
     role === "INSTRUCTOR"
-      ? db.discussion.count({ where: { courseId: { in: ownedCourseIds } } })
-      : db.discussion.count(),
+      ? db.discussions.count({ where: { courseId: { in: ownedCourseIds } } })
+      : db.discussions.count(),
   ]);
 
   return (

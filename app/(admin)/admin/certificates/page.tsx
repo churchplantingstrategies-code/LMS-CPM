@@ -10,7 +10,7 @@ export default async function AdminCertificatesPage() {
     redirect("/login");
   }
 
-  const certificatesCount = await db.certificate.count();
+  const certificatesCount = await db.certificates.count();
 
   return (
     <div className="space-y-6">

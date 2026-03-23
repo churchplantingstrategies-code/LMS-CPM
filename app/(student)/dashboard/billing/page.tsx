@@ -12,12 +12,12 @@ export default async function BillingPage() {
   if (!session?.user) redirect("/login");
 
   const [subscription, payments] = await Promise.all([
-    db.subscription.findFirst({
+    db.subscriptions.findFirst({
       where: { userId: session.user.id, status: { in: ["ACTIVE", "TRIALING", "PAST_DUE"] } },
-      include: { plan: true },
+      include: { plans: true },
       orderBy: { createdAt: "desc" },
     }),
-    db.payment.findMany({
+    db.payments.findMany({
       where: { userId: session.user.id, status: "COMPLETED" },
       orderBy: { createdAt: "desc" },
       take: 20,
@@ -42,9 +42,9 @@ export default async function BillingPage() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-lg font-semibold text-gray-900">{subscription.plan?.name}</p>
+                <p className="text-lg font-semibold text-gray-900">{subscription.plans?.name}</p>
                 <p className="text-sm text-gray-500">
-                  {formatCurrency(subscription.plan?.price ?? 0)}/{subscription.plan?.interval.toLowerCase()}
+                  {formatCurrency(subscription.plans?.price ?? 0)}/{subscription.plans?.interval.toLowerCase()}
                 </p>
               </div>
               <Badge
@@ -54,9 +54,9 @@ export default async function BillingPage() {
               </Badge>
             </div>
 
-            {subscription.plan?.features && (
+            {subscription.plans?.features && (
               <ul className="grid grid-cols-2 gap-2">
-                {(subscription.plan.features as string[]).map((f) => (
+                {(subscription.plans.features as string[]).map((f) => (
                   <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
                     <CheckCircle className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
                     {f}

@@ -17,13 +17,13 @@ export default async function TeacherLayout({ children }: { children: React.Reac
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
+    <div className="teacher-theme-scope flex h-screen overflow-hidden bg-gray-50 dark:bg-slate-950">
       <TeacherSidebar />
       <div className="flex flex-1 flex-col overflow-hidden">
-        <header className="flex h-14 items-center justify-between border-b border-emerald-200 bg-gradient-to-r from-emerald-500 to-teal-500 px-4 sm:px-6 shadow-sm">
+        <header className="flex h-14 items-center justify-between border-b border-emerald-200 bg-gradient-to-r from-emerald-500 to-teal-500 px-4 shadow-sm sm:px-6 dark:border-emerald-700/70 dark:from-slate-900 dark:to-emerald-950">
           <div className="flex items-center gap-3">
             <TeacherMobileNav />
-            <h1 className="text-sm font-semibold text-white">Teacher Workspace</h1>
+            <h1 className="text-sm font-semibold text-white dark:text-emerald-100">Teacher Workspace</h1>
           </div>
           <HeaderUserActions
             name={session.user.name}
@@ -33,7 +33,7 @@ export default async function TeacherLayout({ children }: { children: React.Reac
             showBell={false}
           />
         </header>
-        <main className="flex-1 overflow-auto bg-gray-50 text-gray-900">{children}</main>
+        <main className="flex-1 overflow-auto bg-gray-50 text-gray-900 dark:bg-slate-950 dark:text-slate-100">{children}</main>
       </div>
     </div>
   );

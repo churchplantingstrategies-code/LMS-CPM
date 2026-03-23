@@ -22,7 +22,7 @@ export default async function AdminAutomationPage() {
   const role = session.user.role;
   if (role !== "ADMIN" && role !== "SUPER_ADMIN") redirect("/dashboard");
 
-  const rules = await db.automationRule.findMany({
+  const rules = await db.automation_rules.findMany({
     orderBy: { createdAt: "desc" },
   });
 

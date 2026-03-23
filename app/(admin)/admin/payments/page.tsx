@@ -26,12 +26,11 @@ export default async function AdminPaymentsPage() {
   const role = session.user.role;
   if (role !== "ADMIN" && role !== "SUPER_ADMIN") redirect("/dashboard");
 
-  const payments = await db.payment.findMany({
+  const payments = await db.payments.findMany({
     orderBy: { createdAt: "desc" },
     take: 100,
     include: {
-      user: { select: { name: true, email: true } },
-      course: { select: { title: true } },
+      users: { select: { name: true, email: true } },
     },
   });
 
@@ -71,8 +70,8 @@ export default async function AdminPaymentsPage() {
             {payments.map((payment) => (
               <TableRow key={payment.id}>
                 <TableCell>
-                  <div className="font-medium text-gray-900">{payment.user.name ?? "—"}</div>
-                  <div className="text-xs text-gray-400">{payment.user.email}</div>
+                  <div className="font-medium text-gray-900">{payment.users.name ?? "—"}</div>
+                  <div className="text-xs text-gray-400">{payment.users.email}</div>
                 </TableCell>
                 <TableCell>
                   <Badge variant="secondary" className="text-xs">
@@ -80,7 +79,7 @@ export default async function AdminPaymentsPage() {
                   </Badge>
                 </TableCell>
                 <TableCell className="text-gray-600 text-sm max-w-[200px] truncate">
-                  {payment.course?.title ?? (payment.type === "SUBSCRIPTION" ? "Subscription" : "—")}
+                  {payment.description ?? (payment.type === "SUBSCRIPTION" ? "Subscription" : "—")}
                 </TableCell>
                 <TableCell className="font-medium text-gray-900">
                   {formatCurrency(payment.amount)}

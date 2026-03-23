@@ -33,9 +33,9 @@ export function StudentSidebar() {
   }, [pathname]);
 
   return (
-    <aside className="hidden h-full w-64 flex-col border-r border-brand-100/80 bg-gradient-to-b from-white via-brand-50/35 to-purple-50/45 md:flex">
+    <aside className="hidden h-full w-64 flex-col border-r border-brand-100/80 bg-gradient-to-b from-white via-brand-50/35 to-purple-50/45 md:flex dark:border-slate-700/80 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/70">
       {/* Brand */}
-      <div className="flex h-16 items-center gap-2 border-b border-brand-100/80 px-6">
+      <div className="flex h-16 items-center gap-2 border-b border-brand-100/80 px-6 dark:border-slate-700/80">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-purple-600 shadow-sm">
           <GraduationCap className="h-5 w-5 text-white" />
         </div>
@@ -62,14 +62,14 @@ export function StudentSidebar() {
                     "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
                     isActive
                       ? "bg-gradient-to-r from-brand-600 to-purple-600 text-white shadow-sm"
-                      : "text-gray-600 hover:bg-white hover:text-brand-700",
+                      : "text-gray-600 hover:bg-white hover:text-brand-700 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-brand-300",
                     isPending && "opacity-80"
                   )}
                 >
                   {isPending ? (
                     <Loader2 className="h-5 w-5 animate-spin text-brand-500" />
                   ) : (
-                    <Icon className={cn("h-5 w-5", isActive ? "text-white" : "text-gray-400")} />
+                    <Icon className={cn("h-5 w-5", isActive ? "text-white" : "text-gray-400 dark:text-slate-500")} />
                   )}
                   {item.label}
                   {isPending ? <Loader2 className="ml-auto h-4 w-4 animate-spin text-brand-400" /> : null}
@@ -83,7 +83,7 @@ export function StudentSidebar() {
 
       {/* User Info */}
       {session?.user && (
-        <div className="border-t border-brand-100/80 p-4">
+        <div className="border-t border-brand-100/80 p-4 dark:border-slate-700/80">
           <div className="flex items-center gap-3">
             <Avatar className="h-9 w-9">
               <AvatarImage src={session.user.image || ""} />
@@ -92,8 +92,8 @@ export function StudentSidebar() {
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 overflow-hidden">
-              <p className="text-sm font-medium truncate">{session.user.name}</p>
-              <p className="text-xs text-gray-500 truncate">{session.user.email}</p>
+              <p className="text-sm font-medium truncate text-gray-900 dark:text-slate-100">{session.user.name}</p>
+              <p className="text-xs text-gray-500 truncate dark:text-slate-400">{session.user.email}</p>
             </div>
           </div>
         </div>

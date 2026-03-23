@@ -7,7 +7,7 @@ import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Mail, Lock, Eye, EyeOff, Chrome } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -52,7 +52,11 @@ export default function LoginPage() {
     });
 
     if (result?.error) {
-      setError("Invalid email or password. Please try again.");
+      if (result.error === "CredentialsSignin") {
+        setError("Invalid email or password. Please try again.");
+      } else {
+        setError(`Sign-in failed: ${result.error}`);
+      }
     } else {
       // Redirect based on role
       const sessionRes = await fetch("/api/auth/session");
@@ -84,8 +88,8 @@ export default function LoginPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Welcome back</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-slate-100">Welcome back</h1>
+        <p className="mt-1 text-gray-500 dark:text-slate-400">
           Don&apos;t have an account?{" "}
           <Link href="/register" className="text-brand-600 font-medium hover:underline">
             Sign up free
@@ -131,10 +135,10 @@ export default function LoginPage() {
 
       <div className="relative mb-6">
         <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
+          <span className="w-full border-t border-gray-200 dark:border-slate-700" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-white px-2 text-gray-400">Or continue with email</span>
+          <span className="bg-white px-2 text-gray-400 dark:bg-slate-900 dark:text-slate-500">Or continue with email</span>
         </div>
       </div>
 
@@ -149,7 +153,7 @@ export default function LoginPage() {
         <div>
           <Label htmlFor="email">Email</Label>
           <div className="relative mt-1">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-slate-500" />
             <Input
               id="email"
               type="email"
@@ -166,12 +170,12 @@ export default function LoginPage() {
         <div>
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
-            <Link href="/forgot-password" className="text-xs text-brand-600 hover:underline">
+            <Link href="/forgot-password" className="text-xs text-brand-600 hover:underline dark:text-brand-400">
               Forgot password?
             </Link>
           </div>
           <div className="relative mt-1">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-slate-500" />
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
@@ -182,7 +186,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500"
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>

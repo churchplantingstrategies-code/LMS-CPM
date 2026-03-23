@@ -30,11 +30,11 @@ export default async function AdminEmailPage() {
   if (role !== "ADMIN" && role !== "SUPER_ADMIN") redirect("/dashboard");
 
   const [campaigns, totalLeads] = await Promise.all([
-    db.emailCampaign.findMany({
+    db.email_campaigns.findMany({
       orderBy: { createdAt: "desc" },
-      include: { _count: { select: { logs: true } } },
+      include: { _count: { select: { email_logs: true } } },
     }),
-    db.lead.count(),
+    db.leads.count(),
   ]);
 
   return (

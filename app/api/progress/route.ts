@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
 
   if (completed) {
     const lesson = await db.lesson.findFirst({
-      where: { id: lessonId, module: { courseId } },
+      where: { id: lessonId, modules: { courseId } },
       select: { attachments: true },
     });
 
@@ -93,27 +93,30 @@ export async function POST(request: NextRequest) {
     },
     update: {
       completed,
+      updatedAt: new Date(),
       ...(watchedSeconds !== undefined ? { watchedTime: watchedSeconds } : {}),
       ...(completed ? { completedAt: new Date() } : {}),
     },
     create: {
+      id: crypto.randomUUID(),
       userId: session.user.id,
       lessonId,
       completed,
       watchedTime: watchedSeconds ?? 0,
+      updatedAt: new Date(),
       ...(completed ? { completedAt: new Date() } : {}),
     },
   });
 
   const [totalLessons, completedLessons] = await Promise.all([
     db.lesson.count({
-      where: { module: { courseId } },
+      where: { modules: { courseId } },
     }),
     db.lessonProgress.count({
       where: {
         userId: session.user.id,
         completed: true,
-        lesson: { module: { courseId } },
+        lessons: { modules: { courseId } },
       },
     }),
   ]);
@@ -150,7 +153,7 @@ export async function GET(request: NextRequest) {
   const progressRecords = await db.lessonProgress.findMany({
     where: {
       userId: session.user.id,
-      lesson: { module: { courseId } },
+      lessons: { modules: { courseId } },
     },
     select: { lessonId: true, completed: true, watchedTime: true, completedAt: true },
   });

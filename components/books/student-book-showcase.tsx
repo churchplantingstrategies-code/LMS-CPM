@@ -17,8 +17,8 @@ export function StudentBookShowcase() {
     <div>
       <div className="mb-4 flex items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">Book Store</h2>
-          <p className="text-sm text-gray-500">Live published books from the storefront.</p>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-slate-100">Book Store</h2>
+          <p className="text-sm text-gray-500 dark:text-slate-400">Live published books from the storefront.</p>
         </div>
         <Button variant="ghost" size="sm" asChild>
           <Link href="/checkout">
@@ -31,25 +31,25 @@ export function StudentBookShowcase() {
       <Card className="border-0 shadow-sm">
         <CardContent className="space-y-4 pt-4">
           {loading ? (
-            <p className="py-4 text-sm text-gray-500">Loading bookstore...</p>
+            <p className="py-4 text-sm text-gray-500 dark:text-slate-400">Loading bookstore...</p>
           ) : featuredBooks.length === 0 ? (
             <div className="py-8 text-center">
               <BookOpen className="mx-auto h-10 w-10 text-gray-300" />
-              <p className="mt-3 text-sm text-gray-500">No published books yet.</p>
+              <p className="mt-3 text-sm text-gray-500 dark:text-slate-400">No published books yet.</p>
             </div>
           ) : (
             featuredBooks.map((book) => (
-              <div key={book.id} className="flex gap-3 rounded-2xl bg-gray-50 p-3">
+              <div key={book.id} className="flex gap-3 rounded-2xl bg-gray-50 p-3 dark:bg-slate-900/70">
                 <BookCoverImage bookId={book.id} title={book.title} imageUrl={book.coverImageUrl} className="h-24 w-16 flex-shrink-0 rounded-[18px] shadow-sm" />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     {book.featured ? <Badge variant="brand">Featured</Badge> : null}
                     <Badge variant="secondary">{book.format}</Badge>
                   </div>
-                  <p className="mt-2 truncate text-sm font-semibold text-gray-900">{book.title}</p>
-                  <p className="text-xs text-gray-500">{book.author}</p>
+                  <p className="mt-2 truncate text-sm font-semibold text-gray-900 dark:text-slate-100">{book.title}</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400">{book.author}</p>
                   <div className="mt-3 flex items-center justify-between gap-3">
-                    <span className="text-sm font-semibold text-gray-900">{formatCurrency(book.price, settings.currency)}</span>
+                    <span className="text-sm font-semibold text-gray-900 dark:text-slate-100">{formatCurrency(book.price, settings.currency)}</span>
                     <Button size="sm" variant="outline" asChild>
                       <Link href={`/checkout?bookId=${book.id}`}>Buy now</Link>
                     </Button>

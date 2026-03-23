@@ -19,10 +19,10 @@ export default async function AdminLeadsPage() {
   const role = session.user.role;
   if (role !== "ADMIN" && role !== "SUPER_ADMIN") redirect("/dashboard");
 
-  const leads = await db.lead.findMany({
+  const leads = await db.leads.findMany({
     orderBy: { createdAt: "desc" },
     include: {
-      funnel: { select: { name: true } },
+      funnels: { select: { title: true } },
     },
   });
 
@@ -60,7 +60,7 @@ export default async function AdminLeadsPage() {
                 </TableCell>
                 <TableCell className="text-gray-600">{lead.email}</TableCell>
                 <TableCell className="text-gray-600">
-                  {lead.funnel?.name ?? "—"}
+                  {lead.funnels?.title ?? "—"}
                 </TableCell>
                 <TableCell>
                   {lead.tags && (lead.tags as string[]).length > 0 ? (

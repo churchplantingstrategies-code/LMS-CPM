@@ -10,7 +10,7 @@ export function StudentCartLink() {
   return (
     <Link
       href="/cart"
-      className="relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 transition-colors hover:border-brand-200 hover:text-brand-700"
+      className="relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 transition-colors hover:border-brand-200 hover:text-brand-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-brand-500 dark:hover:text-brand-300"
       aria-label="Open checkout cart"
     >
       <ShoppingCart className="h-4 w-4" />

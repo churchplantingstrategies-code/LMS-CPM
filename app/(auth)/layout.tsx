@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen grid md:grid-cols-2">
+    <div className="min-h-screen grid bg-white dark:bg-slate-950 md:grid-cols-2">
       {/* Left - Brand Panel */}
       <div className="hidden md:flex flex-col justify-between bg-gradient-to-br from-brand-900 via-brand-800 to-purple-900 p-12 text-white">
         <Link href="/" className="flex items-center gap-2 font-bold text-xl">
@@ -38,10 +38,10 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       </div>
 
       {/* Right - Auth Form */}
-      <div className="flex items-center justify-center p-8">
-        <div className="w-full max-w-md">
+      <div className="flex items-center justify-center bg-white p-8 dark:bg-slate-950">
+        <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white/90 p-6 shadow-sm backdrop-blur dark:border-slate-800 dark:bg-slate-900/85">
           {/* Mobile Logo */}
-          <Link href="/" className="flex md:hidden items-center gap-2 font-bold text-xl mb-8">
+          <Link href="/" className="mb-8 flex items-center gap-2 text-xl font-bold md:hidden">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600">
               <GraduationCap className="h-5 w-5 text-white" />
             </div>

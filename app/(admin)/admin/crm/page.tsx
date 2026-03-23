@@ -12,13 +12,13 @@ export default async function AdminCrmPage() {
   if (role !== "ADMIN" && role !== "SUPER_ADMIN") redirect("/dashboard");
 
   const [leads, funnels, automations, campaigns, totalEnrollments, completedPayments, activeSubscriptions, totalStudents] = await Promise.all([
-    db.lead.findMany({ orderBy: { createdAt: "desc" }, take: 20 }),
-    db.funnel.findMany({ orderBy: { createdAt: "desc" }, take: 10 }),
-    db.automationRule.findMany({ orderBy: { createdAt: "desc" }, take: 10 }),
-    db.emailCampaign.findMany({ orderBy: { createdAt: "desc" }, take: 10 }),
-    db.enrollment.count(),
-    db.payment.count({ where: { status: "COMPLETED" } }),
-    db.subscription.count({ where: { status: "ACTIVE" } }),
+    db.leads.findMany({ orderBy: { createdAt: "desc" }, take: 20 }),
+    db.funnels.findMany({ orderBy: { createdAt: "desc" }, take: 10 }),
+    db.automation_rules.findMany({ orderBy: { createdAt: "desc" }, take: 10 }),
+    db.email_campaigns.findMany({ orderBy: { createdAt: "desc" }, take: 10 }),
+    db.enrollments.count(),
+    db.payments.count({ where: { status: "COMPLETED" } }),
+    db.subscriptions.count({ where: { status: "ACTIVE" } }),
     db.user.count({ where: { role: "STUDENT" } }),
   ]);
 

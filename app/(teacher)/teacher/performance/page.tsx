@@ -13,7 +13,7 @@ export default async function TeacherPerformancePage() {
 
   let ownedCourseIds: string[] = [];
   if (role === "INSTRUCTOR") {
-    const courses = await db.course.findMany({
+    const courses = await db.courses.findMany({
       select: { id: true, metadata: true },
       take: 500,
     });
@@ -36,7 +36,7 @@ export default async function TeacherPerformancePage() {
     take: 80,
     include: {
       enrollments: { select: { id: true, status: true } },
-      lessonProgress: { select: { id: true, completed: true } },
+      lesson_progress: { select: { id: true, completed: true } },
       submissions: { select: { score: true } },
     },
   });
@@ -66,7 +66,7 @@ export default async function TeacherPerformancePage() {
               </tr>
             ) : (
               students.map((student) => {
-                const completedLessons = student.lessonProgress.filter((p) => p.completed).length;
+                const completedLessons = student.lesson_progress.filter((p) => p.completed).length;
                 const scored = student.submissions.filter((s) => typeof s.score === "number") as Array<{ score: number }>;
                 const average = scored.length > 0 ? scored.reduce((sum, s) => sum + s.score, 0) / scored.length : null;
 
@@ -78,7 +78,7 @@ export default async function TeacherPerformancePage() {
                     </td>
                     <td className="px-3 py-3">{student.enrollments.length}</td>
                     <td className="px-3 py-3">{completedLessons}</td>
-                    <td className="px-3 py-3">{student.lessonProgress.length}</td>
+                    <td className="px-3 py-3">{student.lesson_progress.length}</td>
                     <td className="px-3 py-3">{average === null ? "—" : average.toFixed(2)}</td>
                   </tr>
                 );

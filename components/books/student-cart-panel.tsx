@@ -21,8 +21,8 @@ export function StudentCartPanel({ compact = false }: { compact?: boolean }) {
             <div className="mb-2 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-50 text-brand-700">
               <ShoppingBag className="h-5 w-5" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900">Book Checkout Cart</h3>
-            <p className="mt-1 text-sm text-gray-500">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-slate-100">Book Checkout Cart</h3>
+            <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">
               Keep subscriptions for recurring access and use this cart for one-time book purchases.
             </p>
           </div>
@@ -30,16 +30,16 @@ export function StudentCartPanel({ compact = false }: { compact?: boolean }) {
         </div>
 
         {items.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-4">
+          <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-4 dark:border-slate-700 dark:bg-slate-900/70">
             <div className="mb-4 flex items-center gap-3">
               <BookMarked className="h-9 w-9 text-gray-300" />
               <div>
-                <p className="font-medium text-gray-900">Your cart is empty</p>
-                <p className="text-sm text-gray-500">Add sample books from the landing page or from the student cart view.</p>
+                <p className="font-medium text-gray-900 dark:text-slate-100">Your cart is empty</p>
+                <p className="text-sm text-gray-500 dark:text-slate-400">Add sample books from the landing page or from the student cart view.</p>
               </div>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-              {catalogLoading ? <p className="text-sm text-gray-500">Loading books...</p> : null}
+              {catalogLoading ? <p className="text-sm text-gray-500 dark:text-slate-400">Loading books...</p> : null}
               {suggestedBooks.map((book) => (
                 <button
                   key={book.id}
@@ -52,13 +52,13 @@ export function StudentCartPanel({ compact = false }: { compact?: boolean }) {
                       variant: "success",
                     });
                   }}
-                  className="rounded-2xl border bg-white p-4 text-left transition-colors hover:border-brand-200 hover:bg-brand-50/40"
+                  className="rounded-2xl border bg-white p-4 text-left transition-colors hover:border-brand-200 hover:bg-brand-50/40 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800"
                 >
-                  <p className="text-sm font-semibold text-gray-900">{book.title}</p>
-                  <p className="mt-1 text-xs text-gray-500">{book.author}</p>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-slate-100">{book.title}</p>
+                  <p className="mt-1 text-xs text-gray-500 dark:text-slate-400">{book.author}</p>
                   <div className="mt-3 flex items-center justify-between text-sm">
-                    <span className="text-brand-700">Add to cart</span>
-                    <span className="font-semibold text-gray-900">{formatCurrency(book.price, "PHP")}</span>
+                    <span className="text-brand-700 dark:text-brand-300">Add to cart</span>
+                    <span className="font-semibold text-gray-900 dark:text-slate-100">{formatCurrency(book.price, "PHP")}</span>
                   </div>
                 </button>
               ))}
@@ -67,16 +67,16 @@ export function StudentCartPanel({ compact = false }: { compact?: boolean }) {
         ) : (
           <div className="space-y-3">
             {items.slice(0, compact ? 2 : items.length).map((item) => (
-              <div key={item.bookId} className="flex items-center justify-between rounded-2xl bg-gray-50 px-4 py-3">
+              <div key={item.bookId} className="flex items-center justify-between rounded-2xl bg-gray-50 px-4 py-3 dark:bg-slate-900/70">
                 <div>
-                  <p className="font-medium text-gray-900">{item.book.title}</p>
-                  <p className="text-sm text-gray-500">Qty {item.quantity} · {item.book.author}</p>
+                  <p className="font-medium text-gray-900 dark:text-slate-100">{item.book.title}</p>
+                  <p className="text-sm text-gray-500 dark:text-slate-400">Qty {item.quantity} · {item.book.author}</p>
                 </div>
-                <p className="font-semibold text-gray-900">{formatCurrency(item.lineTotal, "PHP")}</p>
+                <p className="font-semibold text-gray-900 dark:text-slate-100">{formatCurrency(item.lineTotal, "PHP")}</p>
               </div>
             ))}
             {compact && items.length > 2 ? (
-              <p className="text-sm text-gray-500">+{items.length - 2} more item{items.length - 2 === 1 ? "" : "s"} in cart</p>
+              <p className="text-sm text-gray-500 dark:text-slate-400">+{items.length - 2} more item{items.length - 2 === 1 ? "" : "s"} in cart</p>
             ) : null}
           </div>
         )}

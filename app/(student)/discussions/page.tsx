@@ -14,10 +14,10 @@ type DiscussionItem = {
   content: string;
   isPinned: boolean;
   createdAt: Date;
-  user: {
+  users: {
     name: string | null;
   };
-  course: {
+  courses: {
     title: string;
     slug: string;
   };
@@ -27,7 +27,7 @@ type DiscussionItem = {
 };
 
 async function getDiscussions(userId: string): Promise<DiscussionItem[]> {
-  const enrollments = await db.enrollment.findMany({
+  const enrollments = await db.enrollments.findMany({
     where: { userId },
     select: { courseId: true },
   });
@@ -38,19 +38,19 @@ async function getDiscussions(userId: string): Promise<DiscussionItem[]> {
     return [];
   }
 
-  return db.discussion.findMany({
+  return db.discussions.findMany({
     where: {
       courseId: { in: courseIds },
     },
     include: {
-      user: {
+      users: {
         select: {
           id: true,
           name: true,
           image: true,
         },
       },
-      course: {
+      courses: {
         select: {
           id: true,
           title: true,
@@ -115,8 +115,8 @@ export default async function DiscussionsPage() {
                       {discussion.title}
                     </CardTitle>
                     <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500">
-                      <Badge variant="secondary">{discussion.course.title}</Badge>
-                      <span>by {discussion.user.name || "Anonymous"}</span>
+                      <Badge variant="secondary">{discussion.courses.title}</Badge>
+                      <span>by {discussion.users.name || "Anonymous"}</span>
                       <span className="inline-flex items-center gap-1">
                         <Clock className="h-3 w-3" />
                         {formatRelativeTime(discussion.createdAt)}
@@ -136,7 +136,7 @@ export default async function DiscussionsPage() {
                 <div className="mt-3 flex items-center justify-between text-sm text-gray-600">
                   <span>{discussion._count.replies} replies</span>
                   <Link
-                    href={`/courses/${discussion.course.slug}`}
+                    href={`/courses/${discussion.courses.slug}`}
                     className="font-medium text-brand-600 hover:underline"
                   >
                     Open course

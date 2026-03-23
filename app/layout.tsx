@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { SessionProvider } from "@/components/providers/session-provider";
 import { Toaster } from "@/components/ui/toaster";
@@ -38,6 +39,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`(function(){try{var stored=localStorage.getItem('theme-mode')||'auto';var prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;var isDark=stored==='dark'||(stored==='auto'&&prefersDark);document.documentElement.classList.toggle('dark',isDark);}catch(e){}})();`}
+        </Script>
         <SessionProvider>
           {children}
           <Toaster />

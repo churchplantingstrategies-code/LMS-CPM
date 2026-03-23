@@ -26,10 +26,10 @@ export function HeaderUserActions({
       {showBell ? (
         <button
           type="button"
-          className="relative rounded-lg p-2 transition-colors hover:bg-gray-100"
+          className="relative rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-slate-800"
           aria-label="Notifications"
         >
-          <Bell className="h-5 w-5 text-gray-500" />
+          <Bell className="h-5 w-5 text-gray-500 dark:text-slate-300" />
           <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-brand-600" />
         </button>
       ) : null}

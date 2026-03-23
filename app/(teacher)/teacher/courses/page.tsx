@@ -12,7 +12,7 @@ export default async function TeacherCoursesPage() {
     redirect("/dashboard");
   }
 
-  const allCourses = await db.course.findMany({
+  const allCourses = await db.courses.findMany({
     orderBy: { createdAt: "desc" },
     take: 200,
     select: {

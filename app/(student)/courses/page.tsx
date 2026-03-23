@@ -12,7 +12,7 @@ import { formatDuration, calculateProgress } from "@/lib/utils";
 
 async function getCourses(userId: string) {
   const [courses, enrollments] = await Promise.all([
-    db.course.findMany({
+    db.courses.findMany({
       where: { isPublished: true },
       include: {
         modules: {
@@ -23,7 +23,7 @@ async function getCourses(userId: string) {
       },
       orderBy: [{ isFeatured: "desc" }, { createdAt: "desc" }],
     }),
-    db.enrollment.findMany({
+    db.enrollments.findMany({
       where: { userId },
       select: { courseId: true },
     }),

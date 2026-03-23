@@ -20,7 +20,7 @@ async function gradeSubmissionAction(formData: FormData) {
 
   if (!submissionId) return;
 
-  await db.submission.update({
+  await db.submissions.update({
     where: { id: submissionId },
     data: {
       score: Number.isFinite(scoreValue) ? scoreValue : null,
@@ -44,7 +44,7 @@ export default async function TeacherGradingPage() {
 
   let ownedCourseIds: string[] = [];
   if (role === "INSTRUCTOR") {
-    const courses = await db.course.findMany({
+    const courses = await db.courses.findMany({
       select: { id: true, metadata: true },
       take: 500,
     });
@@ -56,23 +56,23 @@ export default async function TeacherGradingPage() {
       .map((course) => course.id);
   }
 
-  const submissions = await db.submission.findMany({
+  const submissions = await db.submissions.findMany({
     where:
       role === "INSTRUCTOR"
-        ? { assignment: { lesson: { module: { courseId: { in: ownedCourseIds } } } } }
+        ? { assignments: { lessons: { modules: { courseId: { in: ownedCourseIds } } } } }
         : undefined,
     orderBy: { submittedAt: "desc" },
     take: 40,
     include: {
-      user: { select: { name: true, email: true } },
-      assignment: {
+      users: { select: { name: true, email: true } },
+      assignments: {
         select: {
           title: true,
           maxScore: true,
-          lesson: {
+          lessons: {
             select: {
               title: true,
-              module: { select: { title: true, course: { select: { title: true } } } },
+              modules: { select: { title: true, courses: { select: { title: true } } } },
             },
           },
         },
@@ -94,12 +94,12 @@ export default async function TeacherGradingPage() {
           submissions.map((submission) => (
             <div key={submission.id} className="rounded-xl border border-emerald-200 bg-white p-4">
               <div className="mb-3">
-                <p className="text-sm font-semibold text-gray-900">{submission.assignment.title}</p>
+                <p className="text-sm font-semibold text-gray-900">{submission.assignments.title}</p>
                 <p className="text-xs text-gray-600">
-                  {submission.assignment.lesson.module.course.title} / {submission.assignment.lesson.module.title} / {submission.assignment.lesson.title}
+                  {submission.assignments.lessons.modules.courses.title} / {submission.assignments.lessons.modules.title} / {submission.assignments.lessons.title}
                 </p>
                 <p className="mt-1 text-xs text-gray-500">
-                  Student: {submission.user.name || "Unnamed"} ({submission.user.email})
+                  Student: {submission.users.name || "Unnamed"} ({submission.users.email})
                 </p>
               </div>
 
@@ -108,12 +108,12 @@ export default async function TeacherGradingPage() {
               <form action={gradeSubmissionAction} className="grid gap-3 md:grid-cols-3">
                 <input type="hidden" name="submissionId" value={submission.id} />
                 <div>
-                  <label className="mb-1 block text-xs text-gray-700">Score (max {submission.assignment.maxScore})</label>
+                  <label className="mb-1 block text-xs text-gray-700">Score (max {submission.assignments.maxScore})</label>
                   <input
                     type="number"
                     step="0.1"
                     min={0}
-                    max={submission.assignment.maxScore}
+                    max={submission.assignments.maxScore}
                     name="score"
                     defaultValue={submission.score ?? ""}
                     className="w-full rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"

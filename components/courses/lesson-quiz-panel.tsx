@@ -66,12 +66,12 @@ export function LessonQuizPanel({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl border border-brand-500/20 bg-brand-500/10 p-4 text-sm text-brand-100">
-        <div className="flex items-center gap-2 font-semibold text-white">
-          <HelpCircle className="h-4 w-4 text-brand-300" />
+      <div className="rounded-2xl border border-brand-200 bg-brand-50 p-4 text-sm text-brand-800">
+        <div className="flex items-center gap-2 font-semibold text-brand-900">
+          <HelpCircle className="h-4 w-4 text-brand-600" />
           Knowledge Check
         </div>
-        <p className="mt-2 text-brand-100/90">Use these quick quizzes to reinforce the lesson before marking it complete.</p>
+        <p className="mt-2 text-brand-700">Use these quick quizzes to reinforce the lesson before marking it complete.</p>
       </div>
 
       {items.map((item, itemIndex) => {
@@ -80,8 +80,8 @@ export function LessonQuizPanel({
         const isIncorrect = submitted && selected !== undefined && selected !== item.answerIndex;
 
         return (
-          <div key={`${item.question}-${itemIndex}`} className="rounded-2xl border border-gray-800 bg-gray-900/70 p-4">
-            <p className="font-semibold text-white">{itemIndex + 1}. {item.question}</p>
+          <div key={`${item.question}-${itemIndex}`} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <p className="font-semibold text-slate-900">{itemIndex + 1}. {item.question}</p>
             <div className="mt-4 space-y-2">
               {item.options.map((option, optionIndex) => {
                 const revealCorrect = submitted && optionIndex === item.answerIndex;
@@ -93,21 +93,21 @@ export function LessonQuizPanel({
                     className={cn(
                       "flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left text-sm transition-colors",
                       selected === optionIndex
-                        ? "border-brand-500 bg-brand-500/10 text-white"
-                        : "border-gray-800 bg-gray-950 text-gray-300 hover:border-gray-700 hover:bg-gray-900",
+                        ? "border-brand-400 bg-brand-50 text-brand-900"
+                        : "border-slate-200 bg-slate-50 text-slate-700 hover:border-brand-300 hover:bg-white",
                       revealCorrect && "border-emerald-500/60 bg-emerald-500/10",
                       submitted && selected === optionIndex && optionIndex !== item.answerIndex && "border-rose-500/60 bg-rose-500/10"
                     )}
                   >
                     <span>{option}</span>
-                    {submitted && revealCorrect ? <CheckCircle2 className="h-4 w-4 text-emerald-300" /> : null}
-                    {submitted && selected === optionIndex && optionIndex !== item.answerIndex ? <XCircle className="h-4 w-4 text-rose-300" /> : null}
+                    {submitted && revealCorrect ? <CheckCircle2 className="h-4 w-4 text-emerald-600" /> : null}
+                    {submitted && selected === optionIndex && optionIndex !== item.answerIndex ? <XCircle className="h-4 w-4 text-rose-600" /> : null}
                   </button>
                 );
               })}
             </div>
             {submitted && (isCorrect || isIncorrect) ? (
-              <p className={cn("mt-3 text-sm", isCorrect ? "text-emerald-300" : "text-amber-200")}>
+              <p className={cn("mt-3 text-sm", isCorrect ? "text-emerald-700" : "text-amber-700")}>
                 {item.explanation}
               </p>
             ) : null}
@@ -115,11 +115,11 @@ export function LessonQuizPanel({
         );
       })}
 
-      <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-gray-800 bg-gray-900/70 p-4">
+      <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
         <Button variant="brand" onClick={() => setSubmitted(true)}>Check Answers</Button>
         <Button
           variant="outline"
-          className="border-gray-700 bg-transparent text-gray-200 hover:bg-gray-800"
+          className="border-slate-300 bg-white text-slate-700 hover:bg-slate-100"
           onClick={() => {
             setAnswers({});
             setSubmitted(false);
@@ -128,29 +128,29 @@ export function LessonQuizPanel({
           Reset Quiz
         </Button>
         {submitted ? (
-          <p className="text-sm text-gray-300">Score: <span className="font-semibold text-white">{score}/{items.length}</span></p>
+          <p className="text-sm text-slate-600">Score: <span className="font-semibold text-slate-900">{score}/{items.length}</span></p>
         ) : null}
       </div>
 
       {completion ? (
-        <div className="rounded-2xl border border-gray-800 bg-gray-900/70 p-4">
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
           <div className="flex flex-wrap items-center gap-3">
             <Button
               variant="success"
               onClick={() => void completeLesson()}
               disabled={!passed || isCompleting}
-              className="disabled:opacity-100 disabled:bg-slate-800 disabled:text-slate-400"
+              className="disabled:opacity-100 disabled:bg-slate-200 disabled:text-slate-500"
             >
               {isCompleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircle2 className="mr-2 h-4 w-4" />}
               Mark Complete
             </Button>
             {!passed ? (
-              <p className="text-sm text-amber-200">Score 100% to unlock lesson completion.</p>
+              <p className="text-sm text-amber-700">Score 100% to unlock lesson completion.</p>
             ) : (
-              <p className="text-sm text-emerald-300">Knowledge Check passed. You can now mark this lesson complete.</p>
+              <p className="text-sm text-emerald-700">Knowledge Check passed. You can now mark this lesson complete.</p>
             )}
           </div>
-          {completionError ? <p className="mt-3 text-sm text-rose-300">{completionError}</p> : null}
+          {completionError ? <p className="mt-3 text-sm text-rose-700">{completionError}</p> : null}
         </div>
       ) : null}
     </div>

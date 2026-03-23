@@ -18,7 +18,7 @@ export default async function AdminCoursesPage({
   const role = session.user.role;
   if (role !== "ADMIN" && role !== "SUPER_ADMIN") redirect("/dashboard");
 
-  const courses = await db.course.findMany({
+  const courses = await db.courses.findMany({
     orderBy: { createdAt: "desc" },
     take: 30,
     include: {

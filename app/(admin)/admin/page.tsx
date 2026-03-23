@@ -26,24 +26,24 @@ async function getAdminDashboardData() {
     returningUsersGrouped,
   ] = await Promise.all([
     db.user.count({ where: { role: "STUDENT" } }),
-    db.course.count(),
-    db.enrollment.count(),
-    db.enrollment.count({ where: { status: "COMPLETED" } }),
-    db.enrollment.count({ where: { status: { in: ["SUSPENDED", "EXPIRED"] } } }),
-    db.payment.aggregate({ where: { status: "COMPLETED" }, _sum: { amount: true } }),
-    db.payment.findMany({
+    db.courses.count(),
+    db.enrollments.count(),
+    db.enrollments.count({ where: { status: "COMPLETED" } }),
+    db.enrollments.count({ where: { status: { in: ["SUSPENDED", "EXPIRED"] } } }),
+    db.payments.aggregate({ where: { status: "COMPLETED" }, _sum: { amount: true } }),
+    db.payments.findMany({
       where: { status: "COMPLETED" },
       include: {
-        user: {
+        users: {
           select: { name: true, email: true },
         },
       },
       orderBy: { createdAt: "desc" },
       take: 8,
     }),
-    db.lessonProgress.count(),
-    db.lessonProgress.count({ where: { completed: true } }),
-    db.enrollment.groupBy({
+    db.lesson_progress.count(),
+    db.lesson_progress.count({ where: { completed: true } }),
+    db.enrollments.groupBy({
       by: ["userId"],
       _count: { userId: true },
     }),
@@ -191,11 +191,11 @@ export default async function AdminDashboardPage() {
                   </td>
                 </tr>
               ) : (
-                data.recentPayments.map((payment: { id: string; user: { name: string | null; email: string }; description: string | null; amount: number; createdAt: Date }) => (
+                data.recentPayments.map((payment: { id: string; users: { name: string | null; email: string }; description: string | null; amount: number; createdAt: Date }) => (
                   <tr key={payment.id} className="border-b border-slate-900 text-slate-200">
                     <td className="px-2 py-3">
-                      <div className="font-medium">{payment.user.name || "Unknown"}</div>
-                      <div className="text-xs text-slate-500">{payment.user.email}</div>
+                      <div className="font-medium">{payment.users.name || "Unknown"}</div>
+                      <div className="text-xs text-slate-500">{payment.users.email}</div>
                     </td>
                     <td className="px-2 py-3 text-slate-300">{payment.description || "Subscription"}</td>
                     <td className="px-2 py-3 font-semibold text-emerald-400">{formatCurrency(payment.amount)}</td>

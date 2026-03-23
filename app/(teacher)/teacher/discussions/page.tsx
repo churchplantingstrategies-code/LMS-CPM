@@ -21,7 +21,7 @@ async function createDiscussionAction(formData: FormData) {
   if (!courseId || !title || !content) return;
 
   if (role === "INSTRUCTOR") {
-    const course = await db.course.findUnique({
+    const course = await db.courses.findUnique({
       where: { id: courseId },
       select: { metadata: true },
     });
@@ -31,7 +31,7 @@ async function createDiscussionAction(formData: FormData) {
     }
   }
 
-  await db.discussion.create({
+  await db.discussions.create({
     data: {
       courseId,
       userId: session.user.id,
@@ -60,18 +60,18 @@ async function replyDiscussionAction(formData: FormData) {
   if (!discussionId || !content) return;
 
   if (role === "INSTRUCTOR") {
-    const discussion = await db.discussion.findUnique({
+    const discussion = await db.discussions.findUnique({
       where: { id: discussionId },
-      select: { course: { select: { metadata: true } } },
+      select: { courses: { select: { metadata: true } } },
     });
 
-    const metadata = discussion?.course.metadata as { createdByUserId?: string } | null;
+    const metadata = discussion?.courses.metadata as { createdByUserId?: string } | null;
     if (!discussion || metadata?.createdByUserId !== session.user.id) {
       return;
     }
   }
 
-  await db.reply.create({
+  await db.replies.create({
     data: {
       discussionId,
       userId: session.user.id,
@@ -94,7 +94,7 @@ export default async function TeacherDiscussionsPage() {
 
   let ownedCourseIds: string[] = [];
   if (role === "INSTRUCTOR") {
-    const allCourses = await db.course.findMany({
+    const allCourses = await db.courses.findMany({
       select: { id: true, metadata: true },
       take: 500,
     });
@@ -107,21 +107,21 @@ export default async function TeacherDiscussionsPage() {
   }
 
   const [courses, discussions] = await Promise.all([
-    db.course.findMany({
+    db.courses.findMany({
       where: role === "INSTRUCTOR" ? { id: { in: ownedCourseIds } } : undefined,
       orderBy: { title: "asc" },
       select: { id: true, title: true },
       take: 100,
     }),
-    db.discussion.findMany({
+    db.discussions.findMany({
       where: role === "INSTRUCTOR" ? { courseId: { in: ownedCourseIds } } : undefined,
       orderBy: [{ isPinned: "desc" }, { createdAt: "desc" }],
       include: {
-        course: { select: { title: true } },
-        user: { select: { name: true, email: true } },
+        courses: { select: { title: true } },
+        users: { select: { name: true, email: true } },
         replies: {
           include: {
-            user: {
+            users: {
               select: { name: true, email: true },
             },
           },
@@ -177,7 +177,7 @@ export default async function TeacherDiscussionsPage() {
                 <h3 className="text-sm font-semibold text-gray-900">{discussion.title}</h3>
                 <span className="text-xs text-gray-500">{discussion._count.replies} replies</span>
               </div>
-              <p className="mt-1 text-xs text-gray-600">{discussion.course.title} • by {discussion.user.name || discussion.user.email}</p>
+              <p className="mt-1 text-xs text-gray-600">{discussion.courses.title} • by {discussion.users.name || discussion.users.email}</p>
               <p className="mt-3 text-sm text-gray-700">{discussion.content}</p>
 
               <div className="mt-4 space-y-2">
@@ -186,7 +186,7 @@ export default async function TeacherDiscussionsPage() {
                 ) : (
                   discussion.replies.map((reply) => (
                     <div key={reply.id} className="rounded-md border border-emerald-200 bg-emerald-50 p-3">
-                      <p className="text-xs text-gray-600">{reply.user.name || reply.user.email} {reply.isInstructor ? "• Teacher" : ""}</p>
+                      <p className="text-xs text-gray-600">{reply.users.name || reply.users.email} {reply.isInstructor ? "• Teacher" : ""}</p>
                       <p className="mt-1 text-sm text-gray-700">{reply.content}</p>
                     </div>
                   ))

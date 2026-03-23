@@ -417,16 +417,16 @@ export function CourseCreateForm() {
                       setDraggedLessonRef(null);
                     }}
                     onDragEnd={() => setDraggedLessonRef(null)}
-                    className={`rounded-md border bg-slate-950/60 p-3 transition ${
+                    className={`rounded-md border bg-white p-3 transition ${
                       draggedLessonRef?.moduleIndex === moduleIndex && draggedLessonRef.lessonIndex === lessonIndex
-                        ? "border-brand-500/60 opacity-75"
-                        : "border-slate-800"
+                        ? "border-emerald-500/60 opacity-75"
+                        : "border-emerald-200"
                     }`}
                   >
                     <div className="mb-2 flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <GripVertical className="h-4 w-4 text-slate-500" />
-                        <p className="text-xs text-slate-400">Lesson {lessonIndex + 1}</p>
+                        <GripVertical className="h-4 w-4 text-gray-400" />
+                        <p className="text-xs text-gray-500">Lesson {lessonIndex + 1}</p>
                       </div>
                       <div className="flex items-center gap-1">
                         <Button
@@ -435,7 +435,7 @@ export function CourseCreateForm() {
                           variant="ghost"
                           onClick={() => reorderLessons(moduleIndex, lessonIndex, Math.max(0, lessonIndex - 1))}
                           disabled={lessonIndex === 0}
-                          className="text-slate-300 hover:text-slate-100"
+                          className="text-gray-600 hover:text-gray-900"
                         >
                           <ArrowUp className="h-4 w-4" />
                         </Button>
@@ -451,7 +451,7 @@ export function CourseCreateForm() {
                             )
                           }
                           disabled={lessonIndex === moduleItem.lessons.length - 1}
-                          className="text-slate-300 hover:text-slate-100"
+                          className="text-gray-600 hover:text-gray-900"
                         >
                           <ArrowDown className="h-4 w-4" />
                         </Button>
@@ -460,7 +460,7 @@ export function CourseCreateForm() {
                           size="sm"
                           variant="ghost"
                           onClick={() => removeLesson(moduleIndex, lessonIndex)}
-                          className="text-rose-300 hover:text-rose-200"
+                          className="text-red-500 hover:text-red-700"
                         >
                           <Trash2 className="mr-1 h-4 w-4" /> Remove
                         </Button>
