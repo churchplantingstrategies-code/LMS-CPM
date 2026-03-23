@@ -262,12 +262,30 @@ export function AdminSettingsForm() {
           <div className="rounded-xl border bg-white p-6">
             <h2 className="mb-6 text-lg font-semibold text-gray-900">API Configurations</h2>
             <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">PayMongo Secret Key</label><input type="password" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.paymongoSecretKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, paymongoSecretKey: e.target.value } }))} /></div>
-              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">PayMongo Public Key</label><input type="text" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.paymongoPublicKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, paymongoPublicKey: e.target.value } }))} /></div>
-              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">SMS Provider</label><input type="text" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.smsProvider} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, smsProvider: e.target.value } }))} /></div>
-              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">SMS API Key</label><input type="password" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.smsApiKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, smsApiKey: e.target.value } }))} /></div>
-              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">Email Provider</label><input type="text" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.emailProvider} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, emailProvider: e.target.value } }))} /></div>
-              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">Email API Key</label><input type="password" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.emailApiKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, emailApiKey: e.target.value } }))} /></div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">PayMongo Secret Key</label>
+                <input type="password" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.paymongoSecretKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, paymongoSecretKey: e.target.value } }))} />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">PayMongo Public Key</label>
+                <input type="text" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.paymongoPublicKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, paymongoPublicKey: e.target.value } }))} />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">SMS Provider</label>
+                <input type="text" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.smsProvider} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, smsProvider: e.target.value } }))} />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">SMS API Key</label>
+                <input type="password" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.smsApiKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, smsApiKey: e.target.value } }))} />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Email Provider</label>
+                <input type="text" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.emailProvider} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, emailProvider: e.target.value } }))} />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Email API Key</label>
+                <input type="password" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.integrations.emailApiKey} onChange={(e) => setSettings(prev => ({ ...prev, integrations: { ...prev.integrations, emailApiKey: e.target.value } }))} />
+              </div>
             </div>
           </div>
         </TabsContent>
@@ -277,19 +295,25 @@ export function AdminSettingsForm() {
             <h2 className="mb-4 text-lg font-semibold text-gray-900">Google OAuth Setup</h2>
             <p className="mb-4 text-sm text-gray-600">Enable Google login for students. Leave empty to disable.</p>
             <div className="mb-6 rounded-lg bg-blue-50 border border-blue-200 p-4">
-              <p className="text-xs font-medium text-blue-900 mb-2">?? How to set up Google OAuth:</p>
+              <p className="text-xs font-medium text-blue-900 mb-2">📌 How to set up Google OAuth:</p>
               <ol className="list-decimal list-inside text-xs text-blue-800 space-y-1">
                 <li>Go to <a href="https://console.cloud.google.com" target="_blank" rel="noopener noreferrer" className="font-semibold underline hover:text-blue-600">console.cloud.google.com</a></li>
                 <li>Create or select a project</li>
                 <li>Enable the &quot;Google+ API&quot;</li>
-                <li>Go to &quot;Credentials&quot; ? &quot;Create Credentials&quot; ? &quot;OAuth 2.0 Client IDs&quot;</li>
+                <li>Go to &quot;Credentials&quot; → &quot;Create Credentials&quot; → &quot;OAuth 2.0 Client IDs&quot;</li>
                 <li>Add <code className="bg-blue-100 px-2 py-1 rounded text-xs font-mono">http://localhost:3000/api/auth/callback/google</code> as an authorized redirect URI (or your production domain)</li>
                 <li>Copy your Client ID and Client Secret below</li>
               </ol>
             </div>
             <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">Google Client ID</label><input type="text" className="w-full rounded-md border px-3 py-2 text-sm font-mono" placeholder="xxxx-xxxx.apps.googleusercontent.com" value={settings.oauth.googleClientId} onChange={(e) => setSettings(prev => ({ ...prev, oauth: { ...prev.oauth, googleClientId: e.target.value } }))} /></div>
-              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">Google Client Secret</label><input type="password" className="w-full rounded-md border px-3 py-2 text-sm font-mono" placeholder="GOCSPX-xxxx..." value={settings.oauth.googleClientSecret} onChange={(e) => setSettings(prev => ({ ...prev, oauth: { ...prev.oauth, googleClientSecret: e.target.value } }))} /></div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Google Client ID</label>
+                <input type="text" className="w-full rounded-md border px-3 py-2 text-sm font-mono" placeholder="xxxx-xxxx.apps.googleusercontent.com" value={settings.oauth.googleClientId} onChange={(e) => setSettings(prev => ({ ...prev, oauth: { ...prev.oauth, googleClientId: e.target.value } }))} />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Google Client Secret</label>
+                <input type="password" className="w-full rounded-md border px-3 py-2 text-sm font-mono" placeholder="GOCSPX-xxxx..." value={settings.oauth.googleClientSecret} onChange={(e) => setSettings(prev => ({ ...prev, oauth: { ...prev.oauth, googleClientSecret: e.target.value } }))} />
+              </div>
             </div>
           </div>
         </TabsContent>
@@ -298,12 +322,33 @@ export function AdminSettingsForm() {
           <div className="rounded-xl border bg-white p-6">
             <h2 className="mb-6 text-lg font-semibold text-gray-900">Branding, Logo & Page Setup</h2>
             <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">Theme Mode</label><select className="w-full rounded-md border px-3 py-2 text-sm" value={settings.branding.themeMode} onChange={(e) => setSettings(prev => ({ ...prev, branding: { ...prev.branding, themeMode: e.target.value as "dark" | "light" } }))}><option value="dark">Dark</option><option value="light">Light</option></select></div>
-              <div className="space-y-2"><label className="text-sm font-medium text-gray-700">Primary Color</label><input type="text" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.branding.primaryColor} onChange={(e) => setSettings(prev => ({ ...prev, branding: { ...prev.branding, primaryColor: e.target.value } }))} /></div>
-              <div className="space-y-2 md:col-span-2"><label className="text-sm font-medium text-gray-700">Logo URL</label><input type="url" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.branding.logoUrl} onChange={(e) => setSettings(prev => ({ ...prev, branding: { ...prev.branding, logoUrl: e.target.value } }))} /></div>
-              <label className="flex items-center gap-2 text-sm text-gray-700"><input type="checkbox" checked={settings.pages.homeLeadFormEnabled} onChange={(e) => setSettings(prev => ({ ...prev, pages: { ...prev.pages, homeLeadFormEnabled: e.target.checked } }))} />Enable home page lead generator form</label>
-              <label className="flex items-center gap-2 text-sm text-gray-700"><input type="checkbox" checked={settings.pages.maintenanceMode} onChange={(e) => setSettings(prev => ({ ...prev, pages: { ...prev.pages, maintenanceMode: e.target.checked } }))} />Enable maintenance mode</label>
-              <div className="space-y-2 md:col-span-2"><label className="text-sm font-medium text-gray-700">Footer Text</label><textarea rows={2} className="w-full rounded-md border px-3 py-2 text-sm" value={settings.pages.customFooterText} onChange={(e) => setSettings(prev => ({ ...prev, pages: { ...prev.pages, customFooterText: e.target.value } }))} /></div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Theme Mode</label>
+                <select className="w-full rounded-md border px-3 py-2 text-sm" value={settings.branding.themeMode} onChange={(e) => setSettings(prev => ({ ...prev, branding: { ...prev.branding, themeMode: e.target.value as "dark" | "light" } }))}>
+                  <option value="dark">Dark</option>
+                  <option value="light">Light</option>
+                </select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Primary Color</label>
+                <input type="text" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.branding.primaryColor} onChange={(e) => setSettings(prev => ({ ...prev, branding: { ...prev.branding, primaryColor: e.target.value } }))} />
+              </div>
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-sm font-medium text-gray-700">Logo URL</label>
+                <input type="url" className="w-full rounded-md border px-3 py-2 text-sm" value={settings.branding.logoUrl} onChange={(e) => setSettings(prev => ({ ...prev, branding: { ...prev.branding, logoUrl: e.target.value } }))} />
+              </div>
+              <label className="flex items-center gap-2 text-sm text-gray-700">
+                <input type="checkbox" checked={settings.pages.homeLeadFormEnabled} onChange={(e) => setSettings(prev => ({ ...prev, pages: { ...prev.pages, homeLeadFormEnabled: e.target.checked } }))} />
+                Enable home page lead generator form
+              </label>
+              <label className="flex items-center gap-2 text-sm text-gray-700">
+                <input type="checkbox" checked={settings.pages.maintenanceMode} onChange={(e) => setSettings(prev => ({ ...prev, pages: { ...prev.pages, maintenanceMode: e.target.checked } }))} />
+                Enable maintenance mode
+              </label>
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-sm font-medium text-gray-700">Footer Text</label>
+                <textarea rows={2} className="w-full rounded-md border px-3 py-2 text-sm" value={settings.pages.customFooterText} onChange={(e) => setSettings(prev => ({ ...prev, pages: { ...prev.pages, customFooterText: e.target.value } }))} />
+              </div>
             </div>
           </div>
         </TabsContent>
