@@ -6,9 +6,9 @@ import { readBookStore } from "@/lib/book-store";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 type RouteContext = {
-  params: {
+  params: Promise<{
     orderId: string;
-  };
+  }>;
 };
 
 function wrapText(text: string, maxChars = 82) {
@@ -57,12 +57,13 @@ function drawBrandMark(page: Parameters<PDFDocument["addPage"]>[0] extends never
 }
 
 export async function GET(_: NextRequest, { params }: RouteContext) {
+  const { orderId } = await params;
   const session = await auth();
   if (!session?.user) {
     return new NextResponse("Unauthorized", { status: 401 });
   }
 
-  const order = await findBookOrderById(params.orderId);
+  const order = await findBookOrderById(orderId);
   if (!order) {
     return new NextResponse("Order not found", { status: 404 });
   }

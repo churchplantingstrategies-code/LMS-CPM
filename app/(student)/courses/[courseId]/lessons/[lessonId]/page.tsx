@@ -93,12 +93,13 @@ async function getLessonData(courseId: string, lessonId: string, userId: string)
 export default async function LessonPage({
   params,
 }: {
-  params: { courseId: string; lessonId: string };
+  params: Promise<{ courseId: string; lessonId: string }>;
 }) {
+  const { courseId, lessonId } = await params;
   const session = await auth();
   if (!session) redirect("/login");
 
-  const data = await getLessonData(params.courseId, params.lessonId, session.user.id);
+  const data = await getLessonData(courseId, lessonId, session.user.id);
   if (!data) notFound();
 
   const {

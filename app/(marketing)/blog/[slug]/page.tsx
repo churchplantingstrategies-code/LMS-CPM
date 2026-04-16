@@ -4,17 +4,18 @@ import { Badge } from "../../../../components/ui/badge";
 import { blogPosts } from "../data";
 
 type PageProps = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
 export function generateStaticParams() {
   return blogPosts.map((post) => ({ slug: post.slug }));
 }
 
-export default function BlogPostPage({ params }: PageProps) {
-  const post = blogPosts.find((item) => item.slug === params.slug);
+export default async function BlogPostPage({ params }: PageProps) {
+  const { slug } = await params;
+  const post = blogPosts.find((item) => item.slug === slug);
 
   if (!post) {
     notFound();

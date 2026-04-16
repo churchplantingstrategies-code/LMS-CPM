@@ -6,10 +6,11 @@ import { z } from "zod";
 // GET /api/courses/[courseId]
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { courseId: string } }
+  { params }: { params: Promise<{ courseId: string }> }
 ) {
+  const { courseId } = await params;
   const course = await db.course.findUnique({
-    where: { id: params.courseId },
+    where: { id: courseId },
     include: {
       instructor: { select: { id: true, name: true, image: true, bio: true } },
       modules: {
@@ -43,14 +44,15 @@ const updateCourseSchema = z.object({
 // PUT /api/courses/[courseId]
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { courseId: string } }
+  { params }: { params: Promise<{ courseId: string }> }
 ) {
+  const { courseId } = await params;
   const session = await auth();
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const course = await db.course.findUnique({ where: { id: params.courseId } });
+  const course = await db.course.findUnique({ where: { id: courseId } });
   if (!course) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const isOwner = course.instructorId === session.user.id;
@@ -71,7 +73,7 @@ export async function PUT(
   }
 
   const updated = await db.course.update({
-    where: { id: params.courseId },
+    where: { id: courseId },
     data: result.data,
   });
 
@@ -81,14 +83,15 @@ export async function PUT(
 // DELETE /api/courses/[courseId]
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { courseId: string } }
+  { params }: { params: Promise<{ courseId: string }> }
 ) {
+  const { courseId } = await params;
   const session = await auth();
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const course = await db.course.findUnique({ where: { id: params.courseId } });
+  const course = await db.course.findUnique({ where: { id: courseId } });
   if (!course) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const isOwner = course.instructorId === session.user.id;
@@ -99,7 +102,7 @@ export async function DELETE(
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  await db.course.delete({ where: { id: params.courseId } });
+  await db.course.delete({ where: { id: courseId } });
 
   return NextResponse.json({ message: "Course deleted" });
 }

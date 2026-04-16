@@ -5,9 +5,10 @@ import { getPublishedBuilderPageByPath } from "@/lib/page-builder-store";
 export default async function DynamicMarketingPage({
   params,
 }: {
-  params: { slug: string[] };
+  params: Promise<{ slug: string[] }>;
 }) {
-  const path = `/${(params.slug ?? []).join("/")}`;
+  const { slug } = await params;
+  const path = `/${(slug ?? []).join("/")}`;
   const page = await getPublishedBuilderPageByPath(path);
 
   if (!page) {

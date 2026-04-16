@@ -5,8 +5,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const session = await auth();
   if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
@@ -15,7 +16,7 @@ export async function POST(
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const campaign = await db.emailCampaign.findUnique({ where: { id: params.id } });
+  const campaign = await db.emailCampaign.findUnique({ where: { id } });
   if (!campaign) return NextResponse.json({ error: "Campaign not found" }, { status: 404 });
 
   if (campaign.status === "SENT") {

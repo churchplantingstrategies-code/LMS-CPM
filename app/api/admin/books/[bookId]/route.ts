@@ -9,8 +9,9 @@ function ensureAdmin(role?: string) {
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { bookId: string } }
+  { params }: { params: Promise<{ bookId: string }> }
 ) {
+  const { bookId } = await params;
   const session = await auth();
 
   if (!session?.user || !ensureAdmin((session.user as { role?: string }).role)) {
@@ -19,7 +20,7 @@ export async function PATCH(
 
   try {
     const body = (await request.json()) as Partial<BookRecord>;
-    const saved = await updateBook(params.bookId, body);
+    const saved = await updateBook(bookId, body);
 
     if (!saved) {
       return NextResponse.json({ error: "Book not found" }, { status: 404 });
@@ -34,8 +35,9 @@ export async function PATCH(
 
 export async function DELETE(
   _: NextRequest,
-  { params }: { params: { bookId: string } }
+  { params }: { params: Promise<{ bookId: string }> }
 ) {
+  const { bookId } = await params;
   const session = await auth();
 
   if (!session?.user || !ensureAdmin((session.user as { role?: string }).role)) {
@@ -43,7 +45,7 @@ export async function DELETE(
   }
 
   try {
-    const deleted = await deleteBook(params.bookId);
+    const deleted = await deleteBook(bookId);
     if (!deleted) {
       return NextResponse.json({ error: "Book not found" }, { status: 404 });
     }

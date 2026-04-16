@@ -95,8 +95,9 @@ async function buildCoverSvg(bookId: string) {
   `.trim();
 }
 
-export async function GET(_: Request, { params }: { params: { bookId: string } }) {
-  const svg = await buildCoverSvg(params.bookId);
+export async function GET(_: Request, { params }: { params: Promise<{ bookId: string }> }) {
+  const { bookId } = await params;
+  const svg = await buildCoverSvg(bookId);
 
   if (!svg) {
     return new Response("Not found", { status: 404 });

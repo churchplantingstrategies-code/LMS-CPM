@@ -7,7 +7,8 @@ function isSuperAdmin(role?: string) {
   return role === "SUPER_ADMIN";
 }
 
-export async function GET(_: NextRequest, { params }: { params: { pageId: string } }) {
+export async function GET(_: NextRequest, { params }: { params: Promise<{ pageId: string }> }) {
+  const { pageId } = await params;
   const session = await auth();
   const role = (session?.user as { role?: string } | undefined)?.role;
 
@@ -16,7 +17,7 @@ export async function GET(_: NextRequest, { params }: { params: { pageId: string
   }
 
   const pages = await listAllBuilderPages();
-  const page = pages.find((item) => item.id === params.pageId);
+  const page = pages.find((item) => item.id === pageId);
 
   if (!page) {
     return NextResponse.json({ error: "Page not found" }, { status: 404 });
@@ -25,7 +26,8 @@ export async function GET(_: NextRequest, { params }: { params: { pageId: string
   return NextResponse.json({ page });
 }
 
-export async function PATCH(request: NextRequest, { params }: { params: { pageId: string } }) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ pageId: string }> }) {
+  const { pageId } = await params;
   const session = await auth();
   const role = (session?.user as { role?: string } | undefined)?.role;
 
@@ -35,7 +37,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { pageId
 
   try {
     const body = (await request.json()) as Partial<BuilderPageRecord>;
-    const saved = await updateBuilderPage(params.pageId, body);
+    const saved = await updateBuilderPage(pageId, body);
     if (!saved) {
       return NextResponse.json({ error: "Page not found" }, { status: 404 });
     }
@@ -45,7 +47,8 @@ export async function PATCH(request: NextRequest, { params }: { params: { pageId
   }
 }
 
-export async function DELETE(_: NextRequest, { params }: { params: { pageId: string } }) {
+export async function DELETE(_: NextRequest, { params }: { params: Promise<{ pageId: string }> }) {
+  const { pageId } = await params;
   const session = await auth();
   const role = (session?.user as { role?: string } | undefined)?.role;
 
@@ -53,7 +56,7 @@ export async function DELETE(_: NextRequest, { params }: { params: { pageId: str
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const deleted = await deleteBuilderPage(params.pageId);
+  const deleted = await deleteBuilderPage(pageId);
   if (!deleted) {
     return NextResponse.json({ error: "Page not found" }, { status: 404 });
   }

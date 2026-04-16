@@ -5,12 +5,13 @@ import { PageBuilderEditor } from "@/components/admin/page-builder-editor";
 export default async function StandalonePageBuilderEditorPage({
   params,
 }: {
-  params: { pageId: string };
+  params: Promise<{ pageId: string }>;
 }) {
+  const { pageId } = await params;
   const session = await auth();
 
   if (!session?.user) {
-    redirect(`/login?callbackUrl=/builder/${params.pageId}`);
+    redirect(`/login?callbackUrl=/builder/${pageId}`);
   }
 
   if (session.user.role !== "SUPER_ADMIN") {
@@ -19,7 +20,7 @@ export default async function StandalonePageBuilderEditorPage({
 
   return (
     <main className="min-h-screen bg-slate-950 p-3 sm:p-5 lg:p-6">
-      <PageBuilderEditor pageId={params.pageId} />
+      <PageBuilderEditor pageId={pageId} />
     </main>
   );
 }

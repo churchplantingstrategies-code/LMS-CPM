@@ -17,14 +17,15 @@ function isSuperAdmin(role?: string) {
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const session = await auth();
   if (!session?.user || !isSuperAdmin(session.user.role)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const target = await db.user.findUnique({ where: { id: params.id } });
+  const target = await db.user.findUnique({ where: { id } });
   if (!target) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
@@ -66,7 +67,7 @@ export async function PATCH(
   }
 
   const updated = await db.user.update({
-    where: { id: params.id },
+    where: { id },
     data: updateData,
     select: {
       id: true,
@@ -83,18 +84,19 @@ export async function PATCH(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const session = await auth();
   if (!session?.user || !isSuperAdmin(session.user.role)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  if (session.user.id === params.id) {
+  if (session.user.id === id) {
     return NextResponse.json({ error: "You cannot delete your own account" }, { status: 400 });
   }
 
-  const target = await db.user.findUnique({ where: { id: params.id }, select: { role: true } });
+  const target = await db.user.findUnique({ where: { id }, select: { role: true } });
   if (!target) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
@@ -103,6 +105,6 @@ export async function DELETE(
     return NextResponse.json({ error: "Only teacher accounts can be deleted here" }, { status: 400 });
   }
 
-  await db.user.delete({ where: { id: params.id } });
+  await db.user.delete({ where: { id } });
   return NextResponse.json({ message: "Teacher deleted" });
 }

@@ -21,10 +21,11 @@ function titleCase(value: string) {
     .join(" ");
 }
 
-export async function GET(request: NextRequest, { params }: { params: { courseSlug: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ courseSlug: string }> }) {
+  const { courseSlug } = await params;
   const scene = new URL(request.url).searchParams.get("scene") ?? "hero";
   const config = sceneConfig[scene] ?? sceneConfig.hero;
-  const title = titleCase(params.courseSlug);
+  const title = titleCase(courseSlug);
 
   const svg = `
     <svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg">
