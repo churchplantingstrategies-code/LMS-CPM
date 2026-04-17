@@ -25,7 +25,7 @@ export default async function AdminFunnelsPage() {
   const funnels = await db.funnel.findMany({
     orderBy: { createdAt: "desc" },
     include: {
-      _count: { select: { steps: true, leads: true } },
+      _count: { select: { funnel_steps: true, leads: true } },
     },
   });
 
@@ -85,7 +85,7 @@ export default async function AdminFunnelsPage() {
                       {funnel.type.replace(/_/g, " ")}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-center">{funnel._count.steps}</TableCell>
+                  <TableCell className="text-center">{funnel._count.funnel_steps}</TableCell>
                   <TableCell className="text-center">{funnel._count.leads}</TableCell>
                   <TableCell>
                     {funnel.isPublished ? (
