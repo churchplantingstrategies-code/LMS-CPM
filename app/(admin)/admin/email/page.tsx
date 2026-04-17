@@ -111,7 +111,7 @@ export default async function AdminEmailPage() {
             {campaigns.map((campaign) => (
               <TableRow key={campaign.id}>
                 <TableCell>
-                  <div className="font-medium text-gray-900">{campaign.name}</div>
+                  <div className="font-medium text-gray-900">{campaign.title}</div>
                   <div className="text-xs text-gray-400 mt-0.5 truncate max-w-[220px]">
                     {campaign.subject}
                   </div>
