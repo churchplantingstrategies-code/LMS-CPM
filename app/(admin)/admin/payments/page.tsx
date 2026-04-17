@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/table";
 
 const statusVariant: Record<string, "success" | "destructive" | "outline" | "warning"> = {
-  SUCCEEDED: "success",
+  COMPLETED: "success",
   FAILED: "destructive",
   PENDING: "outline",
   REFUNDED: "warning",
@@ -35,7 +35,7 @@ export default async function AdminPaymentsPage() {
   });
 
   const totalRevenue = payments
-    .filter((p) => p.status === "SUCCEEDED")
+    .filter((p) => p.status === "COMPLETED")
     .reduce((sum, p) => sum + p.amount, 0);
 
   return (
