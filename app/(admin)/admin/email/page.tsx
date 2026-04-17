@@ -81,7 +81,7 @@ export default async function AdminEmailPage() {
           <div>
             <p className="text-sm text-gray-500">Emails Sent</p>
             <p className="text-xl font-bold text-gray-900">
-              {campaigns.reduce((sum, c) => sum + c._count.logs, 0)}
+              {campaigns.reduce((sum, c) => sum + c._count.email_logs, 0)}
             </p>
           </div>
         </div>
@@ -126,7 +126,7 @@ export default async function AdminEmailPage() {
                     {campaign.status}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-center">{campaign._count.logs}</TableCell>
+                <TableCell className="text-center">{campaign._count.email_logs}</TableCell>
                 <TableCell className="text-sm text-gray-500">
                   {formatDate(campaign.createdAt)}
                 </TableCell>
