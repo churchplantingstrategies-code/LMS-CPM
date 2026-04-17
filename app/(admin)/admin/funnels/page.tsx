@@ -77,7 +77,7 @@ export default async function AdminFunnelsPage() {
               {funnels.map((funnel) => (
                 <TableRow key={funnel.id}>
                   <TableCell>
-                    <div className="font-medium text-gray-900">{funnel.name}</div>
+                    <div className="font-medium text-gray-900">{funnel.title}</div>
                     <div className="text-xs text-gray-400 font-mono mt-0.5">/{funnel.slug}</div>
                   </TableCell>
                   <TableCell>
