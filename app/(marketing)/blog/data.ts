@@ -17,7 +17,7 @@ export const blogPosts: BlogPost[] = [
       "A practical framework for creating consistent spiritual habits without burnout.",
     content:
       "Daily discipleship is less about intensity and more about consistency. Start with one small non-negotiable: 15 minutes of scripture, reflection, and prayer. Add structure by pairing it with a fixed trigger in your routine, such as after breakfast or before sleep. Track weekly, not daily, to reduce guilt and focus on direction over perfection.",
-    author: "eDiscipleship Team",
+    author: "Church Planting Movement Team",
     date: "2026-03-10",
     category: "Growth",
     readTime: "5 min read",

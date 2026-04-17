@@ -69,7 +69,7 @@ const testimonials = [
     role: "Ministry Leader",
     avatar: "S",
     quote:
-      "eDiscipleship transformed how I lead my community. The courses are practical, deep, and life-changing.",
+      "Church Planting Movement transformed how I lead my community. The courses are practical, deep, and life-changing.",
     rating: 5,
   },
   {
@@ -85,7 +85,7 @@ const testimonials = [
     role: "Youth Director",
     avatar: "R",
     quote:
-      "As a youth leader, I needed engaging content. eDiscipleship delivers that and so much more.",
+      "As a youth leader, I needed engaging content. Church Planting Movement delivers that and so much more.",
     rating: 5,
   },
 ];
@@ -205,7 +205,7 @@ export default async function HomePage() {
                   <div className="h-3 w-3 rounded-full bg-green-500"></div>
                 </div>
                 <div className="flex-1 mx-4 h-5 bg-gray-700 rounded text-xs text-gray-400 flex items-center px-3">
-                  ediscipleship.com/dashboard
+                  churchplantingmovement.com/dashboard
                 </div>
               </div>
               <div className="bg-gradient-to-b from-gray-900 to-gray-800 p-8 text-left">

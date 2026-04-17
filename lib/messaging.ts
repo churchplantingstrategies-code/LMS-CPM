@@ -80,7 +80,7 @@ export async function sendSMS({ to, message }: SMSOptions): Promise<void> {
       await axios.post("https://rest.nexmo.com/sms/json", {
         api_key: vonageApiKey,
         api_secret: vonageApiSecret,
-        from: vonageSenderId || "EDiscipleship",
+        from: vonageSenderId || "CPMovement",
         to,
         text: message,
       });
@@ -102,7 +102,7 @@ export async function sendEmail({ to, subject, html, text, replyTo }: EmailOptio
     smtpHost, smtpPort, smtpUser, smtpPassword,
   } = settings.integrations;
 
-  const fromAddress = emailFromAddress || process.env.EMAIL_FROM || "noreply@ediscipleship.com";
+  const fromAddress = emailFromAddress || process.env.EMAIL_FROM || "noreply@churchplantingmovement.com";
   const toArray = Array.isArray(to) ? to : [to];
   const plainText = text || html.replace(/<[^>]*>/g, "");
 

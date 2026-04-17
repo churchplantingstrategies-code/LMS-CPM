@@ -76,7 +76,7 @@ const DEFAULT_SETTINGS: AdminSettings = {
     transcodeOnUpload: true,
   },
   platform: {
-    supportEmail: "support@ediscipleship.local",
+    supportEmail: "support@churchplantingmovement.local",
     enableCertificates: true,
     enableDiscussions: true,
   },

@@ -16,6 +16,7 @@ import {
   Loader2,
   PanelsTopLeft,
 } from "lucide-react";
+import { SiteLogo } from "@/components/branding/site-logo";
 import { cn } from "../../lib/utils";
 
 export function AdminMobileNav({ role }: { role?: string }) {
@@ -62,7 +63,13 @@ export function AdminMobileNav({ role }: { role?: string }) {
           />
           <aside className="absolute left-0 top-0 h-full w-72 overflow-auto bg-gray-950 text-white shadow-xl">
             <div className="flex h-14 items-center justify-between border-b border-gray-800 px-4">
-              <p className="text-sm font-semibold">Admin Menu</p>
+              <div className="flex items-center gap-3">
+                <SiteLogo className="size-8 ring-white/15" sizes="32px" priority />
+                <div>
+                  <p className="text-sm font-semibold text-white">Church Planting Movement</p>
+                  <p className="text-xs text-gray-400">Admin Menu</p>
+                </div>
+              </div>
               <button
                 type="button"
                 onClick={() => setOpen(false)}

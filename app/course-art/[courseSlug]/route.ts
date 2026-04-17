@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getBrandLogoDataUri } from "@/lib/brand-logo-data";
 
 const sceneConfig: Record<string, { from: string; to: string; label: string; accent: string }> = {
   hero: { from: "#1d4ed8", to: "#0f172a", label: "Demo Course", accent: "#fbbf24" },
@@ -26,6 +27,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   const scene = new URL(request.url).searchParams.get("scene") ?? "hero";
   const config = sceneConfig[scene] ?? sceneConfig.hero;
   const title = titleCase(courseSlug);
+  const brandLogoDataUri = getBrandLogoDataUri();
 
   const svg = `
     <svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -34,12 +36,16 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
           <stop stop-color="${config.from}" />
           <stop offset="1" stop-color="${config.to}" />
         </linearGradient>
+        <clipPath id="brandLogoClip">
+          <circle cx="124" cy="124" r="28" />
+        </clipPath>
       </defs>
       <rect width="1200" height="675" rx="36" fill="url(#bg)" />
       <circle cx="1000" cy="120" r="180" fill="white" fill-opacity="0.08" />
       <circle cx="180" cy="540" r="220" fill="white" fill-opacity="0.05" />
-      <rect x="84" y="86" width="190" height="38" rx="19" fill="white" fill-opacity="0.12" />
-      <text x="113" y="111" fill="white" fill-opacity="0.92" font-size="20" font-family="Arial, Helvetica, sans-serif" font-weight="700">eDiscipleship</text>
+      <circle cx="124" cy="124" r="31" fill="white" fill-opacity="0.96" />
+      <image href="${brandLogoDataUri}" x="96" y="96" width="56" height="56" clip-path="url(#brandLogoClip)" preserveAspectRatio="xMidYMid slice" />
+      <text x="170" y="130" fill="white" fill-opacity="0.92" font-size="18" font-family="Arial, Helvetica, sans-serif" font-weight="700">Church Planting Movement</text>
       <text x="84" y="248" fill="white" font-size="64" font-family="Arial, Helvetica, sans-serif" font-weight="700">${title}</text>
       <text x="84" y="310" fill="${config.accent}" font-size="28" font-family="Arial, Helvetica, sans-serif" font-weight="700">${config.label}</text>
       <text x="84" y="378" fill="white" fill-opacity="0.82" font-size="26" font-family="Arial, Helvetica, sans-serif">Images, quizzes, and progress-ready learning</text>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X, LayoutDashboard, BookOpen, BarChart3, ClipboardCheck, MessageSquare } from "lucide-react";
+import { SiteLogo } from "@/components/branding/site-logo";
 import { cn } from "@/lib/utils";
 
 const items = [
@@ -38,7 +39,13 @@ export function TeacherMobileNav() {
           />
           <aside className="absolute left-0 top-0 h-full w-72 bg-gradient-to-b from-emerald-50 to-emerald-100 p-3 dark:from-slate-950 dark:to-emerald-950/60">
             <div className="mb-4 flex items-center justify-between border-b border-emerald-200 pb-3 dark:border-emerald-800/70">
-              <p className="text-sm font-semibold text-emerald-900 dark:text-emerald-100">Teacher Menu</p>
+              <div className="flex items-center gap-3">
+                <SiteLogo className="size-8 ring-emerald-200 dark:ring-emerald-800/70" sizes="32px" priority />
+                <div>
+                  <p className="text-sm font-semibold text-emerald-900 dark:text-emerald-100">Church Planting Movement</p>
+                  <p className="text-xs text-emerald-700 dark:text-emerald-300">Teacher Menu</p>
+                </div>
+              </div>
               <button type="button" onClick={() => setOpen(false)} className="rounded-md p-1 text-emerald-600 hover:bg-emerald-200 dark:text-emerald-300 dark:hover:bg-emerald-900/50">
                 <X className="h-5 w-5" />
               </button>

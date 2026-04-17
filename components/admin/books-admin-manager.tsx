@@ -35,9 +35,9 @@ const EMPTY_STORE: BookStoreData = {
   books: [],
   settings: {
     currency: "PHP",
-    storeName: "eDiscipleship Books",
+    storeName: "Church Planting Movement Books",
     storefrontHeadline: "Books for discipleship, leadership, and ministry growth.",
-    supportEmail: "books@ediscipleship.local",
+    supportEmail: "books@churchplantingmovement.local",
     returnPolicy: "Digital book purchases are final unless a file is defective or inaccessible.",
     shippingMessage: "Digital delivery is instant after checkout. Physical shipping can be configured later.",
     featuredCollectionTitle: "Books Handpicked for Leaders",

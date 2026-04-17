@@ -1,4 +1,5 @@
 import { getBookById } from "@/lib/book-store";
+import { getBrandLogoDataUri } from "@/lib/brand-logo-data";
 
 const palettes = [
   ["#0F172A", "#2563EB", "#7DD3FC", "#F8FAFC"],
@@ -36,6 +37,8 @@ async function buildCoverSvg(bookId: string) {
   const book = await getBookById(bookId);
   if (!book) return null;
 
+  const brandLogoDataUri = getBrandLogoDataUri();
+
   const palette = palettes[hashValue(book.id) % palettes.length];
   const [bgDark, bgBright, accent, paper] = palette;
   const lines = splitTitle(book.title);
@@ -62,6 +65,9 @@ async function buildCoverSvg(bookId: string) {
           <stop stop-color="rgba(255,255,255,0.22)" />
           <stop offset="1" stop-color="rgba(255,255,255,0.08)" />
         </linearGradient>
+        <clipPath id="brandLogoClip">
+          <circle cx="154" cy="206" r="26" />
+        </clipPath>
       </defs>
 
       <rect width="800" height="1200" rx="44" fill="url(#bg)" />
@@ -78,7 +84,9 @@ async function buildCoverSvg(bookId: string) {
       <rect x="86" y="84" width="628" height="1032" rx="32" fill="url(#panel)" stroke="rgba(255,255,255,0.18)" stroke-width="2" />
 
       <text x="126" y="160" fill="${paper}" fill-opacity="0.78" font-size="28" font-family="Arial, Helvetica, sans-serif" letter-spacing="8">${escapeXml(book.category.toUpperCase())}</text>
-      <text x="126" y="220" fill="${paper}" fill-opacity="0.92" font-size="22" font-family="Arial, Helvetica, sans-serif">eDiscipleship Library</text>
+  <circle cx="154" cy="206" r="28" fill="white" fill-opacity="0.96" />
+  <image href="${brandLogoDataUri}" x="128" y="180" width="52" height="52" clip-path="url(#brandLogoClip)" preserveAspectRatio="xMidYMid slice" />
+  <text x="198" y="220" fill="${paper}" fill-opacity="0.92" font-size="22" font-family="Arial, Helvetica, sans-serif">Church Planting Movement Library</text>
 
       <g>
         <text x="126" y="690" fill="${paper}" font-size="74" font-weight="700" font-family="Arial, Helvetica, sans-serif">${escapeXml(lines[0] ?? "")}</text>

@@ -6,10 +6,11 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import {
   LayoutDashboard, BookOpen, Award, MessageSquare,
-  Settings, CreditCard, Bell, ChevronRight, GraduationCap, ShoppingCart, Receipt, Loader2,
+  Settings, CreditCard, Bell, ChevronRight, ShoppingCart, Receipt, Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { SiteLogo } from "@/components/branding/site-logo";
 import { getInitials } from "@/lib/utils";
 
 const navItems = [
@@ -36,10 +37,8 @@ export function StudentSidebar() {
     <aside className="hidden h-full w-64 flex-col border-r border-brand-100/80 bg-gradient-to-b from-white via-brand-50/35 to-purple-50/45 md:flex dark:border-slate-700/80 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/70">
       {/* Brand */}
       <div className="flex h-16 items-center gap-2 border-b border-brand-100/80 px-6 dark:border-slate-700/80">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-purple-600 shadow-sm">
-          <GraduationCap className="h-5 w-5 text-white" />
-        </div>
-        <span className="font-bold text-lg gradient-text">eDiscipleship</span>
+        <SiteLogo className="size-9 ring-brand-200 dark:ring-slate-700" sizes="36px" priority />
+        <span className="gradient-text max-w-[150px] text-sm font-bold leading-tight">Church Planting Movement</span>
       </div>
 
       {/* Navigation */}

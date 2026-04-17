@@ -116,7 +116,7 @@ export async function triggerAutomation(
         if (action.type === "SEND_EMAIL") {
           const recipient = action.to || context.userEmail;
           if (!recipient) continue;
-          const subject = interpolate(action.subject ?? "Notification from eDiscipleship", context);
+          const subject = interpolate(action.subject ?? "Notification from Church Planting Movement", context);
           const html    = interpolate(action.body    ?? "", context);
           await sendEmail({ to: recipient, subject, html });
         }

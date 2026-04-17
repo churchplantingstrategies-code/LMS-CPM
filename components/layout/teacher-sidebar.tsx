@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, BookOpen, BarChart3, ClipboardCheck, MessageSquare, Settings } from "lucide-react";
+import { SiteLogo } from "@/components/branding/site-logo";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
@@ -21,8 +22,13 @@ export function TeacherSidebar() {
   return (
     <aside className="hidden h-full w-64 flex-col border-r border-emerald-200 bg-gradient-to-b from-emerald-50 to-emerald-100 md:flex dark:border-emerald-800/70 dark:from-slate-950 dark:to-emerald-950/50">
       <div className="border-b border-emerald-200 bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-4 dark:border-emerald-800/70 dark:from-slate-900 dark:to-emerald-950">
-        <p className="text-xs font-semibold uppercase tracking-wider text-white">Teacher Panel</p>
-        <h2 className="mt-1 text-lg font-bold text-white">eDiscipleship</h2>
+        <div className="flex items-center gap-3">
+          <SiteLogo className="size-10 ring-white/25" sizes="40px" priority />
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-white">Teacher Panel</p>
+            <h2 className="mt-1 max-w-[170px] text-sm font-bold leading-tight text-white">Church Planting Movement</h2>
+          </div>
+        </div>
       </div>
       <nav className="flex-1 space-y-1 overflow-y-auto p-3">
         {/* Main Items */}

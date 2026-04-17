@@ -155,7 +155,7 @@ function normalizeTestimonials(input?: BuilderPageRecord["testimonials"]): Build
         id: "testi-1",
         name: "Sarah Johnson",
         role: "Ministry Leader",
-        quote: "eDiscipleship transformed how I lead my community. The courses are practical, deep, and life-changing.",
+        quote: "Church Planting Movement transformed how I lead my community. The courses are practical, deep, and life-changing.",
       },
       {
         id: "testi-2",
@@ -167,7 +167,7 @@ function normalizeTestimonials(input?: BuilderPageRecord["testimonials"]): Build
         id: "testi-3",
         name: "Rachel Williams",
         role: "Youth Director",
-        quote: "As a youth leader, I needed engaging content. eDiscipleship delivers that and so much more.",
+        quote: "As a youth leader, I needed engaging content. Church Planting Movement delivers that and so much more.",
       },
     ];
   }
@@ -295,7 +295,7 @@ function defaultPages(): BuilderPageRecord[] {
       slug: "home-page",
       path: "/",
       status: "DRAFT",
-      seoTitle: "eDiscipleship Home",
+      seoTitle: "Church Planting Movement Home",
       seoDescription: "Edit this homepage from Super Admin Page Builder.",
       hero: {
         title: "Learn. Grow. Transform.",

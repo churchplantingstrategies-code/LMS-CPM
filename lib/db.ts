@@ -1,5 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 
+const { loadEnvConfig } = require("@next/env") as {
+  loadEnvConfig: (dir: string) => void;
+};
+
 type DbClient = PrismaClient & {
   user: PrismaClient["users"];
   account: PrismaClient["accounts"];
@@ -30,7 +34,14 @@ type DbClient = PrismaClient & {
 
 declare global {
   // eslint-disable-next-line no-var
+  var prismaEnvLoaded: boolean | undefined;
+  // eslint-disable-next-line no-var
   var prisma: PrismaClient | undefined;
+}
+
+if (!globalThis.prismaEnvLoaded) {
+  loadEnvConfig(process.cwd());
+  globalThis.prismaEnvLoaded = true;
 }
 
 function createPrismaClient() {

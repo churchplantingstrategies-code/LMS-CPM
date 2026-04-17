@@ -4,30 +4,36 @@ import Script from "next/script";
 import "./globals.css";
 import { SessionProvider } from "@/components/providers/session-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { SITE_LOGO_SRC } from "@/lib/brand";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: "eDiscipleship – Learn, Grow, Transform",
-    template: "%s | eDiscipleship",
+    default: "Church Planting Movement – Learn, Grow, Transform",
+    template: "%s | Church Planting Movement",
   },
   description:
     "Transform your life with world-class online courses in discipleship, leadership, and spiritual growth. Join thousands of learners on their journey.",
   keywords: ["LMS", "online courses", "discipleship", "e-learning", "leadership training"],
-  authors: [{ name: "eDiscipleship" }],
+  authors: [{ name: "Church Planting Movement" }],
   openGraph: {
     type: "website",
     locale: "en_US",
     url: process.env.NEXT_PUBLIC_APP_URL,
-    siteName: "eDiscipleship",
-    title: "eDiscipleship – Learn, Grow, Transform",
+    siteName: "Church Planting Movement",
+    title: "Church Planting Movement – Learn, Grow, Transform",
     description: "Transform your life with world-class online courses.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "eDiscipleship",
+    title: "Church Planting Movement",
     description: "Transform your life with world-class online courses.",
+  },
+  icons: {
+    icon: SITE_LOGO_SRC,
+    shortcut: SITE_LOGO_SRC,
+    apple: SITE_LOGO_SRC,
   },
 };
 

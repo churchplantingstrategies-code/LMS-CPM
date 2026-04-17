@@ -1,10 +1,13 @@
+const { loadEnvConfig } = require("@next/env");
 const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcryptjs");
+
+loadEnvConfig(process.cwd());
 
 async function main() {
   const db = new PrismaClient();
 
-  const email = process.env.BOOTSTRAP_ADMIN_EMAIL || "admin@ediscipleship.local";
+  const email = process.env.BOOTSTRAP_ADMIN_EMAIL || "admin@churchplantingmovement.local";
   const password = process.env.BOOTSTRAP_ADMIN_PASSWORD || "Admin12345!";
   const role = process.env.BOOTSTRAP_ADMIN_ROLE || "SUPER_ADMIN";
   const hash = bcrypt.hashSync(password, 12);

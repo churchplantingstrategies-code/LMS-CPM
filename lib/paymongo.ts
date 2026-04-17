@@ -94,7 +94,7 @@ export async function createCheckoutSession({
           },
         ],
         payment_method_allowed: ["card"],
-        statement_descriptor: metadata?.description ?? "eDiscipleship",
+        statement_descriptor: metadata?.description ?? "CP Movement",
         metadata: {
           userId: metadata?.userId ?? customerId,
           planId: metadata?.planId ?? productId,

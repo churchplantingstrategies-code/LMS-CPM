@@ -164,7 +164,7 @@ export function BookOrdersManager({ orders }: { orders: BookOrderRecord[] }) {
                 <GraduationCap className="h-3.5 w-3.5" />
                 Bookstore Ops
               </div>
-              <h2 className="mt-3 text-xl font-semibold text-white">eDiscipleship order command center</h2>
+              <h2 className="mt-3 text-xl font-semibold text-white">Church Planting Movement order command center</h2>
               <p className="mt-1 text-sm text-slate-400">Filter, export, and verify bookstore payments without leaving the dashboard.</p>
             </div>
             <div className="flex flex-wrap items-center gap-2">

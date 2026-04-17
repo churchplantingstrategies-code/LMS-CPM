@@ -1,5 +1,5 @@
-import { GraduationCap } from "lucide-react";
 import Link from "next/link";
+import { SiteLogo } from "@/components/branding/site-logo";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -7,10 +7,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       {/* Left - Brand Panel */}
       <div className="hidden md:flex flex-col justify-between bg-gradient-to-br from-brand-900 via-brand-800 to-purple-900 p-12 text-white">
         <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/20">
-            <GraduationCap className="h-5 w-5 text-white" />
-          </div>
-          eDiscipleship
+          <SiteLogo className="size-9 ring-white/20" sizes="36px" priority />
+          Church Planting Movement
         </Link>
 
         <div>
@@ -42,10 +40,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white/90 p-6 shadow-sm backdrop-blur dark:border-slate-800 dark:bg-slate-900/85">
           {/* Mobile Logo */}
           <Link href="/" className="mb-8 flex items-center gap-2 text-xl font-bold md:hidden">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600">
-              <GraduationCap className="h-5 w-5 text-white" />
-            </div>
-            <span className="gradient-text">eDiscipleship</span>
+            <SiteLogo className="size-9 ring-brand-200" sizes="36px" priority />
+              <span className="gradient-text max-w-[170px] text-sm leading-tight sm:max-w-none sm:text-base">Church Planting Movement</span>
           </Link>
           {children}
         </div>

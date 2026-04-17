@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X, LayoutDashboard, BookOpen, Award, MessageSquare, CreditCard, Settings, ShoppingCart, Receipt, Loader2 } from "lucide-react";
+import { SiteLogo } from "@/components/branding/site-logo";
 import { cn } from "../../lib/utils";
 
 const navItems = [
@@ -48,7 +49,13 @@ export function StudentMobileNav() {
           />
           <aside className="absolute left-0 top-0 h-full w-72 border-r border-brand-100/80 bg-gradient-to-b from-white via-brand-50/40 to-purple-50/50 shadow-xl dark:border-slate-700/80 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/70">
             <div className="flex h-14 items-center justify-between border-b border-brand-100/80 px-4 dark:border-slate-700/80">
-              <p className="text-sm font-semibold text-brand-800 dark:text-slate-100">Student Menu</p>
+              <div className="flex items-center gap-3">
+                <SiteLogo className="size-8 ring-brand-200 dark:ring-slate-700" sizes="32px" priority />
+                <div>
+                  <p className="text-sm font-semibold text-brand-800 dark:text-slate-100">Church Planting Movement</p>
+                  <p className="text-xs text-brand-600 dark:text-slate-400">Student Menu</p>
+                </div>
+              </div>
               <button
                 type="button"
                 onClick={() => setOpen(false)}

@@ -8,7 +8,6 @@ import {
   LayoutDashboard,
   BookOpen,
   Settings,
-  GraduationCap,
   LogOut,
   ReceiptText,
   Workflow,
@@ -19,6 +18,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { SiteLogo } from "@/components/branding/site-logo";
 import { getInitials } from "@/lib/utils";
 
 const navGroups = [
@@ -94,11 +94,9 @@ export function AdminSidebar({ role }: { role?: string }) {
     <aside className="hidden h-full w-64 flex-col bg-gray-950 text-white md:flex">
       {/* Brand */}
       <div className="flex h-16 items-center gap-2 px-6 border-b border-gray-800">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600">
-          <GraduationCap className="h-5 w-5 text-white" />
-        </div>
+        <SiteLogo className="size-9 ring-white/20" sizes="36px" priority />
         <div>
-          <span className="font-bold text-lg text-white">eDiscipleship</span>
+          <span className="block max-w-[150px] text-sm font-bold leading-tight text-white">Church Planting Movement</span>
           <span className="ml-2 text-xs bg-brand-600 text-white px-1.5 py-0.5 rounded font-medium">Admin</span>
         </div>
       </div>

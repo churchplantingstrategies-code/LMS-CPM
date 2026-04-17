@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { GraduationCap, Twitter, Facebook, Instagram, Youtube, Mail } from "lucide-react";
+import { Twitter, Facebook, Instagram, Youtube, Mail } from "lucide-react";
+import { SiteLogo } from "@/components/branding/site-logo";
 
 const footerLinks = {
   Platform: [
@@ -30,10 +31,8 @@ export function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <Link href="/" className="flex items-center gap-2 font-bold text-xl text-white mb-4">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600">
-                <GraduationCap className="h-5 w-5 text-white" />
-              </div>
-              eDiscipleship
+              <SiteLogo className="size-9 ring-white/20" sizes="36px" priority />
+              Church Planting Movement
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
               Transform your life with world-class online courses in discipleship, leadership,
@@ -95,7 +94,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-8 pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-gray-500">
-            © {new Date().getFullYear()} eDiscipleship. All rights reserved.
+            © {new Date().getFullYear()} Church Planting Movement. All rights reserved.
           </p>
           <p className="text-sm text-gray-500 flex items-center gap-1">
             Designed and developed by Anthony Ramoso.

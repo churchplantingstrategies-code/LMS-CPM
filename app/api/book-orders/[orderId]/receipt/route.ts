@@ -208,7 +208,7 @@ export async function GET(_: NextRequest, { params }: RouteContext) {
   drawText("Policy & Support", { size: 14, bold: true });
   drawWrappedBlock(store.settings.returnPolicy, { size: 10, color: { r: 0.39, g: 0.45, b: 0.55 } });
   y -= 6;
-  drawWrappedBlock("Generated automatically by eDiscipleship bookstore receipts.", { size: 10, color: { r: 0.39, g: 0.45, b: 0.55 } });
+  drawWrappedBlock("Generated automatically by Church Planting Movement bookstore receipts.", { size: 10, color: { r: 0.39, g: 0.45, b: 0.55 } });
 
   const footerY = 28;
   page.drawLine({ start: { x: margin, y: footerY + 14 }, end: { x: page.getWidth() - margin, y: footerY + 14 }, thickness: 1, color: border });

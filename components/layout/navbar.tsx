@@ -6,10 +6,11 @@ import { useSession, signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import {
   BookOpen, Menu, X, ChevronDown, User, LogOut, Settings,
-  LayoutDashboard, Bell, GraduationCap, Loader2,
+  LayoutDashboard, Bell, Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { SiteLogo } from "@/components/branding/site-logo";
 import { getInitials } from "@/lib/utils";
 
 const navLinks = [
@@ -38,10 +39,8 @@ export function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600">
-              <GraduationCap className="h-5 w-5 text-white" />
-            </div>
-            <span className="gradient-text">eDiscipleship</span>
+            <SiteLogo className="size-9 ring-brand-200/70" sizes="36px" priority />
+            <span className="gradient-text max-w-[170px] text-sm leading-tight sm:max-w-none sm:text-base lg:text-xl">Church Planting Movement</span>
           </Link>
 
           {/* Desktop Nav */}

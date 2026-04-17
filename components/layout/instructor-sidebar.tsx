@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Users, Settings } from "lucide-react";
+import { SiteLogo } from "@/components/branding/site-logo";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
@@ -18,8 +19,13 @@ export function InstructorSidebar() {
   return (
     <aside className="hidden h-full w-64 flex-col border-r border-slate-800 bg-slate-900 md:flex">
       <div className="border-b border-slate-800 px-5 py-4">
-        <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Admin Panel</p>
-        <h2 className="mt-1 text-lg font-bold text-slate-100">eDiscipleship</h2>
+        <div className="flex items-center gap-3">
+          <SiteLogo className="size-10 ring-white/15" sizes="40px" priority />
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Admin Panel</p>
+            <h2 className="mt-1 max-w-[170px] text-sm font-bold leading-tight text-slate-100">Church Planting Movement</h2>
+          </div>
+        </div>
       </div>
       <nav className="flex-1 space-y-1 overflow-y-auto p-3">
         {/* Main Items */}
