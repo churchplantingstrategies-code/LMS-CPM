@@ -60,8 +60,9 @@ export default async function AdminStudentsPage() {
               </TableRow>
             )}
             {students.map((student) => {
-              const activeSub = student.subscriptions?.find(s => s.status === "ACTIVE");
-              const activePlan = activeSub?.plans?.name;
+              const activePlan = student.subscriptions?.status === "ACTIVE"
+                ? student.subscriptions?.plans?.name
+                : undefined;
               return (
                 <TableRow key={student.id}>
                   <TableCell>
