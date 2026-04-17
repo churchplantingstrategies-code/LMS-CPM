@@ -76,7 +76,7 @@ export default async function AdminLeadsPage() {
                   )}
                 </TableCell>
                 <TableCell>
-                  {lead.convertedAt ? (
+                  {lead.userId ? (
                     <Badge variant="success">Converted</Badge>
                   ) : (
                     <Badge variant="outline">Lead</Badge>
