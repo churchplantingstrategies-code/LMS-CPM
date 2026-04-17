@@ -149,7 +149,7 @@ export async function updateBookOrderStatus({
   orderId?: string;
   checkoutSessionId?: string;
   status: BookOrderStatus;
-}) {
+}): Promise<BookOrderRecord | null> {
   const orders = await readBookOrders();
   const timestamp = nowIso();
   let updatedOrder: BookOrderRecord | null = null;

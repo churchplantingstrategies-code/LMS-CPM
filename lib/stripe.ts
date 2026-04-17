@@ -28,8 +28,5 @@ export async function getSubscription(subscriptionId: string) {
 }
 
 export async function createPortalSession(customerId: string, returnUrl: string) {
-  return stripe.billingPortal.sessions.create({
-    customer: customerId,
-    return_url: returnUrl,
-  });
+  throw new Error("Stripe is disabled. Use PayMongo instead.");
 }

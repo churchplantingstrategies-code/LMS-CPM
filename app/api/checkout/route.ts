@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
 
       const { checkoutUrl: url, sessionId } = await createOneTimeCheckout({
         customerId,
-        amount: Math.round(course.price * 100),
+        amount: Math.round((course.price ?? 0) * 100),
         currency: "PHP",
         description: course.title,
         successUrl: `${origin}/courses/${course.id}?purchase=success`,

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import type { Prisma } from "@prisma/client";
 
 type MetadataRecord = Record<string, unknown>;
 
@@ -102,22 +103,22 @@ export async function POST(request: NextRequest) {
       const firstInstructorDiscussion = await db.discussion.findFirst({
         where: {
           courseId: course.id,
-          user: {
+          users: {
             role: { in: ["INSTRUCTOR", "ADMIN", "SUPER_ADMIN"] },
           },
         },
         orderBy: { createdAt: "asc" },
         select: {
           userId: true,
-          user: { select: { role: true, email: true } },
+          users: { select: { role: true, email: true } },
         },
       });
 
       if (firstInstructorDiscussion && ownerById.has(firstInstructorDiscussion.userId)) {
         selectedOwner = {
           id: firstInstructorDiscussion.userId,
-          role: firstInstructorDiscussion.user.role,
-          email: firstInstructorDiscussion.user.email,
+          role: firstInstructorDiscussion.users.role,
+          email: firstInstructorDiscussion.users.email,
         };
         source = "first-instructor-discussion";
       }
@@ -151,7 +152,7 @@ export async function POST(request: NextRequest) {
 
       await db.course.update({
         where: { id: course.id },
-        data: { metadata: nextMetadata },
+        data: { metadata: nextMetadata as Prisma.InputJsonValue },
       });
       updated += 1;
     }

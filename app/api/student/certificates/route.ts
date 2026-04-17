@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
         status: "COMPLETED",
       },
       include: {
-        course: {
+        courses: {
           select: {
             id: true,
             title: true,
@@ -32,10 +32,10 @@ export async function GET(request: NextRequest) {
     // Format certificates
     const certificates = enrollments.map((enrollment) => ({
       id: enrollment.id,
-      courseId: enrollment.course.id,
-      courseName: enrollment.course.title,
+      courseId: enrollment.courses.id,
+      courseName: enrollment.courses.title,
       issuedDate: enrollment.completedAt || new Date().toISOString(),
-      completionPercentage: Math.round(enrollment.progress * 100),
+      completionPercentage: 100,
     }));
 
     return NextResponse.json(certificates);

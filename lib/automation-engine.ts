@@ -110,7 +110,7 @@ export async function triggerAutomation(
     });
 
     for (const rule of rules) {
-      const actions = (Array.isArray(rule.actions) ? rule.actions : []) as AutomationAction[];
+      const actions = (Array.isArray(rule.actions) ? rule.actions : []) as unknown as AutomationAction[];
 
       for (const action of actions) {
         if (action.type === "SEND_EMAIL") {

@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { updateBookOrderStatus } from "@/lib/book-orders";
+import type { BookOrderRecord } from "@/types/book-orders";
 import { verifyWebhookSignature } from "@/lib/paymongo";
 import { db } from "@/lib/db";
+import type { Prisma } from "@prisma/client";
 import {
   sendEnrollmentConfirmation,
   sendPaymentReceipt,
@@ -35,7 +37,7 @@ async function upsertCompletedPayment({
         amount,
         currency,
         description,
-        metadata,
+        metadata: metadata as Prisma.InputJsonValue | undefined,
       },
     });
   }
@@ -49,7 +51,7 @@ async function upsertCompletedPayment({
       type: "ONE_TIME",
       paymongoCheckoutSessionId: checkoutSessionId,
       description,
-      metadata,
+      metadata: metadata as Prisma.InputJsonValue | undefined,
     },
   });
 }
@@ -189,7 +191,7 @@ async function handleCheckoutSuccess(data: any) {
   }
 
   if (bookOrderId) {
-    const order = await updateBookOrderStatus({
+    const order: BookOrderRecord | null = await updateBookOrderStatus({
       orderId: bookOrderId,
       checkoutSessionId,
       status: "COMPLETED",

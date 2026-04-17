@@ -126,9 +126,10 @@ export default async function LessonPage({
   const resourceAttachments = attachments.filter((attachment): attachment is Extract<LessonAttachment, { type: "resource" }> => {
     return typeof attachment === "object" && attachment !== null && attachment.type === "resource" && "url" in attachment;
   });
-  const quizItems = attachments.filter((attachment): attachment is LessonQuizItem => {
+  const quizItems = attachments.filter((attachment): attachment is Extract<LessonAttachment, { type: "quiz" }> => {
     return typeof attachment === "object" && attachment !== null && attachment.type === "quiz" && Array.isArray(attachment.options);
   });
+  const quizPanelItems: LessonQuizItem[] = quizItems.map(q => ({ question: q.question, options: q.options, answerIndex: q.answerIndex, explanation: q.explanation }));
   const requiresKnowledgeCheck = Boolean(enrollment && !progress?.completed && quizItems.length > 0);
   const nextLocked = Boolean(enrollment && !progress?.completed);
 
@@ -327,7 +328,7 @@ export default async function LessonPage({
               {quizItems.length > 0 && (
                 <TabsContent value="quiz" className="mt-4">
                   <LessonQuizPanel
-                    items={quizItems}
+                    items={quizPanelItems}
                     completion={
                       enrollment && !progress?.completed
                         ? {

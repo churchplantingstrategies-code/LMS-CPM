@@ -112,12 +112,15 @@ export async function POST(request: NextRequest) {
       title,
       slug: finalSlug,
       description,
-      shortDescription,
+      shortDesc: shortDescription,
       price,
       level: level ?? "ALL_LEVELS",
       category,
-      thumbnailUrl,
-      instructorId: session.user.id,
+      thumbnail: thumbnailUrl,
+      metadata: {
+        createdByUserId: session.user.id,
+        createdByRole: session.user.role,
+      },
     },
   });
 

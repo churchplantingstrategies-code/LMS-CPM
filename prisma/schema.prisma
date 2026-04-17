@@ -9,7 +9,7 @@ datasource db {
 }
 
 model accounts {
-  id                String  @id
+  id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
@@ -27,7 +27,7 @@ model accounts {
 }
 
 model analytics_events {
-  id         String   @id
+  id         String   @id @default(cuid())
   userId     String?
   sessionId  String?
   event      String
@@ -42,20 +42,20 @@ model analytics_events {
 }
 
 model assignments {
-  id          String        @id
+  id          String        @id @default(cuid())
   title       String
   description String
   lessonId    String
   dueDate     DateTime?
   maxScore    Float         @default(100)
   createdAt   DateTime      @default(now())
-  updatedAt   DateTime
+  updatedAt   DateTime      @updatedAt
   lessons     lessons       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   submissions submissions[]
 }
 
 model automation_rules {
-  id          String            @id
+  id          String            @id @default(cuid())
   name        String
   description String?
   trigger     AutomationTrigger
@@ -63,11 +63,11 @@ model automation_rules {
   actions     Json
   isActive    Boolean           @default(true)
   createdAt   DateTime          @default(now())
-  updatedAt   DateTime
+  updatedAt   DateTime @updatedAt
 }
 
 model certificates {
-  id             String   @id
+  id             String   @id @default(cuid())
   userId         String
   courseId       String
   certificateUrl String?
@@ -79,7 +79,7 @@ model certificates {
 }
 
 model courses {
-  id             String           @id
+  id             String           @id @default(cuid())
   title          String
   slug           String           @unique
   description    String?
@@ -96,7 +96,7 @@ model courses {
   duration       Int?
   metadata       Json?
   createdAt      DateTime         @default(now())
-  updatedAt      DateTime
+  updatedAt      DateTime         @updatedAt
   certificates   certificates[]
   discussions    discussions[]
   enrollments    enrollments[]
@@ -105,21 +105,21 @@ model courses {
 }
 
 model discussions {
-  id        String    @id
+  id        String    @id @default(cuid())
   title     String
   content   String
   userId    String
   courseId  String
   isPinned  Boolean   @default(false)
   createdAt DateTime  @default(now())
-  updatedAt DateTime
+  updatedAt DateTime  @updatedAt
   courses   courses   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   users     users     @relation(fields: [userId], references: [id], onDelete: Cascade)
   replies   replies[]
 }
 
 model email_campaigns {
-  id          String         @id
+  id          String         @id @default(cuid())
   title       String
   subject     String
   previewText String?
@@ -131,12 +131,12 @@ model email_campaigns {
   stats       Json?
   tags        String[]
   createdAt   DateTime       @default(now())
-  updatedAt   DateTime
+  updatedAt   DateTime       @updatedAt
   email_logs  email_logs[]
 }
 
 model email_logs {
-  id              String          @id
+  id              String          @id @default(cuid())
   campaignId      String
   leadId          String?
   userId          String?
@@ -152,7 +152,7 @@ model email_logs {
 }
 
 model enrollments {
-  id          String           @id
+  id          String           @id @default(cuid())
   userId      String
   courseId    String
   status      EnrollmentStatus @default(ACTIVE)
@@ -175,7 +175,7 @@ model funnel_courses {
 }
 
 model funnel_steps {
-  id       String         @id
+  id       String         @id @default(cuid())
   title    String
   type     FunnelStepType
   order    Int
@@ -185,7 +185,7 @@ model funnel_steps {
 }
 
 model funnels {
-  id             String           @id
+  id             String           @id @default(cuid())
   title          String
   slug           String           @unique
   description    String?
@@ -194,14 +194,14 @@ model funnels {
   settings       Json?
   stats          Json?
   createdAt      DateTime         @default(now())
-  updatedAt      DateTime
+  updatedAt      DateTime         @updatedAt
   funnel_courses funnel_courses[]
   funnel_steps   funnel_steps[]
   leads          leads[]
 }
 
 model leads {
-  id         String       @id
+  id         String       @id @default(cuid())
   email      String
   name       String?
   phone      String?
@@ -211,21 +211,21 @@ model leads {
   tags       String[]
   metadata   Json?
   createdAt  DateTime     @default(now())
-  updatedAt  DateTime
+  updatedAt  DateTime     @updatedAt
   email_logs email_logs[]
   funnels    funnels?     @relation(fields: [funnelId], references: [id])
   users      users?       @relation(fields: [userId], references: [id])
 }
 
 model lesson_progress {
-  id          String    @id
+  id          String    @id @default(cuid())
   userId      String
   lessonId    String
   completed   Boolean   @default(false)
   watchedTime Int?
   completedAt DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime
+  updatedAt   DateTime  @updatedAt
   lessons     lessons   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   users       users     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -233,7 +233,7 @@ model lesson_progress {
 }
 
 model lessons {
-  id              String            @id
+  id              String            @id @default(cuid())
   title           String
   slug            String
   description     String?
@@ -247,7 +247,7 @@ model lessons {
   attachments     Json?
   moduleId        String
   createdAt       DateTime          @default(now())
-  updatedAt       DateTime
+  updatedAt       DateTime          @updatedAt
   assignments     assignments[]
   lesson_progress lesson_progress[]
   modules         modules           @relation(fields: [moduleId], references: [id], onDelete: Cascade)
@@ -256,20 +256,20 @@ model lessons {
 }
 
 model modules {
-  id          String    @id
+  id          String    @id @default(cuid())
   title       String
   description String?
   order       Int       @default(0)
   isPublished Boolean   @default(false)
   courseId    String
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime
+  updatedAt   DateTime  @updatedAt
   lessons     lessons[]
   courses     courses   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }
 
 model payments {
-  id                        String        @id
+  id                        String        @id @default(cuid())
   userId                    String
   amount                    Float
   currency                  String        @default("usd")
@@ -284,7 +284,7 @@ model payments {
 }
 
 model plans {
-  id                String          @id
+  id                String          @id @default(cuid())
   name              String
   slug              String          @unique
   description       String?
@@ -297,24 +297,24 @@ model plans {
   trialDays         Int?            @default(0)
   maxCourses        Int?
   createdAt         DateTime        @default(now())
-  updatedAt         DateTime
+  updatedAt         DateTime        @updatedAt
   subscriptions     subscriptions[]
 }
 
 model replies {
-  id           String      @id
+  id           String      @id @default(cuid())
   content      String
   userId       String
   discussionId String
   isInstructor Boolean     @default(false)
   createdAt    DateTime    @default(now())
-  updatedAt    DateTime
+  updatedAt    DateTime    @updatedAt
   discussions  discussions @relation(fields: [discussionId], references: [id], onDelete: Cascade)
   users        users       @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model sessions {
-  id           String   @id
+  id           String   @id @default(cuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
@@ -322,7 +322,7 @@ model sessions {
 }
 
 model submissions {
-  id           String           @id
+  id           String           @id @default(cuid())
   userId       String
   assignmentId String
   content      String
@@ -337,7 +337,7 @@ model submissions {
 }
 
 model subscriptions {
-  id                     String             @id
+  id                     String             @id @default(cuid())
   userId                 String             @unique
   planId                 String
   status                 SubscriptionStatus @default(ACTIVE)
@@ -349,13 +349,13 @@ model subscriptions {
   canceledAt             DateTime?
   trialEnd               DateTime?
   createdAt              DateTime           @default(now())
-  updatedAt              DateTime
+  updatedAt              DateTime           @updatedAt
   plans                  plans              @relation(fields: [planId], references: [id])
   users                  users              @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model users {
-  id               String             @id
+  id               String             @id @default(cuid())
   name             String?
   email            String             @unique
   emailVerified    DateTime?
@@ -368,7 +368,7 @@ model users {
   isActive         Boolean            @default(true)
   lastLoginAt      DateTime?
   createdAt        DateTime           @default(now())
-  updatedAt        DateTime
+  updatedAt        DateTime           @updatedAt
   accounts         accounts[]
   analytics_events analytics_events[]
   certificates     certificates[]

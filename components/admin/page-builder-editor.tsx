@@ -231,10 +231,11 @@ export function PageBuilderEditor({ pageId }: { pageId: string }) {
         body: JSON.stringify({ ...draft, status: status ?? draft.status }),
       });
 
-      const payload = (await response.json()) as BuilderPageRecord | { error?: string };
-      if (!response.ok || "error" in payload) {
-        throw new Error("error" in payload ? payload.error : "Failed to save page.");
+      const rawPayload = (await response.json()) as BuilderPageRecord | { error?: string };
+      if (!response.ok || "error" in rawPayload) {
+        throw new Error("error" in rawPayload ? rawPayload.error : "Failed to save page.");
       }
+      const payload = rawPayload as BuilderPageRecord;
 
       const snapshot = JSON.stringify(payload);
       suppressHistoryRef.current = true;

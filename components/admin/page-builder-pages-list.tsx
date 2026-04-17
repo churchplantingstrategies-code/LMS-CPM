@@ -62,10 +62,11 @@ export function PageBuilderPagesList() {
         body: JSON.stringify({ name: label, path: assignedPath }),
       });
 
-      const payload = (await response.json()) as BuilderPageRecord | { error?: string };
-      if (!response.ok || "error" in payload) {
-        throw new Error("error" in payload ? payload.error : "Unable to create page.");
+      const rawPayload = (await response.json()) as BuilderPageRecord | { error?: string };
+      if (!response.ok || "error" in rawPayload) {
+        throw new Error("error" in rawPayload ? rawPayload.error : "Unable to create page.");
       }
+      const payload = rawPayload as BuilderPageRecord;
 
       await loadPages();
       toast({

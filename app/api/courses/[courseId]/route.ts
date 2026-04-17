@@ -12,11 +12,10 @@ export async function GET(
   const course = await db.course.findUnique({
     where: { id: courseId },
     include: {
-      instructor: { select: { id: true, name: true, image: true, bio: true } },
       modules: {
-        orderBy: { position: "asc" },
+        orderBy: { order: "asc" },
         include: {
-          lessons: { orderBy: { position: "asc" } },
+          lessons: { orderBy: { order: "asc" } },
         },
       },
       _count: { select: { enrollments: true } },
@@ -55,7 +54,8 @@ export async function PUT(
   const course = await db.course.findUnique({ where: { id: courseId } });
   if (!course) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const isOwner = course.instructorId === session.user.id;
+  const metadata = course.metadata as Record<string, unknown> | null;
+  const isOwner = metadata?.createdByUserId === session.user.id;
   const isAdmin =
     session.user.role === "ADMIN" || session.user.role === "SUPER_ADMIN";
 
@@ -72,9 +72,14 @@ export async function PUT(
     );
   }
 
+  const { shortDescription, thumbnailUrl, ...rest } = result.data;
   const updated = await db.course.update({
     where: { id: courseId },
-    data: result.data,
+    data: {
+      ...rest,
+      ...(shortDescription !== undefined && { shortDesc: shortDescription }),
+      ...(thumbnailUrl !== undefined && { thumbnail: thumbnailUrl }),
+    },
   });
 
   return NextResponse.json(updated);
@@ -94,7 +99,8 @@ export async function DELETE(
   const course = await db.course.findUnique({ where: { id: courseId } });
   if (!course) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const isOwner = course.instructorId === session.user.id;
+  const delMetadata = course.metadata as Record<string, unknown> | null;
+  const isOwner = delMetadata?.createdByUserId === session.user.id;
   const isAdmin =
     session.user.role === "ADMIN" || session.user.role === "SUPER_ADMIN";
 

@@ -232,7 +232,7 @@ function normalizePlans(input?: BuilderPageRecord["plans"]): BuilderPageRecord["
   }));
 }
 
-function normalizeFinalCta(input?: BuilderPageRecord["finalCta"]): BuilderPageRecord["finalCta"] {
+function normalizeFinalCta(input?: Partial<BuilderPageRecord["finalCta"]>): BuilderPageRecord["finalCta"] {
   return {
     badge: String(input?.badge ?? "").trim(),
     title: String(input?.title ?? "Ready to transform your journey?").trim(),
@@ -245,7 +245,7 @@ function normalizeFinalCta(input?: BuilderPageRecord["finalCta"]): BuilderPageRe
   };
 }
 
-function normalizeLandingCopy(input?: BuilderPageRecord["landingCopy"]): BuilderPageRecord["landingCopy"] {
+function normalizeLandingCopy(input?: Partial<BuilderPageRecord["landingCopy"]>): BuilderPageRecord["landingCopy"] {
   return {
     heroBadge: String(input?.heroBadge ?? "Now with AI-powered learning paths").trim(),
     heroFootnote: String(input?.heroFootnote ?? "14-day free trial · No credit card required · Cancel anytime").trim(),

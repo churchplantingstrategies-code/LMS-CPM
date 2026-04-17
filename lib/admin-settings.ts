@@ -156,11 +156,11 @@ export function sanitizeAdminSettings(input: Partial<AdminSettings>): AdminSetti
   if (input.integrations) {
     const integrations = input.integrations as any;
     if (integrations.paymongoSecretKey && !input.payment?.paymongoSecretKey) {
-      if (!inputWithMigration.payment) inputWithMigration.payment = {};
+      if (!inputWithMigration.payment) inputWithMigration.payment = {} as any;
       (inputWithMigration.payment as any).paymongoSecretKey = integrations.paymongoSecretKey;
     }
     if (integrations.paymongoPublicKey && !input.payment?.paymongoPublicKey) {
-      if (!inputWithMigration.payment) inputWithMigration.payment = {};
+      if (!inputWithMigration.payment) inputWithMigration.payment = {} as any;
       (inputWithMigration.payment as any).paymongoPublicKey = integrations.paymongoPublicKey;
     }
   }
@@ -181,6 +181,10 @@ export function sanitizeAdminSettings(input: Partial<AdminSettings>): AdminSetti
     integrations: {
       ...DEFAULT_SETTINGS.integrations,
       ...(inputWithMigration.integrations || {}),
+    },
+    oauth: {
+      ...DEFAULT_SETTINGS.oauth,
+      ...(inputWithMigration.oauth || {}),
     },
     branding: {
       ...DEFAULT_SETTINGS.branding,
