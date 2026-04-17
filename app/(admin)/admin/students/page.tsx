@@ -26,8 +26,8 @@ export default async function AdminStudentsPage() {
     orderBy: { createdAt: "desc" },
     include: {
       _count: { select: { enrollments: true } },
-      subscription: {
-        include: { plan: { select: { name: true } } },
+      subscriptions: {
+        include: { plans: { select: { name: true } } },
       },
     },
   });
@@ -60,9 +60,8 @@ export default async function AdminStudentsPage() {
               </TableRow>
             )}
             {students.map((student) => {
-              const activePlan = student.subscription?.status === "ACTIVE"
-                ? student.subscription?.plan?.name
-                : undefined;
+              const activeSub = student.subscriptions?.find(s => s.status === "ACTIVE");
+              const activePlan = activeSub?.plans?.name;
               return (
                 <TableRow key={student.id}>
                   <TableCell>
